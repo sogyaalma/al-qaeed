@@ -2,7 +2,8 @@
 """
 End-to-end checks for the static site. Run while the site is being served:
 
-  python3 -m http.server 8000 --bind 0.0.0.0   (in the project root)
+  python3 tools/build.py && python3 tools/package.py
+  python3 -m http.server 8000 --bind 0.0.0.0 --directory dist
   python3 tests/run_checks.py http://127.0.0.1:8000
 
 Writes screenshots to docs/screenshots/ and a JSON report to docs/test-results.json.
@@ -23,7 +24,10 @@ SHOTS = ROOT / "docs" / "screenshots"
 SHOTS.mkdir(parents=True, exist_ok=True)
 AXE_JS = pathlib.Path(axe_core_python.__file__).parent / "axe.min.js"
 
-WIDTHS = {"360": 360, "768": 768, "1024": 1024, "1440": 1440, "1920": 1920}
+WIDTHS = {
+    "360": 360, "375": 375, "430": 430, "768": 768,
+    "1024": 1024, "1366": 1366, "1440": 1440, "1920": 1920,
+}
 PAGES = {"ar": "/", "en": "/en/"}
 
 report = {"checks": [], "failures": 0}
@@ -65,10 +69,51 @@ with sync_playwright() as p:
 
             overflow = page.evaluate("document.documentElement.scrollWidth - document.documentElement.clientWidth")
             check(f"[{lang} {wname}] no horizontal overflow", overflow <= 0, f"overflow={overflow}px")
+
+            clipped_text = page.evaluate("""() => {
+                const selectors = 'h1,h2,h3,p,.btn,.card,.focus-card,.pub,.tl-item,.cert-list li';
+                return Array.from(document.querySelectorAll(selectors))
+                    .filter(el => {
+                        const r = el.getBoundingClientRect();
+                        return r.width > 0 && r.height > 0 && el.scrollWidth > el.clientWidth + 2;
+                    })
+                    .map(el => `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}.${String(el.className || '').replace(/\s+/g, '.')}`)
+                    .slice(0, 8);
+            }""")
+            check(f"[{lang} {wname}] no clipped text in key content", not clipped_text,
+                  ", ".join(clipped_text) or "0 clipped elements")
+
+            if w <= 768:
+                nav_overflow = page.locator(".primary-nav").evaluate("el => el.scrollWidth - el.clientWidth")
+                check(f"[{lang} {wname}] mobile navigation fits without horizontal scrolling",
+                      nav_overflow <= 2, f"nav overflow={nav_overflow}px")
+
+            text_overlaps = page.evaluate("""() => {
+                const nodes = Array.from(document.querySelectorAll('h1,h2,h3,p'))
+                    .filter(el => {
+                        const r = el.getBoundingClientRect();
+                        return r.width > 0 && r.height > 0;
+                    });
+                const overlaps = [];
+                for (let i = 0; i < nodes.length; i++) {
+                    const a = nodes[i].getBoundingClientRect();
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const b = nodes[j].getBoundingClientRect();
+                        const width = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+                        const height = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+                        if (width > 1 && height > 1) {
+                            overlaps.push(`${nodes[i].tagName.toLowerCase()} / ${nodes[j].tagName.toLowerCase()}`);
+                        }
+                    }
+                }
+                return overlaps.slice(0, 8);
+            }""")
+            check(f"[{lang} {wname}] no overlapping heading/paragraph boxes", not text_overlaps,
+                  ", ".join(text_overlaps) or "0 overlaps")
             check(f"[{lang} {wname}] no console errors", not errors, "; ".join(errors)[:300] or "0 errors")
             check(f"[{lang} {wname}] no failed requests", not failed, "; ".join(failed)[:300] or "0 failed")
 
-            if wname in ("360", "1440"):
+            if wname in ("375", "1366"):
                 page.screenshot(path=str(SHOTS / f"{lang}-{wname}-full.png"), full_page=True)
             page.screenshot(path=str(SHOTS / f"{lang}-{wname}-top.png"))
             ctx.close()
@@ -77,6 +122,19 @@ with sync_playwright() as p:
     ctx = browser.new_context(viewport={"width": 1440, "height": 900})
     page = ctx.new_page()
     page.goto(BASE + "/", wait_until="networkidle")
+    page.keyboard.press("Tab")
+    focus_state = page.evaluate("""() => {
+        const el = document.activeElement;
+        const style = getComputedStyle(el);
+        const rect = el.getBoundingClientRect();
+        return {
+            visible: style.visibility !== 'hidden' && style.display !== 'none' && rect.bottom > 0,
+            focusVisible: el.matches(':focus-visible'),
+            outline: parseFloat(style.outlineWidth) > 0 && style.outlineStyle !== 'none',
+        };
+    }""")
+    check("AR page: keyboard focus is visible on first Tab",
+          focus_state["visible"] and focus_state["focusVisible"] and focus_state["outline"], str(focus_state))
     check("AR page: html lang=ar and dir=rtl",
           page.get_attribute("html", "lang") == "ar" and page.get_attribute("html", "dir") == "rtl")
     ar_copy = page.locator("body").inner_text()
@@ -89,6 +147,7 @@ with sync_playwright() as p:
     check("AR page: hreflang alternates present",
           page.locator('link[rel="alternate"][hreflang="en"]').count() == 1)
     check("AR page: a single <h1>", page.locator("h1").count() == 1)
+    check("AR page: contact section is inside the main landmark", page.locator("main #contact").count() == 1)
 
     # language switch: click, then verify the English page
     page.click("a.lang-switch")
@@ -102,6 +161,20 @@ with sync_playwright() as p:
           and "Sheikh Abdulaziz Al-Qaeed" in page.inner_text("#about")
           and not any(phrase in en_copy for phrase in ("about me", "contact me", "email me", "my writing")))
     check("EN page: hero heading is English", "Abdulaziz" in page.inner_text("#hero-title"))
+    check("EN page: contact section is inside the main landmark", page.locator("main #contact").count() == 1)
+    page.keyboard.press("Tab")
+    focus_state = page.evaluate("""() => {
+        const el = document.activeElement;
+        const style = getComputedStyle(el);
+        const rect = el.getBoundingClientRect();
+        return {
+            visible: style.visibility !== 'hidden' && style.display !== 'none' && rect.bottom > 0,
+            focusVisible: el.matches(':focus-visible'),
+            outline: parseFloat(style.outlineWidth) > 0 && style.outlineStyle !== 'none',
+        };
+    }""")
+    check("EN page: keyboard focus is visible on first Tab",
+          focus_state["visible"] and focus_state["focusVisible"] and focus_state["outline"], str(focus_state))
     page.click("a.lang-switch")
     page.wait_for_load_state("networkidle")
     check("Language switch EN→AR returns to /", page.url.rstrip("/").endswith(".com") or page.url.rstrip("/").endswith(":8000") or page.url.rstrip("/").endswith("/") and "/en" not in page.url, page.url)
@@ -116,6 +189,19 @@ with sync_playwright() as p:
         hrefs = page.eval_on_selector_all("a[href^='#']", "els => els.map(e => e.getAttribute('href'))")
         missing = [h for h in set(hrefs) if h != "#" and page.locator(h).count() == 0]
         check(f"[{lang}] every in-page anchor has a target", not missing, f"missing={missing}")
+
+        # Sticky headers must not cover the section reached by in-page navigation.
+        page.set_viewport_size({"width": 375, "height": 800})
+        page.locator('a[href="#experience"]').click()
+        page.wait_for_timeout(800)
+        anchor_geometry = page.evaluate("""() => ({
+            targetTop: document.querySelector('#experience').getBoundingClientRect().top,
+            headerBottom: document.querySelector('.site-header').getBoundingClientRect().bottom,
+        })""")
+        check(f"[{lang}] sticky header does not cover anchor target at 375px",
+              anchor_geometry["targetTop"] >= anchor_geometry["headerBottom"] - 1,
+              str(anchor_geometry))
+        page.set_viewport_size({"width": 1440, "height": 900})
 
         ext = page.eval_on_selector_all("a[href^='http']", "els => els.map(e => e.href)")
         check(f"[{lang}] no external links", not ext, f"found={ext}")
@@ -142,7 +228,7 @@ with sync_playwright() as p:
               f"title={len(title)} desc={len(desc or '')}")
 
     # 404 page
-    # The local python server returns a bare 404 for unknown paths; Vercel (cleanUrls) serves 404.html.
+    # A plain local static server returns its own 404; check the 404 document directly.
     r = page.goto(BASE + "/this-page-does-not-exist", wait_until="networkidle")
     check("Unknown path returns HTTP 404", r.status == 404, f"status={r.status}")
     r2 = page.goto(BASE + "/404.html", wait_until="networkidle")
@@ -152,12 +238,21 @@ with sync_playwright() as p:
     ctx.close()
 
     # ---------- reduced motion: content must stay visible ----------
-    ctx = browser.new_context(viewport={"width": 1024, "height": 800}, reduced_motion="reduce")
+    ctx = browser.new_context(viewport={"width": 375, "height": 800}, reduced_motion="reduce")
     page = ctx.new_page()
     page.goto(BASE + "/", wait_until="networkidle")
     page.wait_for_timeout(300)
     hidden = page.evaluate("Array.from(document.querySelectorAll('.reveal')).filter(e => getComputedStyle(e).opacity === '0').length")
     check("Reduced motion: no reveal element left hidden", hidden == 0, f"hidden={hidden}")
+    page.locator(".btn-primary").hover()
+    motion = page.evaluate("""() => ({
+        scroll: getComputedStyle(document.documentElement).scrollBehavior,
+        transition: getComputedStyle(document.querySelector('.btn-primary')).transitionDuration,
+        transform: getComputedStyle(document.querySelector('.btn-primary')).transform,
+    })""")
+    check("Reduced motion: scroll and button motion disabled",
+          motion["scroll"] == "auto" and all(x.strip() in ("0s", "0ms") for x in motion["transition"].split(","))
+          and motion["transform"] == "none", str(motion))
     ctx.close()
 
     # ---------- no-JS: content must still be complete ----------
@@ -170,7 +265,7 @@ with sync_playwright() as p:
 
     # ---------- axe-core accessibility (WCAG 2.x A/AA) ----------
     for lang, path in PAGES.items():
-        for wname in ("360", "1440"):
+        for wname in ("375", "1366"):
             ctx = browser.new_context(viewport={"width": WIDTHS[wname], "height": 900})
             page = ctx.new_page()
             page.goto(BASE + path, wait_until="networkidle")

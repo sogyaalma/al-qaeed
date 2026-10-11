@@ -189,8 +189,7 @@ html[dir="rtl"] .ico-flip { transform: scaleX(-1); }
   font-size: 0.8rem;
   letter-spacing: 0.04em;
 }
-.primary-nav { margin-inline-start: auto; overflow-x: auto; scrollbar-width: none; }
-.primary-nav::-webkit-scrollbar { display: none; }
+.primary-nav { margin-inline-start: auto; overflow-x: auto; }
 .primary-nav ul { display: flex; gap: 0.25rem; list-style: none; }
 .primary-nav a {
   display: block;
@@ -308,6 +307,7 @@ html[dir="rtl"] .ico-flip { transform: scaleX(-1); }
 
 /* ---------- Sections ---------- */
 .section { padding-block: clamp(3.5rem, 7vw, 6.5rem); }
+.hero[id], .section[id], .contact[id] { scroll-margin-block-start: 6rem; }
 .section-tint { background: var(--tint); }
 .section-head { margin-block-end: clamp(2rem, 4vw, 3rem); max-width: 46rem; }
 .kicker {
@@ -576,6 +576,8 @@ html[dir="rtl"] .ico-flip { transform: scaleX(-1); }
   ::view-transition-old(root),
   ::view-transition-new(root) { animation: none; }
   .motion .reveal { opacity: 1; transform: none; transition: none; }
+  .btn { transition: none; }
+  .btn:hover { transform: none; }
 }
 
 /* ---------- Responsive ---------- */
@@ -587,7 +589,9 @@ html[dir="rtl"] .ico-flip { transform: scaleX(-1); }
 @media (max-width: 860px) {
   .header-inner { flex-wrap: wrap; padding-block: 0.6rem; }
   .brand { font-size: 0.95rem; }
-  .primary-nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+  .primary-nav { order: 3; flex-basis: 100%; margin-inline-start: 0; overflow: visible; }
+  .primary-nav ul { flex-wrap: wrap; }
+  .hero[id], .section[id], .contact[id] { scroll-margin-block-start: 9rem; }
   .lang-switch { margin-inline-start: auto; }
   .cards-2, .cert-list, .pub-grid { grid-template-columns: 1fr; }
 }
@@ -597,5 +601,6 @@ html[dir="rtl"] .ico-flip { transform: scaleX(-1); }
   .tl-period { font-size: 0.95rem; }
   .footer-inner { grid-template-columns: 1fr; }
   .actions .btn { flex: 1 1 auto; }
+  .hero[id], .section[id], .contact[id] { scroll-margin-block-start: 11rem; }
   .hero-media::before { inset-inline-start: 0.75rem; inset-inline-end: -0.75rem; inset-block-start: 0.75rem; }
 }

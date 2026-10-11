@@ -1,0 +1,310 @@
+{
+  "checks": [
+    {
+      "name": "[ar 360] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 360] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[ar 360] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[ar 768] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 768] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[ar 768] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[ar 1024] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 1024] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[ar 1024] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[ar 1440] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 1440] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[ar 1440] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[ar 1920] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 1920] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[ar 1920] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[en 360] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 360] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[en 360] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[en 768] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 768] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[en 768] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[en 1024] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 1024] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[en 1024] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[en 1440] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 1440] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[en 1440] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[en 1920] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 1920] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[en 1920] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "AR page: html lang=ar and dir=rtl",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "AR page: hero is first heading in Arabic",
+      "ok": true,
+      "detail": "عبدالعزيز القعيد"
+    },
+    {
+      "name": "AR page: hreflang alternates present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "AR page: a single <h1>",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Language switch AR→EN navigates to /en/",
+      "ok": true,
+      "detail": "http://127.0.0.1:8000/en/"
+    },
+    {
+      "name": "EN page: html lang=en and dir=ltr",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "EN page: hero heading is English",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Language switch EN→AR returns to /",
+      "ok": true,
+      "detail": "http://127.0.0.1:8000/"
+    },
+    {
+      "name": "Language switch back: dir=rtl",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[ar] every in-page anchor has a target",
+      "ok": true,
+      "detail": "missing=[]"
+    },
+    {
+      "name": "[ar] no external links",
+      "ok": true,
+      "detail": "found=[]"
+    },
+    {
+      "name": "[ar] every image loads and has alt text",
+      "ok": true,
+      "detail": "[{\"src\": \"/assets/img/portrait.jpg\", \"ok\": true, \"alt\": \"عبدالعزيز القعيد جالسًا خلف مكتبه أثناء لقاء إذاعي\"}]"
+    },
+    {
+      "name": "[ar] fonts registered and not in error",
+      "ok": true,
+      "detail": "10 faces"
+    },
+    {
+      "name": "[ar] CV download link resolves (200 + PDF)",
+      "ok": true,
+      "detail": "/assets/docs/abdulaziz-al-qaeed-cv.pdf -> 200 application/pdf"
+    },
+    {
+      "name": "[ar] JSON-LD Person parses and has name",
+      "ok": true,
+      "detail": "عبد العزيز بن عبد الرحمن بن إبراهيم القعيد"
+    },
+    {
+      "name": "[ar] unique title (<=70 chars) and description (<=160)",
+      "ok": true,
+      "detail": "title=55 desc=145"
+    },
+    {
+      "name": "[en] every in-page anchor has a target",
+      "ok": true,
+      "detail": "missing=[]"
+    },
+    {
+      "name": "[en] no external links",
+      "ok": true,
+      "detail": "found=[]"
+    },
+    {
+      "name": "[en] every image loads and has alt text",
+      "ok": true,
+      "detail": "[{\"src\": \"/assets/img/portrait.jpg\", \"ok\": true, \"alt\": \"Abdulaziz Al-Qaeed seated at his desk during a radio interview\"}]"
+    },
+    {
+      "name": "[en] fonts registered and not in error",
+      "ok": true,
+      "detail": "10 faces"
+    },
+    {
+      "name": "[en] CV download link resolves (200 + PDF)",
+      "ok": true,
+      "detail": "/assets/docs/abdulaziz-al-qaeed-cv.pdf -> 200 application/pdf"
+    },
+    {
+      "name": "[en] JSON-LD Person parses and has name",
+      "ok": true,
+      "detail": "Abdulaziz bin Abdulrahman bin Ibrahim Al-Qaeed"
+    },
+    {
+      "name": "[en] unique title (<=70 chars) and description (<=160)",
+      "ok": true,
+      "detail": "title=53 desc=146"
+    },
+    {
+      "name": "Unknown path returns HTTP 404",
+      "ok": true,
+      "detail": "status=404"
+    },
+    {
+      "name": "404.html page content is correct (bilingual message, noindex)",
+      "ok": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "Reduced motion: no reveal element left hidden",
+      "ok": true,
+      "detail": "hidden=0"
+    },
+    {
+      "name": "No-JS: all sections present in HTML",
+      "ok": true,
+      "detail": "sections=9"
+    },
+    {
+      "name": "axe [ar 360] zero violations (WCAG 2.2 AA + best practice)",
+      "ok": true,
+      "detail": "0 violations; passes=35"
+    },
+    {
+      "name": "axe [ar 1440] zero violations (WCAG 2.2 AA + best practice)",
+      "ok": true,
+      "detail": "0 violations; passes=34"
+    },
+    {
+      "name": "axe [en 360] zero violations (WCAG 2.2 AA + best practice)",
+      "ok": true,
+      "detail": "0 violations; passes=35"
+    },
+    {
+      "name": "axe [en 1440] zero violations (WCAG 2.2 AA + best practice)",
+      "ok": true,
+      "detail": "0 violations; passes=34"
+    }
+  ],
+  "failures": 0
+}

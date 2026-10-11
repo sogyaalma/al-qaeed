@@ -1,0 +1,626 @@
+{
+  "_comment": "Single source of bilingual content. Every fact is taken from the CV (السيرة الذاتية). To add a third language, add a key next to 'ar' and 'en' and a matching entry in tools/build.py LANGS.",
+  "site": {
+    "url": "https://al-qaeed.pages.dev",
+    "email": "aq5164@hotmail.com",
+    "cv_file": "assets/docs/abdulaziz-al-qaeed-cv.pdf",
+    "cv_download_name": "abdulaziz-al-qaeed-cv.pdf",
+    "default_lang": "ar"
+  },
+  "person": {
+    "name_short": {
+      "ar": "عبدالعزيز القعيد",
+      "en": "Abdulaziz Al-Qaeed"
+    },
+    "name_full": {
+      "ar": "عبد العزيز بن عبد الرحمن بن إبراهيم القعيد",
+      "en": "Abdulaziz bin Abdulrahman bin Ibrahim Al-Qaeed"
+    },
+    "title": {
+      "ar": "إمام مسجد ومدير تنفيذي في العمل الاجتماعي والإصلاح الأسري",
+      "en": "Imam and Executive Leader in Social Reform and Community Service"
+    },
+    "tagline": {
+      "ar": "إصلاح ذات البين، وخدمة المجتمع، وتعليم القرآن الكريم.",
+      "en": "Reconciliation, community service, and Quran education."
+    },
+    "intro": {
+      "ar": "خدم إمامًا منذ عام 1413هـ، ومدير تنفيذي سابق للجنة إصلاح ذات البين بإمارة منطقة الرياض. ويجمع بين الإمامة والتعليم والعمل التنموي والإعلام والتأليف.",
+      "en": "Has served as an imam since 1413 AH and is a former Executive Director of the Riyadh Region Reconciliation Committee. His work combines the imamate, education, community development, media and writing."
+    },
+    "portrait_alt": {
+      "ar": "عبدالعزيز القعيد جالسًا خلف مكتبه أثناء لقاء إذاعي",
+      "en": "Abdulaziz Al-Qaeed seated at his desk during a radio interview"
+    }
+  },
+  "about": {
+    "heading": {
+      "ar": "نبذة عني",
+      "en": "About"
+    },
+    "body": {
+      "ar": "إمام مسجد قصر الحكم بإمارة منطقة الرياض. عمل مديرًا تنفيذيًا للجنة إصلاح ذات البين بإمارة منطقة الرياض (1437–1444هـ) بقرار من صاحب السمو الملكي أمير المنطقة، ورئيسًا للجنة الحماية الأسرية بها سابقًا. وقبل ذلك كان مديرًا تنفيذيًا لجمعية سقيا الماء بمنطقة الرياض، وإمامًا لمسجد العبيكان بحي شبرا. ويهتم بالإصلاح والوساطة الأسرية، والعمل الأهلي والتنموي، وتحفيظ القرآن الكريم، وإعداد البرامج الثقافية والتربوية والمطبوعات التوعوية.",
+      "en": "Imam of Qasr Al-Hukm Mosque in the Riyadh Region. He served as Executive Director of the Riyadh Region Reconciliation Committee (1437–1444 AH), by decision of His Royal Highness the Emir of the Region, and formerly as Chairman of the Region's Family Protection Committee. Earlier, he was Executive Director of the Saqia Al-Maa Association in Riyadh and Imam of Al-Obaikan Mosque in Shubra. His work focuses on family reconciliation, community development, Quran memorization, and cultural, educational and awareness publications."
+    },
+    "focus_heading": {
+      "ar": "مجالات العمل",
+      "en": "Areas of work"
+    },
+    "focus": [
+      {
+        "title": {
+          "ar": "الإصلاح والأسرة",
+          "en": "Reconciliation and family"
+        },
+        "text": {
+          "ar": "لجان إصلاح ذات البين والحماية الأسرية والصلح.",
+          "en": "Reconciliation, family protection and dispute settlement committees."
+        }
+      },
+      {
+        "title": {
+          "ar": "العمل الأهلي والتنموي",
+          "en": "Community development"
+        },
+        "text": {
+          "ar": "جمعيات التنمية الأهلية، وجمعية سقيا الماء، ومؤسسات خيرية.",
+          "en": "Community development associations, the Saqia Al-Maa Association and charitable foundations."
+        }
+      },
+      {
+        "title": {
+          "ar": "القرآن الكريم والتعليم",
+          "en": "Quran and education"
+        },
+        "text": {
+          "ar": "مدارس ودور تحفيظ القرآن الكريم، ودورات تربوية وتعليمية.",
+          "en": "Quran memorization schools and houses, and educational training courses."
+        }
+      },
+      {
+        "title": {
+          "ar": "الإعلام والثقافة",
+          "en": "Media and culture"
+        },
+        "text": {
+          "ar": "برامج ولقاءات ثقافية، ومشاركات إعلامية في قنوات تلفزيونية.",
+          "en": "Cultural programs and forums, and media appearances on television channels."
+        }
+      }
+    ]
+  },
+  "experience": {
+    "heading": {
+      "ar": "الخبرة المهنية",
+      "en": "Experience"
+    },
+    "intro": {
+      "ar": "مرتبة من الأحدث إلى الأقدم.",
+      "en": "Listed from most recent to earliest."
+    },
+    "items": [
+      {
+        "period": {
+          "ar": "حالياً",
+          "en": "Present"
+        },
+        "role": {
+          "ar": "إمام مسجد قصر الحكم",
+          "en": "Imam, Qasr Al-Hukm Mosque"
+        },
+        "org": {
+          "ar": "إمارة منطقة الرياض",
+          "en": "Riyadh Region Emirate"
+        },
+        "note": null
+      },
+      {
+        "period": {
+          "ar": "1437–1444هـ",
+          "en": "1437–1444 AH"
+        },
+        "role": {
+          "ar": "مدير تنفيذي",
+          "en": "Executive Director"
+        },
+        "org": {
+          "ar": "لجنة إصلاح ذات البين بإمارة منطقة الرياض",
+          "en": "Reconciliation Committee (Islah Dhat al-Bayn), Riyadh Region Emirate"
+        },
+        "note": {
+          "ar": "بقرار من صاحب السمو الملكي أمير منطقة الرياض.",
+          "en": "By decision of His Royal Highness the Emir of the Riyadh Region."
+        }
+      },
+      {
+        "period": {
+          "ar": "سابقاً",
+          "en": "Formerly"
+        },
+        "role": {
+          "ar": "رئيس لجنة الحماية الأسرية",
+          "en": "Chairman, Family Protection Committee"
+        },
+        "org": {
+          "ar": "إمارة منطقة الرياض",
+          "en": "Riyadh Region Emirate"
+        },
+        "note": null
+      },
+      {
+        "period": {
+          "ar": "1422–1423هـ",
+          "en": "1422–1423 AH"
+        },
+        "role": {
+          "ar": "مدير تنفيذي",
+          "en": "Executive Director"
+        },
+        "org": {
+          "ar": "جمعية سقيا الماء بمنطقة الرياض",
+          "en": "Saqia Al-Maa Association, Riyadh Region"
+        },
+        "note": null
+      },
+      {
+        "period": {
+          "ar": "1413–1437هـ",
+          "en": "1413–1437 AH"
+        },
+        "role": {
+          "ar": "إمام مسجد",
+          "en": "Imam"
+        },
+        "org": {
+          "ar": "مسجد العبيكان بحي شبرا، الرياض",
+          "en": "Al-Obaikan Mosque, Shubra District, Riyadh"
+        },
+        "note": null
+      }
+    ]
+  },
+  "community": {
+    "heading": {
+      "ar": "الأعمال الاجتماعية والوطنية",
+      "en": "Community and national service"
+    },
+    "groups": [
+      {
+        "title": {
+          "ar": "الصلح والتنمية الأهلية",
+          "en": "Reconciliation and community development"
+        },
+        "items": [
+          {
+            "ar": "عضو لجنة الصلح الخاصة بوزارة الدفاع بتكليف من خادم الحرمين الشريفين (1433–1434هـ).",
+            "en": "Member, Reconciliation Committee of the Ministry of Defense, appointed by the Custodian of the Two Holy Mosques (1433–1434 AH)."
+          },
+          {
+            "ar": "إدارة لجنة التنمية الأهلية الاجتماعية بحي شبرا، التابعة لوزارة الموارد البشرية (1429هـ).",
+            "en": "Head, Social Community Development Committee, Shubra District, under the Ministry of Human Resources (1429 AH)."
+          },
+          {
+            "ar": "عضو مجلس إدارة جمعية التنمية الأهلية الاجتماعية بحي شبرا (1437–1441هـ).",
+            "en": "Board member, Shubra Social Community Development Association (1437–1441 AH)."
+          }
+        ]
+      },
+      {
+        "title": {
+          "ar": "المؤسسات والجمعيات",
+          "en": "Foundations and associations"
+        },
+        "items": [
+          {
+            "ar": "عضو مجلس إدارة مؤسسة الشيخ عبدالعزيز بن قاسم الأهلية.",
+            "en": "Board member, Sheikh Abdulaziz bin Qasim Al-Ahliya Foundation."
+          },
+          {
+            "ar": "عضو مجلس أمناء مؤسسة الشيخ عبد العزيز بن قاسم الخيرية.",
+            "en": "Member of the Board of Trustees, Sheikh Abdulaziz bin Qasim Charitable Foundation."
+          },
+          {
+            "ar": "عضو مجلس إدارة جمعية سقيا الماء بمنطقة الرياض والمشرف المالي.",
+            "en": "Board member and financial supervisor, Saqia Al-Maa Association, Riyadh Region."
+          },
+          {
+            "ar": "عضو نادي الوشم بشقراء (1422–1424هـ).",
+            "en": "Member, Al-Washm Club, Shaqra (1422–1424 AH)."
+          }
+        ]
+      },
+      {
+        "title": {
+          "ar": "التعليم وتحفيظ القرآن",
+          "en": "Education and Quran memorization"
+        },
+        "items": [
+          {
+            "ar": "مشرف على مدرسة تحفيظ القرآن الكريم بمسجد العبيكان بشبرا للبنين، تابعة لوزارة الشؤون الإسلامية (منذ 1415هـ).",
+            "en": "Supervisor, Quran memorization school for boys at Al-Obaikan Mosque, Shubra, under the Ministry of Islamic Affairs (since 1415 AH)."
+          },
+          {
+            "ar": "مشرف عام لدار الفضائل النسائية لتحفيظ القرآن الكريم، التابعة لوزارة الشؤون الإسلامية.",
+            "en": "General supervisor, Al-Fadha'il Women's Quran Memorization House, under the Ministry of Islamic Affairs."
+          },
+          {
+            "ar": "عضو مجلس مركز الغرب التابع للإدارة العامة النسائية لتحفيظ القرآن الكريم.",
+            "en": "Member of the council, Al-Gharb Quran Memorization Center, General Directorate for Women."
+          },
+          {
+            "ar": "إقامة دورات تربوية وتعليمية في مركز البابطين الاجتماعي بمدينة الرياض (فن التعامل مع الناس، ومهارات الاتصال).",
+            "en": "Delivered educational courses at Al-Babtain Social Center, Riyadh (people skills and communication)."
+          },
+          {
+            "ar": "مدير النادي الصيفي بمتوسطة الملك سعود بالرياض (عدة سنوات).",
+            "en": "Director of the summer club at King Saud Intermediate School, Riyadh (several years)."
+          }
+        ]
+      },
+      {
+        "title": {
+          "ar": "الإعلام والثقافة",
+          "en": "Media and culture"
+        },
+        "items": [
+          {
+            "ar": "رئيس مجلس إدارة وكالة ملتقى الميديا للدعاية والإعلان، ومستشار إعلامي.",
+            "en": "Chairman of the Board, Media Forum Advertising and Marketing Agency, and media consultant."
+          },
+          {
+            "ar": "المشاركة الإعلامية في بعض قنوات التلفزيون السعودي وبعض القنوات الفضائية.",
+            "en": "Media contributor on Saudi television and some satellite channels."
+          },
+          {
+            "ar": "إدارة بعض المسابقات الثقافية لوزارة الشباب والرياضة.",
+            "en": "Managed cultural competitions for the Ministry of Youth and Sports."
+          },
+          {
+            "ar": "إدارة وإعداد بعض اللقاءات والمنتديات والمسابقات والبرامج الثقافية المسموعة والمطبوعة.",
+            "en": "Managed and prepared audio and print cultural programs, forums and competitions."
+          }
+        ]
+      },
+      {
+        "title": {
+          "ar": "المشاركات الوطنية",
+          "en": "National participation"
+        },
+        "items": [
+          {
+            "ar": "عضو الحملة الوطنية الشاملة لتعزيز القيم الوطنية «وطننا أمانة»، بإمارة منطقة الرياض (1436هـ).",
+            "en": "Member, National Campaign to Strengthen National Values, “Our Homeland Is a Trust”, Riyadh Region (1436 AH)."
+          },
+          {
+            "ar": "المشاركة في برنامج التحول الوطني (ورشة عمل وزارة الموارد البشرية، 1435هـ).",
+            "en": "Participant, National Transformation Program workshop, Ministry of Human Resources (1435 AH)."
+          }
+        ]
+      }
+    ],
+    "achievements_heading": {
+      "ar": "إنجاز موثق",
+      "en": "Documented achievement"
+    },
+    "achievements": [
+      {
+        "ar": "تمثيل المملكة في المسابقة الثقافية لدول مجلس التعاون الخليجي، بدولة الكويت (1421هـ).",
+        "en": "Represented the Kingdom in the GCC cultural competition, State of Kuwait (1421 AH)."
+      }
+    ]
+  },
+  "skills": {
+    "heading": {
+      "ar": "المهارات والكفاءات",
+      "en": "Skills and competencies"
+    },
+    "intro": {
+      "ar": "مستخرجة من الأدوار والدورات الموثقة في السيرة، دون مؤشرات نسبية.",
+      "en": "Drawn from the documented roles and courses in the CV, without self-rating scores."
+    },
+    "groups": [
+      {
+        "title": {
+          "ar": "الإدارة والتنظيم",
+          "en": "Management and organization"
+        },
+        "tags": [
+          {
+            "ar": "الإدارة التنفيذية للجان ومؤسسات",
+            "en": "Executive leadership of committees and associations"
+          },
+          {
+            "ar": "الاتصال الإداري",
+            "en": "Administrative communication"
+          },
+          {
+            "ar": "الميزانية المالية",
+            "en": "Financial budgeting"
+          }
+        ]
+      },
+      {
+        "title": {
+          "ar": "التواصل والإصلاح",
+          "en": "Communication and reconciliation"
+        },
+        "tags": [
+          {
+            "ar": "الاتصال الفعال",
+            "en": "Effective communication"
+          },
+          {
+            "ar": "التعامل مع الآخرين",
+            "en": "Working with people"
+          },
+          {
+            "ar": "الوساطة والإصلاح الأسري",
+            "en": "Mediation and family reconciliation"
+          }
+        ]
+      },
+      {
+        "title": {
+          "ar": "التعليم والمحتوى",
+          "en": "Education and content"
+        },
+        "tags": [
+          {
+            "ar": "إعداد البرامج الثقافية والتربوية",
+            "en": "Designing cultural and educational programs"
+          },
+          {
+            "ar": "كتابة الكتيبات والبحوث",
+            "en": "Writing booklets and research papers"
+          },
+          {
+            "ar": "تحفيظ القرآن الكريم",
+            "en": "Quran memorization instruction"
+          }
+        ]
+      },
+      {
+        "title": {
+          "ar": "التقنية والإعلام",
+          "en": "Technology and media"
+        },
+        "tags": [
+          {
+            "ar": "الحاسب الآلي (دورة)",
+            "en": "Computing (course)"
+          },
+          {
+            "ar": "وسائل التواصل الاجتماعي (دورة)",
+            "en": "Social media (course)"
+          },
+          {
+            "ar": "المشاركة الإعلامية",
+            "en": "Media appearances"
+          }
+        ]
+      }
+    ]
+  },
+  "publications": {
+    "heading": {
+      "ar": "الإصدارات والبحوث",
+      "en": "Publications and papers"
+    },
+    "intro": {
+      "ar": "كتيبات وبحوث من إعدادي وكتابتي، وفق عناوينها في السيرة.",
+      "en": "Booklets and papers written and prepared, using their titles as listed in the CV."
+    },
+    "items": [
+      {
+        "ar": "فكرة الحي والمسجد",
+        "en": "The Neighborhood and the Mosque"
+      },
+      {
+        "ar": "خطر الهجر والقطيعة",
+        "en": "The Danger of Shunning and Estrangement"
+      },
+      {
+        "ar": "أسئلة مهمة في العفو والصلح",
+        "en": "Important Questions on Forgiveness and Reconciliation"
+      },
+      {
+        "ar": "رسالة المسجد",
+        "en": "The Message of the Mosque"
+      }
+    ]
+  },
+  "education": {
+    "heading": {
+      "ar": "التعليم",
+      "en": "Education"
+    },
+    "items": [
+      {
+        "title": {
+          "ar": "كلية أصول الدين",
+          "en": "College of Usul al-Din"
+        },
+        "org": {
+          "ar": "جامعة الإمام محمد بن سعود الإسلامية",
+          "en": "Imam Muhammad ibn Saud Islamic University"
+        },
+        "period": null
+      },
+      {
+        "title": {
+          "ar": "معهد الرياض العلمي",
+          "en": "Riyadh Scientific Institute"
+        },
+        "org": {
+          "ar": "جامعة الإمام محمد بن سعود الإسلامية",
+          "en": "Imam Muhammad ibn Saud Islamic University"
+        },
+        "period": {
+          "ar": "1419–1427هـ",
+          "en": "1419–1427 AH"
+        }
+      }
+    ]
+  },
+  "training": {
+    "heading": {
+      "ar": "الدورات والشهادات",
+      "en": "Courses and certificates"
+    },
+    "items": [
+      {
+        "ar": "مشارك في المؤتمر الدولي للابتزاز الجنسي للأطفال (المنظم: وزارة الداخلية).",
+        "en": "Participant, International Conference on Sexual Extortion of Children (organized by the Ministry of Interior)."
+      },
+      {
+        "ar": "دورة «وسائل التواصل الاجتماعي: ما لها وما عليها» (المنظم: وزارة الداخلية).",
+        "en": "Course: “Social Media: Its Benefits and Risks” (organized by the Ministry of Interior)."
+      },
+      {
+        "ar": "حضور دورة «مدير لأول مرة» في مجال العمل الخيري.",
+        "en": "“First-Time Manager” course, charitable sector."
+      },
+      {
+        "ar": "دورة في الحاسب الآلي.",
+        "en": "Computer course."
+      },
+      {
+        "ar": "دورة في فن الاتصال الفعال.",
+        "en": "Course in effective communication."
+      },
+      {
+        "ar": "دورة في الاتصال الإداري.",
+        "en": "Course in administrative communication."
+      },
+      {
+        "ar": "دورة في التعامل مع الآخرين.",
+        "en": "Course in working with people."
+      },
+      {
+        "ar": "دورة في الميزانية المالية.",
+        "en": "Course in financial budgeting."
+      },
+      {
+        "ar": "دورة مقومات النجاح.",
+        "en": "Course: Foundations of Success."
+      },
+      {
+        "ar": "المشاركة في مؤتمر الإعجاز في دورة تركيا (1431هـ).",
+        "en": "Participant, conference on the miracles of the Quran, Turkey course (1431 AH)."
+      }
+    ]
+  },
+  "contact": {
+    "heading": {
+      "ar": "تواصل",
+      "en": "Contact"
+    },
+    "text": {
+      "ar": "للتواصل المهني والدعوات والمقابلات.",
+      "en": "For professional enquiries, invitations and interviews."
+    },
+    "email_label": {
+      "ar": "البريد الإلكتروني",
+      "en": "Email"
+    }
+  },
+  "nav": [
+    {
+      "id": "about",
+      "label": {
+        "ar": "نبذة",
+        "en": "About"
+      }
+    },
+    {
+      "id": "experience",
+      "label": {
+        "ar": "الخبرة",
+        "en": "Experience"
+      }
+    },
+    {
+      "id": "community",
+      "label": {
+        "ar": "الأعمال",
+        "en": "Work"
+      }
+    },
+    {
+      "id": "skills",
+      "label": {
+        "ar": "المهارات",
+        "en": "Skills"
+      }
+    },
+    {
+      "id": "education",
+      "label": {
+        "ar": "التعليم",
+        "en": "Education"
+      }
+    },
+    {
+      "id": "training",
+      "label": {
+        "ar": "الدورات",
+        "en": "Courses"
+      }
+    },
+    {
+      "id": "contact",
+      "label": {
+        "ar": "تواصل",
+        "en": "Contact"
+      }
+    }
+  ],
+  "ui": {
+    "skip": {
+      "ar": "تخطي إلى المحتوى",
+      "en": "Skip to content"
+    },
+    "download": {
+      "ar": "تنزيل السيرة الذاتية (PDF)",
+      "en": "Download CV (PDF)"
+    },
+    "contact_btn": {
+      "ar": "تواصل معي",
+      "en": "Get in touch"
+    },
+    "switch_label": {
+      "ar": "English",
+      "en": "العربية"
+    },
+    "switch_aria": {
+      "ar": "Switch to English",
+      "en": "التبديل إلى العربية"
+    },
+    "email_btn": {
+      "ar": "راسلني بالبريد",
+      "en": "Send an email"
+    },
+    "menu": {
+      "ar": "القائمة",
+      "en": "Menu"
+    },
+    "footer_rights": {
+      "ar": "جميع الحقوق محفوظة.",
+      "en": "All rights reserved."
+    },
+    "cv_note": {
+      "ar": "ملف السيرة نسخة من صفحات السيرة الذاتية المعتمدة.",
+      "en": "The CV file is a copy of the approved CV pages."
+    }
+  },
+  "seo": {
+    "ar": {
+      "title": "عبدالعزيز القعيد | إمام ومدير تنفيذي في العمل الاجتماعي",
+      "description": "السيرة الذاتية لعبدالعزيز بن عبد الرحمن القعيد: لجنة إصلاح ذات البين بإمارة منطقة الرياض، والعمل الأهلي، وتحفيظ القرآن الكريم، والبرامج الثقافية."
+    },
+    "en": {
+      "title": "Abdulaziz Al-Qaeed | Imam and Social Reform Executive",
+      "description": "CV of Abdulaziz bin Abdulrahman Al-Qaeed: Riyadh Region Reconciliation Committee, community development, Quran memorization and cultural programs."
+    }
+  }
+}

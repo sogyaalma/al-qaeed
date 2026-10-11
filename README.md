@@ -1,7 +1,7 @@
-# موقع عبدالعزيز القعيد الشخصي / Abdulaziz Al-Qaeed — Personal Site
+# السيرة التعريفية للشيخ عبدالعزيز القعيد / Sheikh Abdulaziz Al-Qaeed — Biographical Profile
 
-موقع ثنائي اللغة (عربي RTL افتراضيًا، English LTR) مبني بـ **HTML5 + CSS3 + Vanilla JS** بدون framework وبدون خطوة بناء للنشر.
-A bilingual static site (Arabic RTL by default, English LTR). Plain HTML/CSS/JS — no framework, no build step to deploy.
+موقع ثنائي اللغة للتعريف بالشيخ عبدالعزيز القعيد وسيرته، بالعربية (RTL) والإنجليزية (LTR)، مبني بـ **HTML5 + CSS3 + Vanilla JS** دون إطار عمل أو خطوة بناء للنشر.
+A bilingual biographical profile of Sheikh Abdulaziz Al-Qaeed, in Arabic (RTL) and English (LTR). Built with plain HTML/CSS/JS, with no framework or deployment build step.
 
 ## المحتوى / Contents
 | المسار | الوصف |
@@ -45,7 +45,7 @@ python3 -m http.server 8000
 
 **إضافة لغة ثالثة:** أضف مفتاح اللغة (مثل `fr`) بجوار كل `ar`/`en` في `content.json`، ثم أضف اللغة إلى `LANGS` في `tools/build.py` (الاتجاه، المسار) وأنشئ المسار المقابل.
 
-**قبل النشر:** غيّر `https://www.example.com` في `content/content.json` (حقل `site.url`) وفي `robots.txt` إلى النطاق الفعلي، ثم أعد توليد الصفحات.
+**قبل النشر / Before deployment:** تأكد من ضبط `site.url` في `content/content.json` ورابط Sitemap في `robots.txt` على النطاق النهائي، ثم أعد توليد الصفحات. Set both to your final domain, then regenerate the pages.
 
 ## الخطوط / Fonts
 - IBM Plex Sans Arabic (عربي + لاتيني) و Noto Naskh Arabic — مرخصان SIL OFL.

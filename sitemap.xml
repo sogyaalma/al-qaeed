@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://www.example.com/</loc>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://www.example.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.example.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.example.com/"/>
+    <loc>https://al-qaeed.pages.dev/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://al-qaeed.pages.dev/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://al-qaeed.pages.dev/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://al-qaeed.pages.dev/"/>
   </url>
   <url>
-    <loc>https://www.example.com/en/</loc>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://www.example.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.example.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.example.com/"/>
+    <loc>https://al-qaeed.pages.dev/en/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://al-qaeed.pages.dev/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://al-qaeed.pages.dev/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://al-qaeed.pages.dev/"/>
   </url>
 </urlset>

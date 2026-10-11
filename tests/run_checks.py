@@ -79,6 +79,11 @@ with sync_playwright() as p:
     page.goto(BASE + "/", wait_until="networkidle")
     check("AR page: html lang=ar and dir=rtl",
           page.get_attribute("html", "lang") == "ar" and page.get_attribute("html", "dir") == "rtl")
+    ar_copy = page.locator("body").inner_text()
+    check("AR page: third-person biography of the Sheikh",
+          page.inner_text("#about-title") == "نبذة عن الشيخ"
+          and "الشيخ عبدالعزيز القعيد" in page.inner_text("#about")
+          and not any(phrase in ar_copy for phrase in ("نبذة عني", "تواصل معي", "راسلني بالبريد", "إعدادي وكتابتي")))
     check("AR page: hero is first heading in Arabic",
           "عبدالعزيز" in page.inner_text("#hero-title"), page.inner_text("#hero-title"))
     check("AR page: hreflang alternates present",
@@ -91,6 +96,11 @@ with sync_playwright() as p:
     check("Language switch AR→EN navigates to /en/", page.url.rstrip("/").endswith("/en"), page.url)
     check("EN page: html lang=en and dir=ltr",
           page.get_attribute("html", "lang") == "en" and page.get_attribute("html", "dir") == "ltr")
+    en_copy = page.locator("body").inner_text().lower()
+    check("EN page: third-person biography of the Sheikh",
+          page.inner_text("#about-title") == "Biography"
+          and "Sheikh Abdulaziz Al-Qaeed" in page.inner_text("#about")
+          and not any(phrase in en_copy for phrase in ("about me", "contact me", "email me", "my writing")))
     check("EN page: hero heading is English", "Abdulaziz" in page.inner_text("#hero-title"))
     page.click("a.lang-switch")
     page.wait_for_load_state("networkidle")

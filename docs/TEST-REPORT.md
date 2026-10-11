@@ -4,7 +4,11 @@
 Every number below was measured in this sandbox. Browser used: Chromium only.
 
 ## 1. اختبارات المتصفح / Browser checks — `tests/run_checks.py`
-**النتيجة: 61 / 61 نجح** — السجل الكامل في `docs/test-run.log` و `docs/test-results.json`.
+**النتيجة المسجلة سابقًا: 61 / 61 نجح** — السجل الكامل في `docs/test-run.log` و `docs/test-results.json`.
+
+> **تحديث 2026-10-11:** أُعيدت صياغة النصوص لتقديم سيرة تعريفية بالشيخ بصيغة الغائب، وأُضيف اختباران للتحقق من ذلك في اللغتين. لم تُعَد اختبارات المتصفح في هذه البيئة لعدم توفر Playwright وaxe-core-python؛ لذلك فالنتائج واللقطات وقياسات Lighthouse أدناه تخص النسخة السابقة من النصوص.
+>
+> **2026-10-11 copy update:** The site copy now presents a third-person biography of the Sheikh, with two regression checks added for both languages. Browser tests were not rerun because Playwright and axe-core-python are not installed; the results, screenshots and Lighthouse figures below apply to the previous copy revision.
 
 | المجال | ما تم فحصه | النتيجة |
 |---|---|---|

@@ -9,8 +9,8 @@
   },
   "person": {
     "name_short": {
-      "ar": "عبدالعزيز القعيد",
-      "en": "Abdulaziz Al-Qaeed"
+      "ar": "الشيخ عبدالعزيز القعيد",
+      "en": "Sheikh Abdulaziz Al-Qaeed"
     },
     "name_full": {
       "ar": "عبد العزيز بن عبد الرحمن بن إبراهيم القعيد",
@@ -25,22 +25,22 @@
       "en": "Reconciliation, community service, and Quran education."
     },
     "intro": {
-      "ar": "خدم إمامًا منذ عام 1413هـ، ومدير تنفيذي سابق للجنة إصلاح ذات البين بإمارة منطقة الرياض. ويجمع بين الإمامة والتعليم والعمل التنموي والإعلام والتأليف.",
-      "en": "Has served as an imam since 1413 AH and is a former Executive Director of the Riyadh Region Reconciliation Committee. His work combines the imamate, education, community development, media and writing."
+      "ar": "تولّى الشيخ عبدالعزيز القعيد الإمامة منذ عام 1413هـ، وعمل مديرًا تنفيذيًا سابقًا للجنة إصلاح ذات البين بإمارة منطقة الرياض. وتجمع مسيرته بين الإمامة والتعليم والعمل التنموي والإعلام والتأليف.",
+      "en": "Sheikh Abdulaziz Al-Qaeed has served as an imam since 1413 AH and previously led the Riyadh Region Reconciliation Committee as Executive Director. His work spans education, community development, media and writing."
     },
     "portrait_alt": {
-      "ar": "عبدالعزيز القعيد جالسًا خلف مكتبه أثناء لقاء إذاعي",
-      "en": "Abdulaziz Al-Qaeed seated at his desk during a radio interview"
+      "ar": "الشيخ عبدالعزيز القعيد جالسًا خلف مكتبه أثناء لقاء إذاعي",
+      "en": "Sheikh Abdulaziz Al-Qaeed seated at his desk during a radio interview"
     }
   },
   "about": {
     "heading": {
-      "ar": "نبذة عني",
-      "en": "About"
+      "ar": "نبذة عن الشيخ",
+      "en": "Biography"
     },
     "body": {
-      "ar": "إمام مسجد قصر الحكم بإمارة منطقة الرياض. عمل مديرًا تنفيذيًا للجنة إصلاح ذات البين بإمارة منطقة الرياض (1437–1444هـ) بقرار من صاحب السمو الملكي أمير المنطقة، ورئيسًا للجنة الحماية الأسرية بها سابقًا. وقبل ذلك كان مديرًا تنفيذيًا لجمعية سقيا الماء بمنطقة الرياض، وإمامًا لمسجد العبيكان بحي شبرا. ويهتم بالإصلاح والوساطة الأسرية، والعمل الأهلي والتنموي، وتحفيظ القرآن الكريم، وإعداد البرامج الثقافية والتربوية والمطبوعات التوعوية.",
-      "en": "Imam of Qasr Al-Hukm Mosque in the Riyadh Region. He served as Executive Director of the Riyadh Region Reconciliation Committee (1437–1444 AH), by decision of His Royal Highness the Emir of the Region, and formerly as Chairman of the Region's Family Protection Committee. Earlier, he was Executive Director of the Saqia Al-Maa Association in Riyadh and Imam of Al-Obaikan Mosque in Shubra. His work focuses on family reconciliation, community development, Quran memorization, and cultural, educational and awareness publications."
+      "ar": "الشيخ عبدالعزيز القعيد إمام مسجد قصر الحكم بإمارة منطقة الرياض. عمل مديرًا تنفيذيًا للجنة إصلاح ذات البين بإمارة منطقة الرياض (1437–1444هـ) بقرار من صاحب السمو الملكي أمير المنطقة، وتولى رئاسة لجنة الحماية الأسرية بالإمارة سابقًا. وقبل ذلك، عمل مديرًا تنفيذيًا لجمعية سقيا الماء بمنطقة الرياض وإمامًا لمسجد العبيكان بحي شبرا. وتشمل مجالات اهتمامه الإصلاح والوساطة الأسرية، والعمل الأهلي والتنموي، وتحفيظ القرآن الكريم، وإعداد البرامج الثقافية والتربوية والمطبوعات التوعوية.",
+      "en": "Sheikh Abdulaziz Al-Qaeed is the Imam of Qasr Al-Hukm Mosque in the Riyadh Region. He served as Executive Director of the Riyadh Region Reconciliation Committee (1437–1444 AH), by decision of His Royal Highness the Emir of the Region, and formerly chaired its Family Protection Committee. Earlier, he led the Saqia Al-Maa Association in Riyadh and served as Imam of Al-Obaikan Mosque in Shubra. His work focuses on family reconciliation, community development, Quran memorization, and cultural, educational and awareness publications."
     },
     "focus_heading": {
       "ar": "مجالات العمل",
@@ -407,8 +407,8 @@
       "en": "Publications and papers"
     },
     "intro": {
-      "ar": "كتيبات وبحوث من إعدادي وكتابتي، وفق عناوينها في السيرة.",
-      "en": "Booklets and papers written and prepared, using their titles as listed in the CV."
+      "ar": "كتيبات وبحوث أعدّها الشيخ عبدالعزيز القعيد وكتبها، وفق العناوين الواردة في سيرته الذاتية.",
+      "en": "Booklets and papers prepared and written by Sheikh Abdulaziz Al-Qaeed, listed as they appear in his CV."
     },
     "items": [
       {
@@ -512,12 +512,12 @@
   },
   "contact": {
     "heading": {
-      "ar": "تواصل",
-      "en": "Contact"
+      "ar": "التواصل مع الشيخ",
+      "en": "Contact the Sheikh"
     },
     "text": {
-      "ar": "للتواصل المهني والدعوات والمقابلات.",
-      "en": "For professional enquiries, invitations and interviews."
+      "ar": "للتواصل المهني مع الشيخ عبدالعزيز القعيد، والدعوات والمقابلات.",
+      "en": "For professional enquiries, invitations and interviews with Sheikh Abdulaziz Al-Qaeed."
     },
     "email_label": {
       "ar": "البريد الإلكتروني",
@@ -529,7 +529,7 @@
       "id": "about",
       "label": {
         "ar": "نبذة",
-        "en": "About"
+        "en": "Biography"
       }
     },
     {
@@ -585,8 +585,8 @@
       "en": "Download CV (PDF)"
     },
     "contact_btn": {
-      "ar": "تواصل معي",
-      "en": "Get in touch"
+      "ar": "تواصل مع الشيخ",
+      "en": "Contact the Sheikh"
     },
     "switch_label": {
       "ar": "English",
@@ -597,8 +597,8 @@
       "en": "التبديل إلى العربية"
     },
     "email_btn": {
-      "ar": "راسلني بالبريد",
-      "en": "Send an email"
+      "ar": "مراسلة الشيخ بالبريد الإلكتروني",
+      "en": "Email the Sheikh"
     },
     "menu": {
       "ar": "القائمة",
@@ -615,12 +615,12 @@
   },
   "seo": {
     "ar": {
-      "title": "عبدالعزيز القعيد | إمام ومدير تنفيذي في العمل الاجتماعي",
-      "description": "السيرة الذاتية لعبدالعزيز بن عبد الرحمن القعيد: لجنة إصلاح ذات البين بإمارة منطقة الرياض، والعمل الأهلي، وتحفيظ القرآن الكريم، والبرامج الثقافية."
+      "title": "الشيخ عبدالعزيز القعيد | السيرة التعريفية",
+      "description": "نبذة عن الشيخ عبدالعزيز القعيد، إمام مسجد قصر الحكم، وخبرته في إصلاح ذات البين والعمل المجتمعي وتعليم القرآن الكريم."
     },
     "en": {
-      "title": "Abdulaziz Al-Qaeed | Imam and Social Reform Executive",
-      "description": "CV of Abdulaziz bin Abdulrahman Al-Qaeed: Riyadh Region Reconciliation Committee, community development, Quran memorization and cultural programs."
+      "title": "Sheikh Abdulaziz Al-Qaeed | Biography",
+      "description": "Biography of Sheikh Abdulaziz Al-Qaeed, imam of Qasr Al-Hukm Mosque and former Riyadh Region Reconciliation Committee executive director."
     }
   }
 }

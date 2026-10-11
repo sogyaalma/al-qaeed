@@ -6,7 +6,7 @@
 - نطاق شخصي تشتريه بنفسك (لم يُشترَ نطاق ضمن هذا المشروع).
 
 ## 2. قبل النشر / Before deploying
-1. غيّر `https://www.example.com` إلى نطاقك في:
+1. حدّث النطاق إلى نطاقك النهائي في:
    - `content/content.json` → `site.url`
    - `robots.txt` (سطر Sitemap)
 2. أعد توليد الصفحات: `python3 tools/build.py`
@@ -18,7 +18,7 @@
 cd al-qaeed-website
 git init -b main
 git add .
-git commit -m "Initial personal website"
+git commit -m "Initial biographical profile"
 git remote add origin <YOUR_REPO_URL>
 git push -u origin main
 ```

@@ -4,11 +4,14 @@ Generates the static pages from content/content.json.
 
   python3 tools/build.py
 
-Output (committed to the repo, so deployment needs NO build step):
+Generated root outputs (committed for review and root-level local preview):
   index.html          Arabic (default, RTL)
   en/index.html       English (LTR)
   404.html            Not-found page
   sitemap.xml         With hreflang alternates
+
+For Cloudflare Pages, run tools/package.py after this script and deploy dist/. That
+allowlisted static output excludes repository documentation, tests, and source data.
 
 To add a third language: add an entry to LANGS below and a matching key
 ("xx") next to every "ar"/"en" value in content/content.json.
@@ -369,7 +372,6 @@ def training(lang):
       </ul>
     </div>
   </section>
-  </main>
 """
 
 
@@ -385,11 +387,12 @@ def contact(lang):
       <p>{e(t(c['text'], lang))}</p>
     </div>
     <div class="contact-actions">
-      <a class="btn btn-light" href="mailto:{EMAIL}">{icon('mail')}<span>{e(t(ui['email_btn'], lang))}</span></a>
-      <p class="email-line"><span>{e(t(c['email_label'], lang))}:</span> <a href="mailto:{EMAIL}" dir="ltr">{EMAIL}</a></p>
+      <a class="btn btn-light" href="mailto:{e(EMAIL)}">{icon('mail')}<span>{e(t(ui['email_btn'], lang))}</span></a>
+      <p class="email-line"><span>{e(t(c['email_label'], lang))}:</span> <a href="mailto:{e(EMAIL)}" dir="ltr">{e(EMAIL)}</a></p>
     </div>
   </div>
 </section>
+</main>
 """
 
 

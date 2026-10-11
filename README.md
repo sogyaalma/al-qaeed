@@ -1,7 +1,7 @@
 # السيرة التعريفية للشيخ عبدالعزيز القعيد / Sheikh Abdulaziz Al-Qaeed — Biographical Profile
 
-موقع ثنائي اللغة للتعريف بالشيخ عبدالعزيز القعيد وسيرته، بالعربية (RTL) والإنجليزية (LTR)، مبني بـ **HTML5 + CSS3 + Vanilla JS** دون إطار عمل أو خطوة بناء للنشر.
-A bilingual biographical profile of Sheikh Abdulaziz Al-Qaeed, in Arabic (RTL) and English (LTR). Built with plain HTML/CSS/JS, with no framework or deployment build step.
+موقع ثنائي اللغة للتعريف بالشيخ عبدالعزيز القعيد وسيرته، بالعربية (RTL) والإنجليزية (LTR). مبني بـ **HTML5 + CSS3 + Vanilla JS**، ويُنتج ملفات ثابتة للنشر؛ لا إطار واجهات ولا Backend ولا قاعدة بيانات.
+A bilingual Arabic (RTL) and English (LTR) profile built with plain HTML/CSS/JavaScript. It deploys as static files—no framework runtime, backend, or database.
 
 ## المحتوى / Contents
 | المسار | الوصف |
@@ -10,48 +10,52 @@ A bilingual biographical profile of Sheikh Abdulaziz Al-Qaeed, in Arabic (RTL) a
 | `en/index.html` | English page |
 | `404.html` | صفحة الخطأ 404 |
 | `assets/css/styles.css` | التصميم كله (الخطوط + الأنماط) |
-| `assets/js/main.js` | تحسين تدريجي فقط: سنة الحقوق + ظهور العناصر (الصفحة مكتملة بدونه) |
+| `assets/js/main.js` | تحسين تدريجي فقط: سنة الحقوق + ظهور العناصر (المحتوى مكتمل بدونه) |
 | `assets/fonts/` | الخطوط مستضافة محليًا (woff2) مع ملفات الترخيص |
 | `assets/img/` | الصورة الشخصية (JPG/WebP بأحجام متعددة)، وfavicon.svg |
-| `assets/docs/abdulaziz-al-qaeed-cv.pdf` | ملف السيرة الذاتية للتنزيل (انظر ملاحظة أدناه) |
-| `content/content.json` | **مصدر المحتوى الوحيد** (عربي وإنجليزي) |
-| `tools/build.py` | يولّد الصفحات من `content.json` |
-| `tests/run_checks.py` | اختبارات المتصفح (Playwright) |
-| `docs/` | تقرير الاختبارات، Lighthouse، قائمة التحديث، لقطات الشاشة |
-| `robots.txt`, `sitemap.xml`, `vercel.json` | SEO والإعدادات الأمنية عند النشر على Vercel |
+| `assets/docs/abdulaziz-al-qaeed-cv.pdf` | ملف السيرة الذاتية للتنزيل |
+| `content/content.json` | مصدر المحتوى الثنائي اللغة (ملف مصدر، لا يدخل حزمة النشر) |
+| `tools/build.py` | يولّد الصفحات وملف sitemap من `content.json` |
+| `tools/package.py` | ينشئ `dist/` بقائمة ملفات الموقع العامة فقط |
+| `tests/run_checks.py` | اختبارات المتصفح (Playwright وaxe-core) |
+| `docs/` | تقارير الاختبارات واللقطات وقائمة اعتماد المحتوى؛ لا تدخل حزمة النشر |
+| `_headers` | ترويسات Cloudflare Pages الأمنية |
+| `robots.txt`, `sitemap.xml` | إعدادات SEO |
 
-> ملاحظة السيرة: الملف المرفق كان صفحتين PNG وليس PDF أصلي، لذلك أُنشئ منه PDF بعنوان "abdulaziz-al-qaeed-cv.pdf". إن توفر PDF أصلي، استبدل الملف بالنسخة الأصلية بنفس الاسم.
+> ملاحظة السيرة: ملف PDF الحالي نسخة أُنشئت من صفحتي PNG، وليس PDF أصليًا موقّعًا. راجع `docs/UPDATE-CHECKLIST.md` للتأكيدات المطلوبة قبل النشر العام. هذا الملف والوثائق الداخلية لا يُنسخان إلى `dist/`.
 
-## التشغيل محليًا / Run locally
-المتطلبات: Python 3 (أي إصدار حديث). لا حاجة لتثبيت أي حزم للتشغيل.
+## البناء والمعاينة محليًا / Build and preview locally
+المتطلبات: Python 3 (المكتبة القياسية فقط لبناء الموقع وتغليفه).
 
 ```bash
-cd al-qaeed-website
-python3 -m http.server 8000
+python3 tools/build.py
+python3 tools/package.py
+python3 -m http.server 8000 --bind 0.0.0.0 --directory dist
 ```
 ثم افتح / Then open: http://localhost:8000 و http://localhost:8000/en/
 
 ## تعديل المحتوى / Editing content
-1. عدّل القيم في `content/content.json` (كل نص له مفتاحان `ar` و `en`).
-2. أعد توليد الصفحات:
+1. عدّل القيم في `content/content.json` (النصوص بالعربية والإنجليزية).
+2. أعد توليد الصفحات وتجهيز حزمة النشر:
    ```bash
-   python3 tools/build.py
+   python3 tools/build.py && python3 tools/package.py
    ```
-3. شغّل الاختبارات (اختياري لكن موصى به، تحتاج Playwright):
+3. شغّل اختبارات المتصفح (تحتاج Playwright وaxe-core وChromium):
    ```bash
-   pip install playwright axe-core-python && python3 -m playwright install chromium
+   pip install playwright axe-core-python
+   python3 -m playwright install chromium
+   python3 -m http.server 8000 --bind 0.0.0.0 --directory dist
    python3 tests/run_checks.py http://127.0.0.1:8000
    ```
 
-**إضافة لغة ثالثة:** أضف مفتاح اللغة (مثل `fr`) بجوار كل `ar`/`en` في `content.json`، ثم أضف اللغة إلى `LANGS` في `tools/build.py` (الاتجاه، المسار) وأنشئ المسار المقابل.
+**إضافة لغة ثالثة:** أضف مفتاح اللغة بجوار `ar` و`en` في `content.json`، ثم أضف اللغة إلى `LANGS` في `tools/build.py` وأنشئ المسار المقابل.
 
-**قبل النشر / Before deployment:** تأكد من ضبط `site.url` في `content/content.json` ورابط Sitemap في `robots.txt` على النطاق النهائي، ثم أعد توليد الصفحات. Set both to your final domain, then regenerate the pages.
+**قبل النشر:** تأكد من ضبط `site.url` في `content/content.json` ورابط sitemap في `robots.txt` على النطاق النهائي، ثم أعد التوليد والتغليف.
 
 ## الخطوط / Fonts
-- IBM Plex Sans Arabic (عربي + لاتيني) و Noto Naskh Arabic — مرخصان SIL OFL.
-- Satoshi (Fontshare) — مجاني للاستخدام التجاري والويب.
-- الخطوط مستضافة ذاتيًا بالكامل: لا طلبات لخوادم طرف ثالث.
+- IBM Plex Sans Arabic وNoto Naskh Arabic — مرخصان SIL OFL.
+- Satoshi (Fontshare) — مرخص للاستخدام التجاري والويب وفق ملف الترخيص المرفق.
+- الخطوط مستضافة ذاتيًا بالكامل: لا طلبات خطوط لخوادم طرف ثالث.
 
 ## النشر / Deployment
-راجع `DEPLOY.md` لخطوات النشر على Vercel وربط النطاق.
-See `DEPLOY.md` for Vercel deployment and custom-domain steps.
+راجع `DEPLOY.md` لإعداد Cloudflare Pages ومراجعة نشر الفروع. إعداد `vercel.json` خاص بـVercel ولا يحل محل إعداد Cloudflare Pages.

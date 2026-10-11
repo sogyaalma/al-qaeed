@@ -1,64 +1,72 @@
-# دليل النشر وربط النطاق / Deployment & Domain Guide
+# النشر على Cloudflare Pages / Cloudflare Pages Deployment
 
-## 1. المتطلبات / Requirements
-- حساب GitHub أو GitLab أو Bitbucket (اختياري لكنه الأسهل للتحديث).
-- حساب Vercel (مجاني للمشاريع الشخصية؛ تحقق من شروط الخطة قبل الاستخدام).
-- نطاق شخصي تشتريه بنفسك (لم يُشترَ نطاق ضمن هذا المشروع).
+الموقع static بالكامل. لا يحتاج إلى Backend أو قاعدة بيانات أو Pages Functions أو Workers.
 
-## 2. قبل النشر / Before deploying
-1. حدّث النطاق إلى نطاقك النهائي في:
-   - `content/content.json` → `site.url`
-   - `robots.txt` (سطر Sitemap)
-2. أعد توليد الصفحات: `python3 tools/build.py`
-3. تحقق من الملف `assets/docs/abdulaziz-al-qaeed-cv.pdf` وأن الصورة صحيحة الحق.
-4. لا توجد متغيرات بيئة سرية مطلوبة، ولا يوجد ملف `.env`.
+## 1. إعداد مشروع Cloudflare Pages
 
-## 3. رفع المشروع إلى Git / Push to Git (اختياري)
+في مشروع Pages المرتبط بالمستودع، استخدم الإعدادات التالية لتوليد حزمة عامة منفصلة عن ملفات المصدر والتوثيق:
+
+| الإعداد | القيمة |
+|---|---|
+| Framework preset | `None` |
+| Root directory | جذر المستودع (الافتراضي) |
+| Build command | `python3 tools/build.py && python3 tools/package.py` |
+| Build output directory | `dist` |
+| متغيرات البيئة | لا توجد متغيرات مطلوبة لهذا الموقع |
+
+يتضمن `tools/package.py` فقط الصفحات والأصول المطلوبة و`robots.txt` و`sitemap.xml` و`_headers` في `dist/`. لا ينشر `docs/` أو `tests/` أو `tools/` أو `content/` أو ملفات README/DEPLOY.
+
+> إذا كان إعداد المشروع الحالي ينشر جذر المستودع مباشرةً، غيّر مجلد الإخراج إلى `dist` قبل اعتماد النشر. لا يكفي وجود `dist/` في المستودع ما لم يوجّه إعداد Pages إليه.
+
+## 2. المعاينة ومراجعة الفروع
+
+- اجعل فرع الإنتاج هو الفرع المعتمد لديك (غالبًا `main`).
+- فعّل معاينات الفروع من إعدادات Git integration في Pages، ثم راجع عنوان المعاينة الذي ينشأ للفرع قبل دمجه.
+- لا أستطيع تغيير إعدادات لوحة Cloudflare من ملفات المستودع؛ إعدادات الفرع الإنتاجي والمعاينة يجب تأكيدها في لوحة Pages.
+
+## 3. النطاق وSEO
+
+عند تغيير النطاق عن `https://al-qaeed.pages.dev`:
+1. حدّث `site.url` في `content/content.json`.
+2. حدّث رابط sitemap في `robots.txt`.
+3. شغّل `python3 tools/build.py && python3 tools/package.py`.
+4. تحقّق من canonical وOpen Graph و`hreflang` في الصفحتين، ومن روابط `robots.txt` و`sitemap.xml` بعد النشر.
+
+تُدار إضافة النطاق وDNS وHTTPS من لوحة Cloudflare وفق القيم التي تعرضها المنصة؛ لا تُنسخ سجلات DNS من مزود آخر دون تحقق.
+
+## 4. المسارات والترويسات
+
+- العربية: `/` من `index.html`.
+- الإنجليزية: `/en/` من `en/index.html`.
+- الخطأ: `404.html` في جذر حزمة النشر.
+- لا توجد قواعد إعادة كتابة لازمة للمسارات الحالية، ولا يوجد ملف `_redirects`.
+- ملف `_headers` يضع ترويسات الأمان على Cloudflare Pages. بعد نشر Preview، تحقّق من الترويسات الفعلية ومن تحميل CSS وJavaScript والصور والخطوط.
+- سياسة `Cache-Control: immutable` في `vercel.json` تخص Vercel فقط ولا تُنسخ إلى Pages؛ أسماء الأصول الحالية غير مبصّمة.
+
+## 5. التحقق من Preview
+
+افتح رابط Preview واختبر:
+- `/` و`/en/`، ومبدّل اللغة وروابط الأقسام.
+- تنزيل `/assets/docs/abdulaziz-al-qaeed-cv.pdf`.
+- صفحة 404 مع حالة HTTP المناسبة.
+- `/robots.txt` و`/sitemap.xml`.
+- صور WebP والخطوط وترويسات الأمان في أدوات المطور.
+- أحجام العرض العربية والإنجليزية الواردة في `tests/run_checks.py`.
+
+## 6. تحديث المحتوى محليًا
+
 ```bash
-cd al-qaeed-website
-git init -b main
-git add .
-git commit -m "Initial biographical profile"
-git remote add origin <YOUR_REPO_URL>
-git push -u origin main
+python3 tools/build.py
+python3 tools/package.py
 ```
 
-## 4. النشر على Vercel / Deploy on Vercel
-**الطريقة أ — من لوحة Vercel:**
-1. Add New → Project → استورد المستودع (أو اختر "Deploy" وارفع مجلد المشروع).
-2. Framework Preset: **Other**. Build Command: **فارغ**. Output Directory: **فارغ** (الجذر).
-3. اضغط Deploy.
+اختبر الحزمة محليًا:
 
-**الطريقة ب — من سطر الأوامر:**
 ```bash
-npm i -g vercel
-cd al-qaeed-website
-vercel        # أول مرة: أجب بالأسئلة، واختر Other / no build
-vercel --prod
+python3 -m http.server 8000 --bind 0.0.0.0 --directory dist
+python3 tests/run_checks.py http://127.0.0.1:8000
 ```
-ملف `vercel.json` موجود ويضبط رؤوس الأمان والتخزين المؤقت وإزالة الامتداد `.html`.
 
-## 5. ربط النطاق الشخصي / Connect a custom domain
-1. في مشروع Vercel: Settings → Domains → أضف النطاق (مثل `example.com` و `www.example.com`).
-2. Vercel يعرض لك سجلات DNS المطلوبة. **تحقق منها في لوحة Vercel نفسها لأنها قد تتغير.** في الغالب:
+## 7. Vercel كخيار منفصل
 
-| النوع / Type | الاسم / Name | القيمة / Value |
-|---|---|---|
-| A | `@` (النطاق الجذري) | `76.76.21.21` |
-| CNAME | `www` | `cname.vercel-dns.com` |
-
-3. أضف هذه السجلات عند مزود النطاق (مسجّل النطاق أو DNS provider). قد يستغرق الانتشار دقائق إلى ساعات.
-4. انتظر حتى يظهر النطاق بحالة **Valid Configuration** وتُصدر شهادة HTTPS تلقائيًا.
-5. اختر النطاق الأساسي (apex أو www) وفعّل التحويل من الآخر إن أردت.
-6. بعد ربط النطاق، غيّر `site.url` و `robots.txt` كما في القسم 2، وأعد النشر.
-
-## 6. التحقق من نجاح النشر / Verify the deployment
-- افتح الرابط الذي يعطيه Vercel، ثم النطاق الشخصي بعد انتشار DNS.
-- تأكد من: الصفحة العربية تفتح على `/`، الإنجليزية على `/en/`، التنزيل يعمل على `/assets/docs/abdulaziz-al-qaeed-cv.pdf`، والقفل الأخضر لـ HTTPS.
-- `https://YOUR-DOMAIN/sitemap.xml` و `https://YOUR-DOMAIN/robots.txt` يجب أن يعرضا الملفات.
-- لا تعتبر الموقع منشورًا قبل أن تفتح الرابط الفعلي بنفسك.
-
-## 7. التحديث لاحقًا / Updating later
-- عدّل `content/content.json` ثم `python3 tools/build.py`، ثم ارفع التغييرات (`git push`) أو أعد `vercel --prod`.
-- لإضافة مشروع أو شهادة أو خبرة: أضف عنصرًا جديدًا في المصفوفة المناسبة (`experience.items`، `training.items`، `community.groups`...) بالمفتاحين `ar` و `en`، ثم أعد التوليد.
-- راجع `docs/UPDATE-CHECKLIST.md` للمعلومات التي تحتاج تأكيدًا.
+يوجد `vercel.json` لإعداد Vercel بديلًا، لكنه **ليس إعداد Cloudflare Pages**. إذا استُخدم Vercel لاحقًا، اختبر توافق `cleanUrls` و`trailingSlash` مع الروابط canonical، ولا تطبق تخزينًا طويلًا immutable على أسماء ملفات ثابتة دون versioning.

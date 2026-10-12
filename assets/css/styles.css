@@ -67,24 +67,44 @@
    ========================================================================== */
 
 :root {
-  --ink: #15201c;
-  --ink-2: #3f4d47;
+  /* ── Design tokens ──────────────────────────────────────────────────────
+     Grouped by semantic role (layering methodology adapted from NDS-vanilla,
+     see docs/NDS-ADOPTION-AUDIT.md and docs/DESIGN-TOKENS.md).
+     Rules of use:
+       - Rules reference these tokens only; never hardcode a hex or size.
+       - A new color or size becomes a token here first.
+       - Re-theming starts in the palette group; nothing else should change.
+     ─────────────────────────────────────────────────────────────────────── */
+
+  /* Surfaces: page background (warm paper), alternating section tint, raised card. */
   --paper: #f8f5ee;
   --tint: #f0ece2;
   --card: #ffffff;
+
+  /* Text: default ink, secondary/muted ink. */
+  --ink: #15201c;
+  --ink-2: #3f4d47;
+
+  /* Brand & interaction: primary green (links, buttons, marks), deep variant
+     (hover/pressed), soft tint (quiet fills and text on green), accent gold
+     (kickers and the global focus ring). */
   --green: #0e5a49;
   --green-deep: #0a4035;
   --green-soft: #e4efea;
   --gold: #7d6236;
+
+  /* Hairlines, shape and elevation: border color, corner radii, one shared shadow. */
   --line: #ddd5c4;
   --radius: 20px;
   --radius-sm: 12px;
   --shadow: 0 1px 2px rgb(21 32 28 / 0.06), 0 8px 24px rgb(21 32 28 / 0.06);
 
+  /* Typography roles: display = headings, body = text, quote = citations and taglines. */
   --font-display: "Satoshi", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
   --font-body: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
   --font-quote: "Noto Naskh Arabic", "IBM Plex Sans Arabic", serif;
 
+  /* Fluid type scale: three sizes only (body, section heading, hero heading). */
   --fs-body: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
   --fs-h2: clamp(1.85rem, 1.35rem + 2vw, 2.75rem);
   --fs-h1: clamp(2.75rem, 1.6rem + 5vw, 5.25rem);

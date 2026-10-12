@@ -192,10 +192,11 @@ PASS [en 375] no touch target below 24px (WCAG 2.5.8)  [[]]
 PASS [en 375] every target reaches the 44px comfort size  [0 of 11 below 44px]
 PASS [en 1366] no touch target below 24px (WCAG 2.5.8)  [[]]
 PASS [en 1366] every target reaches the 44px comfort size  [0 of 15 below 44px]
-PASS CV download is an A4 document with selectable text  [pages=5 size=595x842pt text=5293 chars 405KB]
+PASS CV download is an A4 document with selectable text  [pages=5 size=595x842pt text=5491 chars 397KB]
+PASS webfont subsets cover every character now on the pages  [130 characters covered by font-subset.json]
 PASS axe [ar 375] zero violations (WCAG 2.2 AA + best practice)  [0 violations; passes=35]
 PASS axe [ar 1366] zero violations (WCAG 2.2 AA + best practice)  [0 violations; passes=35]
 PASS axe [en 375] zero violations (WCAG 2.2 AA + best practice)  [0 violations; passes=35]
 PASS axe [en 1366] zero violations (WCAG 2.2 AA + best practice)  [0 violations; passes=35]
 
-199/199 passed
+200/200 passed

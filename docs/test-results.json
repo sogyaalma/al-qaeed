@@ -973,7 +973,12 @@
     {
       "name": "CV download is an A4 document with selectable text",
       "ok": true,
-      "detail": "pages=5 size=595x842pt text=5293 chars 405KB"
+      "detail": "pages=5 size=595x842pt text=5491 chars 397KB"
+    },
+    {
+      "name": "webfont subsets cover every character now on the pages",
+      "ok": true,
+      "detail": "130 characters covered by font-subset.json"
     },
     {
       "name": "axe [ar 375] zero violations (WCAG 2.2 AA + best practice)",

@@ -1,0 +1,63 @@
+{
+  "generated_by": "tools/subset_fonts.py",
+  "used_characters": " !#%&'()*+,-./0123456789:;=@ABCDEFGHIJKLMNOPQRSTUVWXY_abcdefghijklmnopqrstuvwxyz|~©«·»،ءآأؤإئابةتثجحخدذرزسشصضطظعغـفقكلمنهوىيًّ–—“”",
+  "used_character_count": 130,
+  "files": [
+    {
+      "file": "ibm-plex-sans-arabic-arabic-400-normal.woff2",
+      "original_bytes": 42848,
+      "subset_bytes": 24028,
+      "sha256": "d1b70e12462b8830"
+    },
+    {
+      "file": "ibm-plex-sans-arabic-arabic-600-normal.woff2",
+      "original_bytes": 45688,
+      "subset_bytes": 25912,
+      "sha256": "db5f90b68979e5f2"
+    },
+    {
+      "file": "ibm-plex-sans-arabic-arabic-700-normal.woff2",
+      "original_bytes": 44280,
+      "subset_bytes": 25096,
+      "sha256": "a1d3e8945a34fd3c"
+    },
+    {
+      "file": "ibm-plex-sans-arabic-latin-400-normal.woff2",
+      "original_bytes": 19164,
+      "subset_bytes": 13024,
+      "sha256": "a0f3de0483c6ae76"
+    },
+    {
+      "file": "ibm-plex-sans-arabic-latin-600-normal.woff2",
+      "original_bytes": 20500,
+      "subset_bytes": 13980,
+      "sha256": "19f55c1f25c63b01"
+    },
+    {
+      "file": "ibm-plex-sans-arabic-latin-700-normal.woff2",
+      "original_bytes": 19504,
+      "subset_bytes": 13312,
+      "sha256": "6b33b5c70fcc47af"
+    },
+    {
+      "file": "noto-naskh-arabic-arabic-400-normal.woff2",
+      "original_bytes": 52668,
+      "subset_bytes": 16996,
+      "sha256": "86eef7daf49d333a"
+    },
+    {
+      "file": "satoshi-500.woff2",
+      "original_bytes": 25596,
+      "subset_bytes": 10868,
+      "sha256": "c589179f6e5fca06"
+    },
+    {
+      "file": "satoshi-700.woff2",
+      "original_bytes": 25328,
+      "subset_bytes": 10568,
+      "sha256": "dfc789eb619548a4"
+    }
+  ],
+  "total_original_bytes": 295576,
+  "total_subset_bytes": 153784
+}

@@ -432,6 +432,26 @@ with sync_playwright() as p:
     except ImportError:
         print("SKIP CV text check (pip install pypdf)")
 
+    # ---------- webfont subsets still cover every character on the pages ----------
+    # The fonts in assets/fonts/ are subsets (tools/subset_fonts.py). If new
+    # content introduces a character outside the recorded set, the browser would
+    # fall back to a system font mid-sentence — fail loudly instead. The character
+    # set is computed by the same helper the subsetting tool uses, so both sides
+    # always agree on what "the characters on the pages" means.
+    manifest = ROOT / "docs" / "font-subset.json"
+    sys.path.insert(0, str(ROOT / "tools"))
+    try:
+        from subset_fonts import used_characters
+        covered = set(json.loads(manifest.read_text(encoding="utf-8"))["used_characters"])
+        current = used_characters()
+        missing = sorted(current - covered)
+        check("webfont subsets cover every character now on the pages",
+              not missing,
+              "re-run tools/subset_fonts.py -> missing " + "".join(missing)[:80] if missing
+              else f"{len(current)} characters covered by {manifest.name}")
+    except Exception as exc:  # missing manifest, unreadable file, import error
+        check("webfont subsets cover every character now on the pages", False, f"{type(exc).__name__}: {exc}")
+
     # ---------- axe-core accessibility (WCAG 2.x A/AA) ----------
     for lang, path in PAGES.items():
         for wname in ("375", "1366"):

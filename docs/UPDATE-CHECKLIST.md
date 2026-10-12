@@ -6,12 +6,14 @@
 
 ```bash
 python3 tools/build.py            # يبني index.html و en/index.html و 404.html و sitemap.xml
+python3 tools/subset_fonts.py     # يعيد ضغط الخطوط لمحارف المحتوى الجديد (يتطلب: pip install fonttools brotli)
 python3 tools/make_cv_pdf.py      # يحدّث assets/docs/abdulaziz-al-qaeed-cv.pdf من محتوى الموقع (يتطلب Chromium/Playwright)
 python3 tools/package.py          # ينشئ مجلد dist/ الذي يُنشر على Cloudflare Pages
 python3 -m http.server 8000 --bind 0.0.0.0 --directory dist
-python3 tests/run_checks.py http://127.0.0.1:8000   # 199 فحصًا؛ يجب أن تكون النتيجة 199/199
+python3 tests/run_checks.py http://127.0.0.1:8000   # 200 فحصًا؛ يجب أن تكون النتيجة 200/200
 ```
 
+- **مهم:** إن أضفت نصًا جديدًا (حروفًا أو رموزًا لم تكن في الموقع) شغّل `subset_fonts.py` أولًا؛ ملفات الخطوط مضغوطة على المحارف المستخدمة، والفحص رقم 200 سيفشل ويخبرك بالحرف الناقص إن نسيت. الملفات الأصلية كاملة محفوظة في `tools/fonts-original/`.
 - **مهم:** أعد تشغيل `make_cv_pdf.py` قبل `package.py` في كل مرة يتغير فيها المحتوى، وإلا بقي ملف السيرة قديمًا داخل `dist/`.
 - ملف السيرة الحالي **مُولَّد من محتوى الصفحة** (PDF نصي A4 من 5 صفحات، قابل للبحث والنسخ). عند توفّر **النسخة الأصلية الموقّعة** من الشيخ: ضعها مكان `assets/docs/abdulaziz-al-qaeed-cv.pdf` ثم شغّل `package.py` فقط، وأبلغنا لنُحدّث سطر الفحص في `tests/run_checks.py` إن تغيّر عدد الصفحات.
 

@@ -13,6 +13,7 @@ import json
 import pathlib
 import re
 import sys
+import urllib.parse
 import urllib.request
 
 from playwright.sync_api import sync_playwright
@@ -25,8 +26,8 @@ SHOTS.mkdir(parents=True, exist_ok=True)
 AXE_JS = pathlib.Path(axe_core_python.__file__).parent / "axe.min.js"
 
 WIDTHS = {
-    "360": 360, "375": 375, "430": 430, "768": 768,
-    "1024": 1024, "1366": 1366, "1440": 1440, "1920": 1920,
+    "360": 360, "375": 375, "430": 430, "768": 768, "861": 861, "900": 900,
+    "1024": 1024, "1100": 1100, "1366": 1366, "1440": 1440, "1920": 1920,
 }
 PAGES = {"ar": "/", "en": "/en/"}
 
@@ -177,7 +178,10 @@ with sync_playwright() as p:
           focus_state["visible"] and focus_state["focusVisible"] and focus_state["outline"], str(focus_state))
     page.click("a.lang-switch")
     page.wait_for_load_state("networkidle")
-    check("Language switch EN→AR returns to /", page.url.rstrip("/").endswith(".com") or page.url.rstrip("/").endswith(":8000") or page.url.rstrip("/").endswith("/") and "/en" not in page.url, page.url)
+    # Port-agnostic: only the path matters, so the check also passes behind
+    # Cloudflare Pages previews and any local port.
+    check("Language switch EN→AR returns to /",
+          urllib.parse.urlparse(page.url).path in ("", "/"), page.url)
     check("Language switch back: dir=rtl", page.get_attribute("html", "dir") == "rtl")
     ctx.close()
 
@@ -191,9 +195,13 @@ with sync_playwright() as p:
         check(f"[{lang}] every in-page anchor has a target", not missing, f"missing={missing}")
 
         # Sticky headers must not cover the section reached by in-page navigation.
+        # At 375px the horizontal nav is replaced by the section index, so the
+        # check drives the index panel exactly like a phone user would.
         page.set_viewport_size({"width": 375, "height": 800})
-        page.locator('a[href="#experience"]').click()
-        page.wait_for_timeout(800)
+        page.click(".toc-toggle")
+        page.wait_for_timeout(200)
+        page.locator('.toc-list a[href="#experience"]').first.click()
+        page.wait_for_timeout(900)
         anchor_geometry = page.evaluate("""() => ({
             targetTop: document.querySelector('#experience').getBoundingClientRect().top,
             headerBottom: document.querySelector('.site-header').getBoundingClientRect().bottom,
@@ -206,9 +214,15 @@ with sync_playwright() as p:
         ext = page.eval_on_selector_all("a[href^='http']", "els => els.map(e => e.href)")
         check(f"[{lang}] no external links", not ext, f"found={ext}")
 
-        imgs = page.eval_on_selector_all("img", "els => els.map(e => ({src:e.getAttribute('src'), ok: e.complete && e.naturalWidth>0, alt: e.getAttribute('alt')}))")
-        check(f"[{lang}] every image loads and has alt text",
-              all(i["ok"] and i["alt"] for i in imgs), json.dumps(imgs, ensure_ascii=False)[:200])
+        imgs = page.eval_on_selector_all("img", """els => els.map(e => ({
+            src: e.getAttribute('src'),
+            ok: e.complete && e.naturalWidth > 0,
+            alt: e.getAttribute('alt'),
+            decorativeContext: e.closest('[aria-hidden="true"]') !== null,
+        }))""")
+        check(f"[{lang}] every image loads, and has either alt text or a decorative context",
+              all(i["ok"] and (i["alt"] or i["decorativeContext"]) for i in imgs),
+              json.dumps(imgs, ensure_ascii=False)[:200])
 
         fonts = page.evaluate("""() => Array.from(document.fonts).map(f => ({family: f.family, weight: f.weight, status: f.status}))""")
         loaded_or_unused = all(f["status"] in ("loaded", "unloaded") for f in fonts)
@@ -262,6 +276,161 @@ with sync_playwright() as p:
     visible_sections = page.evaluate("Array.from(document.querySelectorAll('section')).length")
     check("No-JS: all sections present in HTML", visible_sections == 9, f"sections={visible_sections}")
     ctx.close()
+
+    # ---------- print output (the site doubles as a printable CV) ----------
+    for lang, path in PAGES.items():
+        ctx = browser.new_context(viewport={"width": 1240, "height": 1754})
+        page = ctx.new_page()
+        page.goto(BASE + path, wait_until="networkidle")
+        page.emulate_media(media="print")
+        page.wait_for_timeout(300)
+        print_state = page.evaluate("""() => ({
+            hiddenReveals: Array.from(document.querySelectorAll('.reveal'))
+                .filter(e => parseFloat(getComputedStyle(e).opacity) < 0.9).length,
+            printHeader: getComputedStyle(document.querySelector('.print-head')).display !== 'none',
+            screenOnlyHidden: ['header', '.to-top-wrap'].every(sel => getComputedStyle(document.querySelector(sel)).display === 'none'),
+            bodyText: document.body.innerText.length,
+        })""")
+        check(f"[{lang}] print: no content block is left invisible",
+              print_state["hiddenReveals"] == 0, f"hidden={print_state['hiddenReveals']}")
+        check(f"[{lang}] print: document header shown, interactive chrome hidden",
+              print_state["printHeader"] and print_state["screenOnlyHidden"], str(print_state))
+        check(f"[{lang}] print: the document carries the full text",
+              print_state["bodyText"] > 3000, f"{print_state['bodyText']} chars")
+        page.emulate_media(media="screen")
+        ctx.close()
+
+    # ---------- header integrity across the widths that used to clip ----------
+    for lang, path in PAGES.items():
+        ctx = browser.new_context(viewport={"width": 1366, "height": 900})
+        page = ctx.new_page()
+        page.goto(BASE + path, wait_until="networkidle")
+        clipped = {}
+        header_heights = {}
+        for width in (768, 861, 900, 1024, 1100, 1180, 1366, 1920):
+            page.set_viewport_size({"width": width, "height": 900})
+            page.wait_for_timeout(120)
+            state = page.evaluate("""() => ({
+                header: Math.round(document.querySelector('.site-header').getBoundingClientRect().height),
+                clipped: Array.from(document.querySelectorAll('.primary-nav a, .lang-switch, .toc-toggle, .brand-name'))
+                    .filter(el => { const r = el.getBoundingClientRect();
+                        return r.width > 0 && (r.left < -1 || r.right > innerWidth + 1); })
+                    .map(el => el.textContent.trim()),
+            })""")
+            if state["clipped"]:
+                clipped[width] = state["clipped"]
+            header_heights[width] = state["header"]
+        check(f"[{lang}] no header or navigation item is clipped (768-1920px)", not clipped, json.dumps(clipped, ensure_ascii=False)[:200])
+        check(f"[{lang}] header stays a single compact row from 768px up",
+              max(header_heights.values()) <= 80, json.dumps(header_heights))
+        ctx.close()
+
+    # ---------- header height must not depend on which fonts arrived ----------
+    for lang, path in PAGES.items():
+        for _ in range(2):
+            ctx = browser.new_context(viewport={"width": 375, "height": 812})
+            page = ctx.new_page()
+            page.goto(BASE + path, wait_until="networkidle")
+            page.wait_for_timeout(400)
+            height = page.evaluate("Math.round(document.querySelector('.site-header').getBoundingClientRect().height)")
+            report.setdefault("header_mobile", {}).setdefault(lang, []).append(height)
+            ctx.close()
+        heights = report["header_mobile"][lang]
+        check(f"[{lang}] mobile header is compact and stable across loads (<=64px, spread <= 2px)",
+              max(heights) <= 64 and max(heights) - min(heights) <= 2, f"heights={heights}")
+
+    # ---------- the section index panel ----------
+    for lang, path in PAGES.items():
+        for width in (375, 768, 1366):
+            ctx = browser.new_context(viewport={"width": width, "height": 900})
+            page = ctx.new_page()
+            page.goto(BASE + path, wait_until="networkidle")
+            page.click(".toc-toggle")
+            page.wait_for_timeout(200)
+            panel = page.evaluate("""() => {
+                const panel = document.querySelector('.toc-panel');
+                const box = panel.getBoundingClientRect();
+                const header = document.querySelector('.site-header').getBoundingClientRect();
+                const offenders = Array.from(panel.querySelectorAll('a, summary'))
+                    .filter(el => { const r = el.getBoundingClientRect(); return r.width > 0 && (r.left < -1 || r.right > innerWidth + 1); }).length;
+                return {left: box.left, right: box.right, top: box.top, headerBottom: header.bottom,
+                        width: innerWidth, offenders, links: panel.querySelectorAll('.toc-list a').length};
+            }""")
+            check(f"[{lang} {width}] section index opens inside the viewport with all {len(page.query_selector_all('.toc-list a'))} sections",
+                  panel["offenders"] == 0 and panel["left"] >= -1 and panel["right"] <= panel["width"] + 1
+                  and panel["top"] >= panel["headerBottom"] - 2 and panel["links"] == 8,
+                  json.dumps(panel))
+            page.keyboard.press("Escape")
+            page.wait_for_timeout(150)
+            check(f"[{lang} {width}] Escape closes the section index",
+                  not page.evaluate("() => document.querySelector('[data-toc]').open"))
+            ctx.close()
+
+    # ---------- in-page state: current section, back-to-top, print action ----------
+    for lang, path in PAGES.items():
+        ctx = browser.new_context(viewport={"width": 1366, "height": 900})
+        page = ctx.new_page()
+        page.goto(BASE + path, wait_until="networkidle")
+        top_state = page.evaluate("() => document.querySelector('[data-back-to-top]').hidden")
+        check(f"[{lang}] back-to-top stays hidden at the top of the page", top_state)
+        page.evaluate("window.scrollTo(0, document.body.scrollHeight * 0.6)")
+        page.wait_for_timeout(500)
+        state = page.evaluate("""() => ({
+            backToTop: !document.querySelector('[data-back-to-top]').hidden,
+            current: document.querySelectorAll('.primary-nav a[aria-current="location"], .toc-list a[aria-current="location"]').length,
+            printEnabled: !document.querySelector('[data-print]').hidden,
+        })""")
+        check(f"[{lang}] the current section is marked once for keyboard and screen readers",
+              state["current"] >= 1 and state["current"] <= 3, f"aria-current elements={state['current']}")
+        check(f"[{lang}] back-to-top and the print action appear while reading",
+              state["backToTop"] and state["printEnabled"], str(state))
+        ctx.close()
+
+    # ---------- the language switch keeps the reader in the same section ----------
+    ctx = browser.new_context(viewport={"width": 1440, "height": 900})
+    page = ctx.new_page()
+    page.goto(BASE + "/#community", wait_until="networkidle")
+    href = page.get_attribute(".lang-switch", "href")
+    check("Language switch keeps the current section", href.endswith("/en/#community"), href)
+    page.click(".lang-switch")
+    page.wait_for_load_state("networkidle")
+    check("Language switch lands on the same section (EN)",
+          page.url.rstrip("/").endswith("/en/#community"), page.url)
+    ctx.close()
+
+    # ---------- touch targets ----------
+    for lang, path in PAGES.items():
+        for width in (375, 1366):
+            ctx = browser.new_context(viewport={"width": width, "height": 812})
+            page = ctx.new_page()
+            page.goto(BASE + path, wait_until="networkidle")
+            targets = page.evaluate("""() => Array.from(document.querySelectorAll('a, button, summary'))
+                .filter(el => el.getBoundingClientRect().width > 0)
+                .map(el => ({t: (el.innerText || '').trim().slice(0, 24),
+                             h: Math.round(el.getBoundingClientRect().height)}))""")
+            small = [t for t in targets if t["h"] < 24]
+            comfortable = [t for t in targets if t["h"] < 44]
+            check(f"[{lang} {width}] no touch target below 24px (WCAG 2.5.8)",
+                  not small, json.dumps(small, ensure_ascii=False)[:200])
+            check(f"[{lang} {width}] every target reaches the 44px comfort size",
+                  not comfortable, f"{len(comfortable)} of {len(targets)} below 44px")
+            ctx.close()
+
+    # ---------- the downloadable CV is a real text document ----------
+    try:
+        from pypdf import PdfReader
+        import io as _io
+        with urllib.request.urlopen(BASE + "/assets/docs/abdulaziz-al-qaeed-cv.pdf", timeout=30) as response:
+            data = response.read()
+        reader = PdfReader(_io.BytesIO(data))
+        page_size = reader.pages[0].mediabox
+        text_chars = sum(len((p.extract_text() or "").strip()) for p in reader.pages)
+        a4 = abs(float(page_size.width) - 595) < 2 and abs(float(page_size.height) - 842) < 2
+        check("CV download is an A4 document with selectable text",
+              a4 and text_chars > 2000,
+              f"pages={len(reader.pages)} size={round(float(page_size.width))}x{round(float(page_size.height))}pt text={text_chars} chars {len(data)//1024}KB")
+    except ImportError:
+        print("SKIP CV text check (pip install pypdf)")
 
     # ---------- axe-core accessibility (WCAG 2.x A/AA) ----------
     for lang, path in PAGES.items():

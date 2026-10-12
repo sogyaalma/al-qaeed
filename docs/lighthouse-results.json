@@ -1,74 +1,153 @@
-[
-  {
-    "page": "ar",
-    "form": "mobile",
-    "scores": {
-      "performance": 91,
-      "accessibility": 100,
-      "best-practices": 100,
-      "seo": 100
-    },
-    "metrics": {
-      "first-contentful-paint": "2.3 s",
-      "largest-contentful-paint": "3.2 s",
-      "total-blocking-time": "0 ms",
-      "cumulative-layout-shift": "0.002",
-      "speed-index": "2.3 s"
-    },
-    "failing_audits": []
+{
+  "environment": {
+    "date": "2026-10-12",
+    "lighthouse": "13.5.0",
+    "browser": "Chromium headless 153.0.8010.0 (software rendering, no GPU)",
+    "server": "local static server replaying the exact _headers CSP and gzip-encoding HTML/CSS/JS/Fonts",
+    "target": "dist/ (the folder deployed to Cloudflare Pages)",
+    "caveat": "Local lab numbers, not field data (CrUX). Desktop runs throttle the CPU at 1x and network at 10 Mbit/s; mobile runs emulate a 412x823 viewport with 4x CPU slowdown and ~1.5 Mbit/s. Lighthouse \"simulated\" metrics are modelled from a warm trace and vary run to run; the unthrottled \"observed\" metrics below show what the browser actually painted.",
+    "note_merge": "Measured after merging main (NDS adoption packages أ/ب/ج): brand gradient in the contact band, light-gold focus ring on dark surfaces, unified scrollspy."
   },
-  {
-    "page": "ar",
-    "form": "desktop",
-    "scores": {
-      "performance": 100,
-      "accessibility": 100,
-      "best-practices": 100,
-      "seo": 100
+  "results": [
+    {
+      "page": "ar",
+      "form": "mobile",
+      "scores": {
+        "performance": 93,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "runs": 3,
+      "score_range": [
+        93,
+        95
+      ],
+      "metrics": {
+        "first-contentful-paint": "2.0 s",
+        "largest-contentful-paint": "2.7 s",
+        "speed-index": "2.0 s",
+        "total-blocking-time": "10 ms",
+        "cumulative-layout-shift": "0.001"
+      },
+      "observed_unthrottled_ms": {
+        "fcp": 122,
+        "lcp": 146,
+        "cls": 0.001
+      },
+      "failing_audits": [],
+      "payload_kib": {
+        "total": 370,
+        "font": 292,
+        "image": 62,
+        "stylesheet": 8,
+        "document": 6,
+        "script": 2
+      }
     },
-    "metrics": {
-      "first-contentful-paint": "0.6 s",
-      "largest-contentful-paint": "0.7 s",
-      "total-blocking-time": "0 ms",
-      "cumulative-layout-shift": "0.001",
-      "speed-index": "0.6 s"
+    {
+      "page": "ar",
+      "form": "desktop",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": "0.5 s",
+        "largest-contentful-paint": "0.6 s",
+        "speed-index": "0.5 s",
+        "total-blocking-time": "0 ms",
+        "cumulative-layout-shift": "0.001"
+      },
+      "observed_unthrottled_ms": {
+        "fcp": 132,
+        "lcp": 132,
+        "cls": 0.001
+      },
+      "failing_audits": [],
+      "payload_kib": {
+        "total": 352
+      }
     },
-    "failing_audits": []
-  },
-  {
-    "page": "en",
-    "form": "mobile",
-    "scores": {
-      "performance": 96,
-      "accessibility": 100,
-      "best-practices": 100,
-      "seo": 100
+    {
+      "page": "en",
+      "form": "mobile",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": "1.7 s",
+        "largest-contentful-paint": "2.1 s",
+        "speed-index": "1.7 s",
+        "total-blocking-time": "0 ms",
+        "cumulative-layout-shift": "0"
+      },
+      "observed_unthrottled_ms": {
+        "fcp": 123,
+        "lcp": 123,
+        "cls": 0
+      },
+      "failing_audits": [],
+      "payload_kib": {
+        "total": 232
+      }
     },
-    "metrics": {
-      "first-contentful-paint": "2.0 s",
-      "largest-contentful-paint": "2.4 s",
-      "total-blocking-time": "0 ms",
-      "cumulative-layout-shift": "0",
-      "speed-index": "2.0 s"
+    {
+      "page": "en",
+      "form": "desktop",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": "0.4 s",
+        "largest-contentful-paint": "0.5 s",
+        "speed-index": "0.4 s",
+        "total-blocking-time": "0 ms",
+        "cumulative-layout-shift": "0"
+      },
+      "observed_unthrottled_ms": {
+        "fcp": 168,
+        "lcp": 168,
+        "cls": 0
+      },
+      "failing_audits": [],
+      "payload_kib": {
+        "total": 214
+      }
     },
-    "failing_audits": []
-  },
-  {
-    "page": "en",
-    "form": "desktop",
-    "scores": {
-      "performance": 100,
-      "accessibility": 100,
-      "best-practices": 100,
-      "seo": 100
-    },
-    "metrics": {
-      "first-contentful-paint": "0.5 s",
-      "largest-contentful-paint": "0.5 s",
-      "total-blocking-time": "0 ms",
-      "cumulative-layout-shift": "0",
-      "speed-index": "0.5 s"
-    },
-    "failing_audits": []
+    {
+      "page": "404",
+      "form": "desktop",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 54
+      },
+      "note": "SEO 54 is expected on an error page: it is marked noindex and is not in the sitemap.",
+      "failing_audits": [],
+      "observed_unthrottled_ms": {
+        "fcp": 168,
+        "lcp": 168,
+        "cls": 0
+      }
+    }
+  ],
+  "previous_version_for_reference": {
+    "source": "docs/lighthouse-results.json as committed at 52d938c",
+    "ar_mobile_performance": 91,
+    "ar_mobile_lcp": "3.2 s",
+    "en_mobile_performance": 96,
+    "en_mobile_lcp": "2.4 s",
+    "desktop": "100 / 100 both languages",
+    "note": "Different session, same lab setup family; direction of change is described in docs/TEST-REPORT.md. Not a controlled A/B comparison."
   }
-]
+}

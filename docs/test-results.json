@@ -6,6 +6,21 @@
       "detail": "overflow=0px"
     },
     {
+      "name": "[ar 360] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[ar 360] mobile navigation fits without horizontal scrolling",
+      "ok": true,
+      "detail": "nav overflow=0px"
+    },
+    {
+      "name": "[ar 360] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
       "name": "[ar 360] no console errors",
       "ok": true,
       "detail": "0 errors"
@@ -16,9 +31,84 @@
       "detail": "0 failed"
     },
     {
+      "name": "[ar 375] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 375] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[ar 375] mobile navigation fits without horizontal scrolling",
+      "ok": true,
+      "detail": "nav overflow=0px"
+    },
+    {
+      "name": "[ar 375] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
+      "name": "[ar 375] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[ar 375] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[ar 430] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 430] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[ar 430] mobile navigation fits without horizontal scrolling",
+      "ok": true,
+      "detail": "nav overflow=0px"
+    },
+    {
+      "name": "[ar 430] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
+      "name": "[ar 430] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[ar 430] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
       "name": "[ar 768] no horizontal overflow",
       "ok": true,
       "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 768] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[ar 768] mobile navigation fits without horizontal scrolling",
+      "ok": true,
+      "detail": "nav overflow=0px"
+    },
+    {
+      "name": "[ar 768] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
     },
     {
       "name": "[ar 768] no console errors",
@@ -31,9 +121,69 @@
       "detail": "0 failed"
     },
     {
+      "name": "[ar 861] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 861] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[ar 861] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
+      "name": "[ar 861] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[ar 861] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[ar 900] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 900] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[ar 900] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
+      "name": "[ar 900] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[ar 900] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
       "name": "[ar 1024] no horizontal overflow",
       "ok": true,
       "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 1024] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[ar 1024] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
     },
     {
       "name": "[ar 1024] no console errors",
@@ -46,9 +196,69 @@
       "detail": "0 failed"
     },
     {
+      "name": "[ar 1100] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 1100] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[ar 1100] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
+      "name": "[ar 1100] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[ar 1100] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[ar 1366] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 1366] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[ar 1366] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
+      "name": "[ar 1366] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[ar 1366] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
       "name": "[ar 1440] no horizontal overflow",
       "ok": true,
       "detail": "overflow=0px"
+    },
+    {
+      "name": "[ar 1440] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[ar 1440] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
     },
     {
       "name": "[ar 1440] no console errors",
@@ -66,6 +276,16 @@
       "detail": "overflow=0px"
     },
     {
+      "name": "[ar 1920] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[ar 1920] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
       "name": "[ar 1920] no console errors",
       "ok": true,
       "detail": "0 errors"
@@ -81,6 +301,21 @@
       "detail": "overflow=0px"
     },
     {
+      "name": "[en 360] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[en 360] mobile navigation fits without horizontal scrolling",
+      "ok": true,
+      "detail": "nav overflow=0px"
+    },
+    {
+      "name": "[en 360] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
       "name": "[en 360] no console errors",
       "ok": true,
       "detail": "0 errors"
@@ -91,9 +326,84 @@
       "detail": "0 failed"
     },
     {
+      "name": "[en 375] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 375] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[en 375] mobile navigation fits without horizontal scrolling",
+      "ok": true,
+      "detail": "nav overflow=0px"
+    },
+    {
+      "name": "[en 375] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
+      "name": "[en 375] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[en 375] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[en 430] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 430] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[en 430] mobile navigation fits without horizontal scrolling",
+      "ok": true,
+      "detail": "nav overflow=0px"
+    },
+    {
+      "name": "[en 430] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
+      "name": "[en 430] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[en 430] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
       "name": "[en 768] no horizontal overflow",
       "ok": true,
       "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 768] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[en 768] mobile navigation fits without horizontal scrolling",
+      "ok": true,
+      "detail": "nav overflow=0px"
+    },
+    {
+      "name": "[en 768] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
     },
     {
       "name": "[en 768] no console errors",
@@ -106,9 +416,69 @@
       "detail": "0 failed"
     },
     {
+      "name": "[en 861] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 861] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[en 861] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
+      "name": "[en 861] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[en 861] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[en 900] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 900] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[en 900] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
+      "name": "[en 900] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[en 900] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
       "name": "[en 1024] no horizontal overflow",
       "ok": true,
       "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 1024] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[en 1024] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
     },
     {
       "name": "[en 1024] no console errors",
@@ -121,9 +491,69 @@
       "detail": "0 failed"
     },
     {
+      "name": "[en 1100] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 1100] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[en 1100] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
+      "name": "[en 1100] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[en 1100] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
+      "name": "[en 1366] no horizontal overflow",
+      "ok": true,
+      "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 1366] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[en 1366] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
+      "name": "[en 1366] no console errors",
+      "ok": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "[en 1366] no failed requests",
+      "ok": true,
+      "detail": "0 failed"
+    },
+    {
       "name": "[en 1440] no horizontal overflow",
       "ok": true,
       "detail": "overflow=0px"
+    },
+    {
+      "name": "[en 1440] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[en 1440] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
     },
     {
       "name": "[en 1440] no console errors",
@@ -141,6 +571,16 @@
       "detail": "overflow=0px"
     },
     {
+      "name": "[en 1920] no clipped text in key content",
+      "ok": true,
+      "detail": "0 clipped elements"
+    },
+    {
+      "name": "[en 1920] no overlapping heading/paragraph boxes",
+      "ok": true,
+      "detail": "0 overlaps"
+    },
+    {
       "name": "[en 1920] no console errors",
       "ok": true,
       "detail": "0 errors"
@@ -151,14 +591,24 @@
       "detail": "0 failed"
     },
     {
+      "name": "AR page: keyboard focus is visible on first Tab",
+      "ok": true,
+      "detail": "{'visible': True, 'focusVisible': True, 'outline': True}"
+    },
+    {
       "name": "AR page: html lang=ar and dir=rtl",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "AR page: third-person biography of the Sheikh",
       "ok": true,
       "detail": ""
     },
     {
       "name": "AR page: hero is first heading in Arabic",
       "ok": true,
-      "detail": "عبدالعزيز القعيد"
+      "detail": "الشيخ عبدالعزيز القعيد"
     },
     {
       "name": "AR page: hreflang alternates present",
@@ -171,12 +621,22 @@
       "detail": ""
     },
     {
+      "name": "AR page: contact section is inside the main landmark",
+      "ok": true,
+      "detail": ""
+    },
+    {
       "name": "Language switch AR→EN navigates to /en/",
       "ok": true,
-      "detail": "http://127.0.0.1:8000/en/"
+      "detail": "http://127.0.0.1:8124/en/"
     },
     {
       "name": "EN page: html lang=en and dir=ltr",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "EN page: third-person biography of the Sheikh",
       "ok": true,
       "detail": ""
     },
@@ -186,9 +646,19 @@
       "detail": ""
     },
     {
+      "name": "EN page: contact section is inside the main landmark",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "EN page: keyboard focus is visible on first Tab",
+      "ok": true,
+      "detail": "{'visible': True, 'focusVisible': True, 'outline': True}"
+    },
+    {
       "name": "Language switch EN→AR returns to /",
       "ok": true,
-      "detail": "http://127.0.0.1:8000/"
+      "detail": "http://127.0.0.1:8124/"
     },
     {
       "name": "Language switch back: dir=rtl",
@@ -201,19 +671,24 @@
       "detail": "missing=[]"
     },
     {
+      "name": "[ar] sticky header does not cover anchor target at 375px",
+      "ok": true,
+      "detail": "{'targetTop': 78.046875, 'headerBottom': 63}"
+    },
+    {
       "name": "[ar] no external links",
       "ok": true,
       "detail": "found=[]"
     },
     {
-      "name": "[ar] every image loads and has alt text",
+      "name": "[ar] every image loads, and has either alt text or a decorative context",
       "ok": true,
-      "detail": "[{\"src\": \"/assets/img/portrait.jpg\", \"ok\": true, \"alt\": \"عبدالعزيز القعيد جالسًا خلف مكتبه أثناء لقاء إذاعي\"}]"
+      "detail": "[{\"src\": \"/assets/img/portrait-480.webp\", \"ok\": true, \"alt\": \"\", \"decorativeContext\": true}, {\"src\": \"/assets/img/portrait.jpg\", \"ok\": true, \"alt\": \"الشيخ عبدالعزيز القعيد جالسًا خلف مكتبه أثناء لقاء "
     },
     {
       "name": "[ar] fonts registered and not in error",
       "ok": true,
-      "detail": "10 faces"
+      "detail": "9 faces"
     },
     {
       "name": "[ar] CV download link resolves (200 + PDF)",
@@ -228,7 +703,7 @@
     {
       "name": "[ar] unique title (<=70 chars) and description (<=160)",
       "ok": true,
-      "detail": "title=55 desc=145"
+      "detail": "title=41 desc=116"
     },
     {
       "name": "[en] every in-page anchor has a target",
@@ -236,19 +711,24 @@
       "detail": "missing=[]"
     },
     {
+      "name": "[en] sticky header does not cover anchor target at 375px",
+      "ok": true,
+      "detail": "{'targetTop': 77.609375, 'headerBottom': 63}"
+    },
+    {
       "name": "[en] no external links",
       "ok": true,
       "detail": "found=[]"
     },
     {
-      "name": "[en] every image loads and has alt text",
+      "name": "[en] every image loads, and has either alt text or a decorative context",
       "ok": true,
-      "detail": "[{\"src\": \"/assets/img/portrait.jpg\", \"ok\": true, \"alt\": \"Abdulaziz Al-Qaeed seated at his desk during a radio interview\"}]"
+      "detail": "[{\"src\": \"/assets/img/portrait-480.webp\", \"ok\": true, \"alt\": \"\", \"decorativeContext\": true}, {\"src\": \"/assets/img/portrait.jpg\", \"ok\": true, \"alt\": \"Sheikh Abdulaziz Al-Qaeed seated at his desk during"
     },
     {
       "name": "[en] fonts registered and not in error",
       "ok": true,
-      "detail": "10 faces"
+      "detail": "9 faces"
     },
     {
       "name": "[en] CV download link resolves (200 + PDF)",
@@ -263,7 +743,7 @@
     {
       "name": "[en] unique title (<=70 chars) and description (<=160)",
       "ok": true,
-      "detail": "title=53 desc=146"
+      "detail": "title=37 desc=137"
     },
     {
       "name": "Unknown path returns HTTP 404",
@@ -281,30 +761,250 @@
       "detail": "hidden=0"
     },
     {
+      "name": "Reduced motion: scroll and button motion disabled",
+      "ok": true,
+      "detail": "{'scroll': 'auto', 'transition': '0s', 'transform': 'none'}"
+    },
+    {
       "name": "No-JS: all sections present in HTML",
       "ok": true,
       "detail": "sections=9"
     },
     {
-      "name": "axe [ar 360] zero violations (WCAG 2.2 AA + best practice)",
+      "name": "[ar] print: no content block is left invisible",
+      "ok": true,
+      "detail": "hidden=0"
+    },
+    {
+      "name": "[ar] print: document header shown, interactive chrome hidden",
+      "ok": true,
+      "detail": "{'hiddenReveals': 0, 'printHeader': True, 'screenOnlyHidden': True, 'bodyText': 4997}"
+    },
+    {
+      "name": "[ar] print: the document carries the full text",
+      "ok": true,
+      "detail": "4997 chars"
+    },
+    {
+      "name": "[en] print: no content block is left invisible",
+      "ok": true,
+      "detail": "hidden=0"
+    },
+    {
+      "name": "[en] print: document header shown, interactive chrome hidden",
+      "ok": true,
+      "detail": "{'hiddenReveals': 0, 'printHeader': True, 'screenOnlyHidden': True, 'bodyText': 6073}"
+    },
+    {
+      "name": "[en] print: the document carries the full text",
+      "ok": true,
+      "detail": "6073 chars"
+    },
+    {
+      "name": "[ar] no header or navigation item is clipped (768-1920px)",
+      "ok": true,
+      "detail": "{}"
+    },
+    {
+      "name": "[ar] header stays a single compact row from 768px up",
+      "ok": true,
+      "detail": "{\"768\": 63, \"861\": 63, \"900\": 63, \"1024\": 69, \"1100\": 69, \"1180\": 69, \"1366\": 69, \"1920\": 69}"
+    },
+    {
+      "name": "[en] no header or navigation item is clipped (768-1920px)",
+      "ok": true,
+      "detail": "{}"
+    },
+    {
+      "name": "[en] header stays a single compact row from 768px up",
+      "ok": true,
+      "detail": "{\"768\": 63, \"861\": 63, \"900\": 63, \"1024\": 69, \"1100\": 69, \"1180\": 69, \"1366\": 69, \"1920\": 69}"
+    },
+    {
+      "name": "[ar] mobile header is compact and stable across loads (<=64px, spread <= 2px)",
+      "ok": true,
+      "detail": "heights=[63, 63]"
+    },
+    {
+      "name": "[en] mobile header is compact and stable across loads (<=64px, spread <= 2px)",
+      "ok": true,
+      "detail": "heights=[63, 63]"
+    },
+    {
+      "name": "[ar 375] section index opens inside the viewport with all 8 sections",
+      "ok": true,
+      "detail": "{\"left\": 12, \"right\": 363, \"top\": 70, \"headerBottom\": 63, \"width\": 375, \"offenders\": 0, \"links\": 8}"
+    },
+    {
+      "name": "[ar 375] Escape closes the section index",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[ar 768] section index opens inside the viewport with all 8 sections",
+      "ok": true,
+      "detail": "{\"left\": 12, \"right\": 756, \"top\": 70, \"headerBottom\": 63, \"width\": 768, \"offenders\": 0, \"links\": 8}"
+    },
+    {
+      "name": "[ar 768] Escape closes the section index",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[ar 1366] section index opens inside the viewport with all 8 sections",
+      "ok": true,
+      "detail": "{\"left\": 188.4375, \"right\": 540.4375, \"top\": 69.59375, \"headerBottom\": 69, \"width\": 1366, \"offenders\": 0, \"links\": 8}"
+    },
+    {
+      "name": "[ar 1366] Escape closes the section index",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[en 375] section index opens inside the viewport with all 8 sections",
+      "ok": true,
+      "detail": "{\"left\": 12, \"right\": 363, \"top\": 70, \"headerBottom\": 63, \"width\": 375, \"offenders\": 0, \"links\": 8}"
+    },
+    {
+      "name": "[en 375] Escape closes the section index",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[en 768] section index opens inside the viewport with all 8 sections",
+      "ok": true,
+      "detail": "{\"left\": 12, \"right\": 756, \"top\": 70, \"headerBottom\": 63, \"width\": 768, \"offenders\": 0, \"links\": 8}"
+    },
+    {
+      "name": "[en 768] Escape closes the section index",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[en 1366] section index opens inside the viewport with all 8 sections",
+      "ok": true,
+      "detail": "{\"left\": 837.203125, \"right\": 1189.203125, \"top\": 69.59375, \"headerBottom\": 69, \"width\": 1366, \"offenders\": 0, \"links\": 8}"
+    },
+    {
+      "name": "[en 1366] Escape closes the section index",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[ar] back-to-top stays hidden at the top of the page",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[ar] the current section is marked once for keyboard and screen readers",
+      "ok": true,
+      "detail": "aria-current elements=1"
+    },
+    {
+      "name": "[ar] back-to-top and the print action appear while reading",
+      "ok": true,
+      "detail": "{'backToTop': True, 'current': 1, 'printEnabled': True}"
+    },
+    {
+      "name": "[en] back-to-top stays hidden at the top of the page",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[en] the current section is marked once for keyboard and screen readers",
+      "ok": true,
+      "detail": "aria-current elements=1"
+    },
+    {
+      "name": "[en] back-to-top and the print action appear while reading",
+      "ok": true,
+      "detail": "{'backToTop': True, 'current': 1, 'printEnabled': True}"
+    },
+    {
+      "name": "Language switch keeps the current section",
+      "ok": true,
+      "detail": "/en/#community"
+    },
+    {
+      "name": "Language switch lands on the same section (EN)",
+      "ok": true,
+      "detail": "http://127.0.0.1:8124/en/#community"
+    },
+    {
+      "name": "[ar 375] no touch target below 24px (WCAG 2.5.8)",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "[ar 375] every target reaches the 44px comfort size",
+      "ok": true,
+      "detail": "0 of 11 below 44px"
+    },
+    {
+      "name": "[ar 1366] no touch target below 24px (WCAG 2.5.8)",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "[ar 1366] every target reaches the 44px comfort size",
+      "ok": true,
+      "detail": "0 of 15 below 44px"
+    },
+    {
+      "name": "[en 375] no touch target below 24px (WCAG 2.5.8)",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "[en 375] every target reaches the 44px comfort size",
+      "ok": true,
+      "detail": "0 of 11 below 44px"
+    },
+    {
+      "name": "[en 1366] no touch target below 24px (WCAG 2.5.8)",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "[en 1366] every target reaches the 44px comfort size",
+      "ok": true,
+      "detail": "0 of 15 below 44px"
+    },
+    {
+      "name": "CV download is an A4 document with selectable text",
+      "ok": true,
+      "detail": "pages=5 size=595x842pt text=5293 chars 405KB"
+    },
+    {
+      "name": "axe [ar 375] zero violations (WCAG 2.2 AA + best practice)",
       "ok": true,
       "detail": "0 violations; passes=35"
     },
     {
-      "name": "axe [ar 1440] zero violations (WCAG 2.2 AA + best practice)",
-      "ok": true,
-      "detail": "0 violations; passes=34"
-    },
-    {
-      "name": "axe [en 360] zero violations (WCAG 2.2 AA + best practice)",
+      "name": "axe [ar 1366] zero violations (WCAG 2.2 AA + best practice)",
       "ok": true,
       "detail": "0 violations; passes=35"
     },
     {
-      "name": "axe [en 1440] zero violations (WCAG 2.2 AA + best practice)",
+      "name": "axe [en 375] zero violations (WCAG 2.2 AA + best practice)",
       "ok": true,
-      "detail": "0 violations; passes=34"
+      "detail": "0 violations; passes=35"
+    },
+    {
+      "name": "axe [en 1366] zero violations (WCAG 2.2 AA + best practice)",
+      "ok": true,
+      "detail": "0 violations; passes=35"
     }
   ],
-  "failures": 0
+  "failures": 0,
+  "header_mobile": {
+    "ar": [
+      63,
+      63
+    ],
+    "en": [
+      63,
+      63
+    ]
+  }
 }

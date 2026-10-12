@@ -1,4 +1,7 @@
-/* Progressive enhancement only. The page is complete without this file. */
+/* Progressive enhancement only. The page is complete without this file.
+   No inline styles are used anywhere (the production CSP forbids them):
+   state is expressed with classes and attributes, and the reading progress bar
+   is drawn by a CSS scroll-driven animation. */
 (function () {
   "use strict";
 
@@ -8,41 +11,101 @@
   var yearEl = document.querySelector("[data-year]");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-  // Scrollspy: highlight the nav link of the section in view.
-  // Progressive enhancement; the nav works the same without JavaScript.
-  var nav = document.querySelector(".primary-nav");
-  if (nav && "IntersectionObserver" in window) {
-    var links = {};
-    nav.querySelectorAll('a[href^="#"]').forEach(function (a) {
-      links[a.getAttribute("href").slice(1)] = a;
+  // --- Section index panel ------------------------------------------------
+  var toc = document.querySelector("[data-toc]");
+  if (toc) {
+    var tocToggle = toc.querySelector("summary");
+    toc.addEventListener("click", function (event) {
+      // Choosing a section closes the panel; the anchor still navigates.
+      if (event.target.closest && event.target.closest("a")) toc.open = false;
     });
-    var sections = Object.keys(links)
-      .map(function (id) { return document.getElementById(id); })
-      .filter(Boolean);
-    var setActive = function (id) {
-      Object.keys(links).forEach(function (key) {
-        var on = key === id;
-        links[key].classList.toggle("is-active", on);
-        if (on) links[key].setAttribute("aria-current", "location");
-        else links[key].removeAttribute("aria-current");
-      });
-    };
-    var update = function () {
-      var line = window.innerHeight * 0.4;
-      var current = null;
-      sections.forEach(function (s) {
-        if (s.getBoundingClientRect().top <= line) current = s.id;
-      });
-      // At the end of the page the last section may never cross the line.
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
-        current = sections[sections.length - 1].id;
+    document.addEventListener("click", function (event) {
+      if (toc.open && !toc.contains(event.target)) toc.open = false;
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && toc.open) {
+        toc.open = false;
+        if (tocToggle) tocToggle.focus();
       }
-      setActive(current);
-    };
-    var spy = new IntersectionObserver(update, { rootMargin: "-40% 0px -55% 0px" });
-    sections.forEach(function (s) { spy.observe(s); });
+    });
   }
 
+  // --- Print action (only offered when it can work) -----------------------
+  var printBtn = document.querySelector("[data-print]");
+  if (printBtn) {
+    printBtn.hidden = false;
+    printBtn.addEventListener("click", function () { window.print(); });
+  }
+
+  // --- Language switch keeps the reader in the same section ---------------
+  var langSwitch = document.querySelector(".lang-switch");
+  if (langSwitch && window.location.hash.length > 1) {
+    langSwitch.setAttribute("href", langSwitch.getAttribute("href") + window.location.hash);
+  }
+
+  // --- Current section, progress and back-to-top --------------------------
+  var toTop = document.querySelector("[data-back-to-top]");
+  var headerEl = document.querySelector(".site-header");
+  var sections = Array.prototype.slice.call(document.querySelectorAll("main section[id]"));
+  var links = Array.prototype.slice.call(
+    document.querySelectorAll('.primary-nav a[href^="#"], .toc-list a[href^="#"]')
+  );
+  var linksById = {};
+  links.forEach(function (link) {
+    var id = link.getAttribute("href").slice(1);
+    (linksById[id] = linksById[id] || []).push(link);
+  });
+
+  function markCurrent(id) {
+    Object.keys(linksById).forEach(function (key) {
+      var isCurrent = key === id;
+      linksById[key].forEach(function (link) {
+        link.classList.toggle("is-active", isCurrent);
+        if (isCurrent) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+    });
+  }
+
+  var ticking = false;
+  function update() {
+    ticking = false;
+    var y = window.pageYOffset || root.scrollTop || 0;
+    var headerH = headerEl ? headerEl.offsetHeight : 0;
+    if (toTop) toTop.hidden = y < 600;
+
+    // A section becomes current once its top crosses the reading line:
+    // just below the sticky header, or 40% of the viewport on tall screens.
+    var line = Math.max(headerH + 48, window.innerHeight * 0.4);
+    var current = "";
+    for (var i = 0; i < sections.length; i++) {
+      var box = sections[i].getBoundingClientRect();
+      if (box.top <= line) current = sections[i].id;
+    }
+    // At the end of the page the last section may never cross the line.
+    if (sections.length && y + window.innerHeight >= document.documentElement.scrollHeight - 2) {
+      current = sections[sections.length - 1].id;
+    }
+    markCurrent(current);
+  }
+  function requestUpdate() {
+    if (!ticking) {
+      ticking = true;
+      window.requestAnimationFrame(update);
+    }
+  }
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
+  window.addEventListener("hashchange", requestUpdate);
+  update();
+
+  if (toTop) {
+    toTop.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    });
+  }
+
+  // --- Reveal on scroll ---------------------------------------------------
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduceMotion || !("IntersectionObserver" in window)) return;
 

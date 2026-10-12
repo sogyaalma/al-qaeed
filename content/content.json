@@ -530,49 +530,104 @@
       "label": {
         "ar": "نبذة",
         "en": "Biography"
-      }
+      },
+      "primary": true,
+      "meta": {
+        "ar": "4 مجالات عمل",
+        "en": "4 focus areas"
+      },
+      "num": "01"
     },
     {
       "id": "experience",
       "label": {
         "ar": "الخبرة",
         "en": "Experience"
-      }
+      },
+      "primary": true,
+      "meta": {
+        "ar": "5 وظائف موثّقة",
+        "en": "5 documented roles"
+      },
+      "num": "02"
     },
     {
       "id": "community",
       "label": {
         "ar": "الأعمال",
         "en": "Work"
-      }
+      },
+      "primary": true,
+      "meta": {
+        "ar": "5 مجموعات · 18 بندًا",
+        "en": "5 groups · 18 items"
+      },
+      "num": "03"
     },
     {
       "id": "skills",
       "label": {
         "ar": "المهارات",
         "en": "Skills"
-      }
+      },
+      "primary": false,
+      "meta": {
+        "ar": "4 مجموعات كفاءات",
+        "en": "4 competency groups"
+      },
+      "num": "04"
+    },
+    {
+      "id": "publications",
+      "label": {
+        "ar": "الإصدارات",
+        "en": "Publications"
+      },
+      "primary": false,
+      "meta": {
+        "ar": "4 إصدارات",
+        "en": "4 titles"
+      },
+      "num": "05"
     },
     {
       "id": "education",
       "label": {
         "ar": "التعليم",
         "en": "Education"
-      }
+      },
+      "primary": false,
+      "meta": {
+        "ar": "مؤهلان دراسيان",
+        "en": "2 academic qualifications"
+      },
+      "num": "06"
     },
     {
       "id": "training",
       "label": {
         "ar": "الدورات",
         "en": "Courses"
-      }
+      },
+      "primary": false,
+      "meta": {
+        "ar": "10 دورات وشهادات",
+        "en": "10 courses and certificates"
+      },
+      "num": "07"
     },
     {
       "id": "contact",
       "label": {
         "ar": "تواصل",
         "en": "Contact"
-      }
+      },
+      "primary": true,
+      "meta": {
+        "ar": "بريد إلكتروني",
+        "en": "Email"
+      },
+      "num": "08"
     }
   ],
   "ui": {
@@ -611,6 +666,46 @@
     "cv_note": {
       "ar": "ملف السيرة نسخة من صفحات السيرة الذاتية المعتمدة.",
       "en": "The CV file is a copy of the approved CV pages."
+    },
+    "toc_label": {
+      "ar": "الفهرس",
+      "en": "Contents"
+    },
+    "toc_title": {
+      "ar": "أقسام الصفحة",
+      "en": "Page sections"
+    },
+    "toc_top": {
+      "ar": "أعلى الصفحة",
+      "en": "Back to top"
+    },
+    "back_to_top": {
+      "ar": "عودة إلى الأعلى",
+      "en": "Back to top"
+    },
+    "print_action": {
+      "ar": "طباعة أو حفظ PDF",
+      "en": "Print or save PDF"
+    },
+    "portrait_caption": {
+      "ar": "لقطة أثناء لقاء إذاعي",
+      "en": "Photographed during a radio interview"
+    },
+    "index_aria": {
+      "ar": "فهرس أقسام الصفحة",
+      "en": "Page section index"
+    },
+    "progress_aria": {
+      "ar": "مقدار التقدم في الصفحة",
+      "en": "Reading progress"
+    },
+    "updated_note": {
+      "ar": "سيرة تعريفية معتمدة من المحتوى الموثق.",
+      "en": "Biographical profile based on documented content."
+    },
+    "switch_short": {
+      "ar": "EN",
+      "en": "AR"
     }
   },
   "seo": {
@@ -622,5 +717,47 @@
       "title": "Sheikh Abdulaziz Al-Qaeed | Biography",
       "description": "Biography of Sheikh Abdulaziz Al-Qaeed, imam of Qasr Al-Hukm Mosque and former Riyadh Region Reconciliation Committee executive director."
     }
-  }
+  },
+  "hero_facts": [
+    {
+      "label": {
+        "ar": "المنصب الحالي",
+        "en": "Current role"
+      },
+      "value": {
+        "ar": "إمام مسجد قصر الحكم — إمارة منطقة الرياض",
+        "en": "Imam, Qasr Al-Hukm Mosque — Riyadh Region Emirate"
+      }
+    },
+    {
+      "label": {
+        "ar": "الإمامة منذ",
+        "en": "Imam since"
+      },
+      "value": {
+        "ar": "1413هـ",
+        "en": "1413 AH"
+      }
+    },
+    {
+      "label": {
+        "ar": "مدير تنفيذي سابق",
+        "en": "Former executive director"
+      },
+      "value": {
+        "ar": "لجنة إصلاح ذات البين (1437–1444هـ)",
+        "en": "Reconciliation Committee (1437–1444 AH)"
+      }
+    },
+    {
+      "label": {
+        "ar": "الإصدارات والبحوث",
+        "en": "Publications"
+      },
+      "value": {
+        "ar": "{count} عناوين",
+        "en": "{count} titles"
+      }
+    }
+  ]
 }

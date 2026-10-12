@@ -536,7 +536,11 @@ html[dir="rtl"] .ico-flip { transform: scaleX(-1); }
 
 /* Contact */
 .contact {
-  background: var(--green);
+  /* Brand gradient: a soft gold glow at the top fading into deep green —
+     identity accents only, no external assets. */
+  background:
+    radial-gradient(56rem 24rem at 50% -18%, rgb(241 217 166 / 0.10), transparent 60%),
+    linear-gradient(168deg, var(--green) 8%, var(--green-deep) 88%);
   color: #fff;
   padding-block: clamp(3.5rem, 7vw, 6rem);
 }
@@ -553,6 +557,8 @@ html[dir="rtl"] .ico-flip { transform: scaleX(-1); }
 .email-line { font-size: 1rem; }
 .email-line a { color: #fff; font-weight: 600; overflow-wrap: anywhere; }
 .contact .btn-light { min-height: 3rem; }
+/* Light-gold focus ring over the dark surface, same convention as the footer. */
+.contact :is(a, button):focus-visible { outline-color: #f1d9a6; }
 
 /* Footer */
 .site-footer {

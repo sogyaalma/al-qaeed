@@ -221,6 +221,9 @@ html[dir="rtl"] .ico-flip { transform: scaleX(-1); }
   white-space: nowrap;
 }
 .primary-nav a:hover { background: var(--green-soft); color: var(--green-deep); }
+/* Current section in view (set by main.js scrollspy; no class without JS). */
+.primary-nav a.is-active,
+.primary-nav a.is-active:hover { background: var(--green); color: #fff; }
 .lang-switch {
   flex: none;
   border: 1px solid var(--green);

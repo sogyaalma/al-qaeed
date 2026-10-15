@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 """
-Generates the static pages from content/content.json.
+Generates the static pages from content/content.json using NDS-vanilla markup.
 
   python3 tools/build.py
 
-Generated root outputs (committed for review and root-level local preview):
-  index.html          Arabic (default, RTL)
-  en/index.html       English (LTR)
-  404.html            Not-found page
-  sitemap.xml         With hreflang alternates
+Canonical sources (NDS IQ):
+  examples/faculty-cv.md          — profile page shape
+  layout/page-layout.md           — article + sideinfo body
+  ui-shell/hero.md #hero-profile  — sub/flat hero with avatar
+  ui-shell/mainnav.md             — header navigation
+  ui-shell/footer.md              — footer
+  templates/404-template.md       — not-found page
+  ui-shell/head.md                — document head (blocking critical CSS)
 
-For Cloudflare Pages, run tools/package.py after this script and deploy dist/. That
-allowlisted static output excludes repository documentation, tests, and source data.
-
-To add a third language: add an entry to LANGS below and a matching key
-("xx") next to every "ar"/"en" value in content/content.json.
+Generated:
+  index.html, en/index.html, 404.html, sitemap.xml
 """
 import html
 import json
@@ -34,15 +34,55 @@ CV_PATH = "/" + DATA["site"]["cv_file"]
 CV_NAME = DATA["site"]["cv_download_name"]
 EMAIL = DATA["site"]["email"]
 YEAR_FALLBACK = "2026"
+ASSET_VER = "1.12.x-dev"
 
-ICON = {
-    "download": '<path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/>',
-    "mail": '<path d="M3.5 6.5h17v11h-17z"/><path d="M3.5 7l8.5 6.5L20.5 7"/>',
-    "check": '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
-    "arrow": '<path d="M5 12h14M13 6l6 6-6 6"/>',
-    "arrow-up": '<path d="M12 19V6M6 12l6-6 6 6"/>',
-    "list": '<path d="M4 7h16M4 12h16M4 17h10"/>',
-}
+# Inline gate from ui-shell/head.md (required first-paint hide until NDS CSS).
+GATE_CSS = """html[data-theme~=dark] :where(.nds-main-nav .nds-brand.nds-oncolor :is(img,svg)){filter:brightness(0) invert(1)}
+    html{background-color:var(--background-body, #f8f5ee)}
+    html[data-theme~=dark]{background-color:var(--background-body, #111927)}
+    :where(.nds-topbar){background-color:var(--background-topbar, #f3f4f6)}
+    html[data-theme~=dark] :where(.nds-topbar){background-color:var(--background-topbar, #111927)}
+    :where(.nds-main-nav){background-color:var(--background-nav, #fffdf8)}
+    html[data-theme~=dark] :where(.nds-main-nav){background-color:var(--background-nav, #1f2a37)}
+    :where(.nds-hero-image-wrapper)::before{content:"";position:absolute;inset:0;background:color-mix(in srgb, var(--background-image-overlay, #0a3d32) calc(var(--overlay, 0.7) * 100%), transparent);pointer-events:none}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{overflow-anchor:none}
+    html :where(header){display:contents}
+    html :where(.nds-topbar){height:40px}
+    html :where(.nds-main-nav){height:var(--nds-nav-height, 72px)}
+    html .nds-swiper.nds-hero:not([data-nds-swiper-initialized],[data-swiper-preset]) .nds-swiper-slide:not(:first-child){display:none}
+    :where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-user-feedback-section,.nds-footer){visibility:hidden}
+    html:not([data-nds-loaded]) main{overflow-x:clip}
+    .nds-skip-link:not(:focus){position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0}
+    :root{--nds-icons-opacity: 0}
+    :is(.nds-hidden,[hidden],[data-state~=hidden],[data-filtered]){display:none !important}
+    :where(.nds-hero-section){position:relative;height:550px}
+    :where(.nds-hero-section.nds-sub){height:auto;min-height:220px}
+    :where(.nds-hero-image-wrapper){position:absolute;inset:0}
+    :where(.nds-hero-image){width:100%;height:100%;object-fit:cover;display:block}
+    :where(.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:hidden}"""
+
+THEME_BOOT = """(function() {
+      var v; try { v = localStorage.getItem('nds-theme'); } catch (e) {}
+      if (v) {
+        var d = document.documentElement;
+        var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\\s+/)
+          .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+        d.setAttribute('data-theme', t.join(' '));
+      }
+    })();
+    (function () {
+      document.querySelectorAll('link[rel="preload"][data-nds-defer]').forEach(function (p) {
+        var l = document.createElement('link');
+        for (var i = 0; i < p.attributes.length; i++) {
+          var a = p.attributes[i];
+          if (a.name !== 'rel' && a.name !== 'as') l.setAttribute(a.name, a.value);
+        }
+        l.rel = 'stylesheet';
+        p.removeAttribute('data-nds-defer');
+        document.head.appendChild(l);
+      });
+    })();"""
 
 
 def e(s):
@@ -50,19 +90,9 @@ def e(s):
 
 
 def t(value, lang):
-    """Return the text for a language. Accepts {'ar':..,'en':..} or a plain string."""
     if isinstance(value, dict):
         return value.get(lang) or value.get(DEFAULT) or ""
     return value
-
-
-def icon(name, cls=""):
-    c = f' class="ico {cls}"' if cls else ' class="ico"'
-    return (
-        f'<svg{c} viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" '
-        f'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
-        f"{ICON[name]}</svg>"
-    )
 
 
 def other_lang(lang):
@@ -70,7 +100,6 @@ def other_lang(lang):
 
 
 def content_counts():
-    """Item counts used by the section index. Derived, never hand-written."""
     d = DATA
     return {
         "about": len(d["about"]["focus"]),
@@ -87,11 +116,6 @@ def content_counts():
 
 
 def validate_nav_counts():
-    """Fail the build when a section index count no longer matches the content.
-
-    Numbers typed in a section's `meta` label must be exactly the counts derived
-    from content.json. This keeps the index honest when content is edited.
-    """
     counts = content_counts()
     problems = []
     for item in DATA["nav"]:
@@ -110,50 +134,25 @@ def validate_nav_counts():
 
 
 def fill_tokens(text, lang):
-    """Replace {count} style tokens in authored copy with derived values."""
     counts = content_counts()
     values = {"count": counts["publications"]}
     return re.sub(r"\{(\w+)\}", lambda m: str(values.get(m.group(1), m.group(0))), str(text))
-
-
-def section_index(lang):
-    """Full index of the page sections, used by the header panel."""
-    rows = []
-    for item in DATA["nav"]:
-        heading = DATA.get(item["id"], {}).get("heading")
-        name = t(heading, lang) if heading else t(item["label"], lang)
-        rows.append(
-            f"""          <li><a href="#{item['id']}">
-            <span class="toc-no" aria-hidden="true">{item['num']}</span>
-            <span class="toc-name">{e(name)}</span>
-            <span class="toc-meta" aria-hidden="true">{e(t(item['meta'], lang))}</span>
-          </a></li>"""
-        )
-    return "\n".join(rows)
 
 
 def page_url(lang):
     return SITE_URL + LANGS[lang]["path"]
 
 
-def head(lang):
+def i18n(lang, ar, en):
+    return ar if lang == "ar" else en
+
+
+def head(lang, title, description, extra_meta=""):
     L = LANGS[lang]
-    seo = DATA["seo"][lang]
     person = DATA["person"]
     name = t(person["name_short"], lang)
-    alt_links = "\n".join(
+    alt_links = chr(10).join(
         f'  <link rel="alternate" hreflang="{k}" href="{e(SITE_URL + v["path"])}">' for k, v in LANGS.items()
-    )
-    preload_fonts = (
-        ["/assets/fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2",
-         "/assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2",
-         "/assets/fonts/noto-naskh-arabic-arabic-400-normal.woff2"]
-        if lang == "ar"
-        else ["/assets/fonts/satoshi-700.woff2",
-              "/assets/fonts/ibm-plex-sans-arabic-latin-400-normal.woff2"]
-    )
-    preload = "\n  ".join(
-        f'<link rel="preload" href="{u}" as="font" type="font/woff2" crossorigin>' for u in preload_fonts
     )
     jsonld = {
         "@context": "https://schema.org",
@@ -161,7 +160,7 @@ def head(lang):
         "name": t(person["name_full"], lang),
         "alternateName": [DATA["person"]["name_short"]["ar"], DATA["person"]["name_short"]["en"]],
         "jobTitle": t(person["title"], lang),
-        "description": seo["description"],
+        "description": description,
         "email": f"mailto:{EMAIL}",
         "url": page_url(lang),
         "image": SITE_URL + "/assets/img/portrait.jpg",
@@ -171,447 +170,610 @@ def head(lang):
     return f"""<!DOCTYPE html>
 <html lang="{L['html_lang']}" dir="{L['dir']}">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{e(seo['title'])}</title>
-  <meta name="description" content="{e(seo['description'])}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{e(title)}</title>
+  <style>
+    {GATE_CSS}
+  </style>
+  <link rel="preload" as="image" href="/assets/img/portrait-480.webp" fetchpriority="high">
+  <link rel="preload" href="/assets/css/nds.critical.min.css?ver={ASSET_VER}" as="style" fetchpriority="high" data-nds-defer>
+  <link rel="preload" href="/assets/css/nds-main.min.css?ver={ASSET_VER}" as="style" fetchpriority="low" data-nds-defer="main">
+  <link rel="preload" href="/assets/css/theme.css?ver={ASSET_VER}" as="style" data-nds-defer>
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" fetchpriority="low">
+  <meta name="description" content="{e(description)}">
   <meta name="theme-color" content="#0e5a49">
   <link rel="canonical" href="{e(page_url(lang))}">
   <link rel="alternate" hreflang="x-default" href="{e(SITE_URL + '/')}">
 {alt_links}
   <meta property="og:type" content="profile">
   <meta property="og:site_name" content="{e(name)}">
-  <meta property="og:title" content="{e(seo['title'])}">
-  <meta property="og:description" content="{e(seo['description'])}">
+  <meta property="og:title" content="{e(title)}">
+  <meta property="og:description" content="{e(description)}">
   <meta property="og:url" content="{e(page_url(lang))}">
   <meta property="og:image" content="{e(SITE_URL + '/assets/img/portrait.jpg')}">
   <meta property="og:image:alt" content="{e(t(person['portrait_alt'], lang))}">
   <meta property="og:locale" content="{L['locale']}">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  {preload}
-  <link rel="preload" as="image" href="/assets/img/portrait.webp" imagesrcset="/assets/img/portrait-480.webp 480w, /assets/img/portrait.webp 950w" imagesizes="(max-width: 1024px) 90vw, 500px" type="image/webp">
-  <link rel="stylesheet" href="/assets/css/styles.css">
+  {extra_meta}
   <script type="application/ld+json">{json.dumps(jsonld, ensure_ascii=False, indent=2)}</script>
-  <script src="/assets/js/main.js" defer></script>
+  <script>
+    {THEME_BOOT}
+  </script>
+  <noscript>
+    <link rel="stylesheet" href="/assets/css/nds.critical.min.css?ver={ASSET_VER}">
+    <link rel="stylesheet" href="/assets/css/nds-main.min.css?ver={ASSET_VER}">
+    <link rel="stylesheet" href="/assets/css/theme.css?ver={ASSET_VER}">
+    <style>:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-footer,.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){{visibility:visible}}</style>
+  </noscript>
 </head>
 """
 
 
 def header(lang):
-    """Sticky header: identity, four primary anchors, full section index, language.
-
-    The horizontal nav is only shown where it cannot be clipped (>=1024px). The
-    section index covers every section, so nothing is lost on small screens.
-    """
     ui = DATA["ui"]
     other = other_lang(lang)
-    primary = "".join(
-        f'        <li><a href="#{n["id"]}">{e(t(n["label"], lang))}</a></li>\n'
-        for n in DATA["nav"] if n.get("primary")
-    )
+    home = LANGS[lang]["path"]
+    name = t(DATA["person"]["name_short"], lang)
+    slogan = t(DATA["person"]["title"], lang)
+    other_label = t(ui["switch_label"], lang)
+    other_lang_attr = LANGS[other]["html_lang"]
+    nav_items = []
+    for n in DATA["nav"]:
+        if not n.get("primary"):
+            continue
+        nav_items.append(
+            f"""          <li class="nds-nav-item">
+            <a href="#{n['id']}" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+              <span class="nds-label">{e(t(n['label'], lang))}</span>
+            </a>
+          </li>"""
+        )
+    links = chr(10).join(nav_items)
+    skip = t(ui["skip"], lang)
+    toggle = i18n(lang, "فتح قائمة التنقل", "Toggle navigation menu")
     return f"""<body>
-<a class="skip-link" href="#main">{e(t(ui['skip'], lang))}</a>
-<div class="print-only print-head">
-  <p class="print-name">{e(t(DATA['person']['name_short'], lang))}</p>
-  <p class="print-role">{e(t(DATA['person']['title'], lang))}</p>
-  <p class="print-meta">{e(SITE_URL.replace('https://', '').replace('http://', ''))} · {e(EMAIL)}</p>
-</div>
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="{LANGS[lang]['path']}">
-      <span class="monogram" aria-hidden="true">{'ع ق' if lang == 'ar' else 'AQ'}</span>
-      <span class="brand-name">{e(t(DATA['person']['name_short'], lang))}</span>
-    </a>
-    <nav class="primary-nav" aria-label="{'التنقل الرئيسي' if lang == 'ar' else 'Primary navigation'}">
-      <ul>
-{primary}      </ul>
-    </nav>
-    <div class="header-tools">
-      <details class="toc" data-toc>
-        <summary class="toc-toggle">
-          {icon('list', 'ico-toc')}<span class="toc-label">{e(t(ui['toc_label'], lang))}</span>
-        </summary>
-        <div class="toc-panel">
-          <p class="toc-title" id="toc-title">{e(t(ui['toc_title'], lang))}</p>
-          <nav aria-labelledby="toc-title" aria-label="{e(t(ui['index_aria'], lang))}">
-            <ol class="toc-list">
-{section_index(lang)}
-            </ol>
-          </nav>
-          <p class="toc-foot"><a href="#top">{icon('arrow-up')}<span>{e(t(ui['toc_top'], lang))}</span></a></p>
+  <a class="nds-skip-link" href="#main-content">{e(skip)}</a>
+  <header>
+    <nav class="nds-main-nav nds-content-wrapper" id="nds-main-nav" aria-label="{e(i18n(lang, 'التنقل الرئيسي', 'Primary navigation'))}" data-i18n-aria-label="mainnav.primary_navigation">
+      <div class="nds-nav-container">
+        <a href="{home}" class="nds-brand">
+          <img class="nds-brand-logo" src="/assets/img/favicon.svg" width="40" height="40" alt="">
+          <span class="nds-brand-name">{e(name)}
+            <span class="nds-brand-slogan">{e(slogan)}</span>
+          </span>
+        </a>
+        <ul class="nds-nav-minimal" hidden>
+          <li class="nds-nav-toggler nds-nav-item">
+            <button class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="{e(toggle)}" data-i18n-aria-label="mainnav.toggle_menu" aria-expanded="false" aria-controls="nds-nav-collapse">
+              <i class="nds-icon nds-hgi-menu-01" aria-hidden="true"></i>
+            </button>
+          </li>
+        </ul>
+        <div class="nds-nav-collapse" id="nds-nav-collapse" hidden>
+          <div class="nds-nav-collapse-content">
+            <ul class="nds-nav-primary">
+{links}
+            </ul>
+            <div class="nds-nav-item nds-show-more">
+              <a href="#about" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full" title="{e(i18n(lang, 'المزيد', 'Show more'))}" data-i18n-title="scroll-more.show_more" aria-label="{e(i18n(lang, 'المزيد', 'Show more'))}" data-i18n-aria-label="scroll-more.show_more">
+                <i class="nds-icon nds-hgi-arrow-down-01" aria-hidden="true"></i>
+              </a>
+            </div>
+            <ul class="nds-nav-actions">
+              <li class="nds-nav-item nds-icon-only nds-pinned" id="nav-language">
+                <a href="{LANGS[other]['path']}" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="{e(other_label)}" lang="{other_lang_attr}" hreflang="{other_lang_attr}"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sm md sr">{e(other_label)}</span></a>
+              </li>
+            </ul>
+          </div>
         </div>
-      </details>
-      <a class="lang-switch" href="{LANGS[other]['path']}" hreflang="{LANGS[other]['html_lang']}" lang="{LANGS[other]['html_lang']}"><span class="lang-full">{e(t(ui['switch_label'], lang))}</span><span class="lang-compact">{e(t(ui['switch_short'], lang))}</span></a>
-    </div>
-  </div>
-  <div class="progress" aria-hidden="true"><span class="progress-bar"></span></div>
-</header>
+      </div>
+    </nav>
+  </header>
 """
 
 
 def hero(lang):
     p = DATA["person"]
     ui = DATA["ui"]
-    facts = "\n".join(
-        f"""          <li>
-            <span class="facts-label">{e(t(f['label'], lang))}</span>
-            <span class="facts-value">{e(fill_tokens(t(f['value'], lang), lang))}</span>
-          </li>"""
-        for f in DATA["hero_facts"]
-    )
-    return f"""<main id="main">
-  <section class="hero" id="top" aria-labelledby="hero-title">
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <div class="hero-identity">
-          <span class="hero-avatar" aria-hidden="true">
-            <img src="/assets/img/portrait-480.webp" width="480" height="432" alt="" loading="lazy" decoding="async">
-          </span>
-          <p class="eyebrow">{e(t(p['title'], lang))}</p>
-          <h1 id="hero-title">{e(t(p['name_short'], lang))}</h1>
-          <p class="fullname">{e(t(p['name_full'], lang))}</p>
-        </div>
-        <p class="tagline">{e(t(p['tagline'], lang))}</p>
-        <ul class="facts">
-{facts}
-        </ul>
-        <p class="intro">{e(t(p['intro'], lang))}</p>
-        <div class="actions">
-          <a class="btn btn-primary" href="{CV_PATH}" download="{CV_NAME}">{icon('download')}<span>{e(t(ui['download'], lang))}</span></a>
-          <a class="btn btn-ghost" href="#contact">{e(t(ui['contact_btn'], lang))}</a>
-        </div>
-      </div>
-      <figure class="hero-media">
-        <span class="hero-frame">
-          <picture>
-            <source type="image/webp" srcset="/assets/img/portrait-480.webp 480w, /assets/img/portrait.webp 950w" sizes="(max-width: 1024px) 90vw, 500px">
-            <img src="/assets/img/portrait.jpg" width="950" height="855" fetchpriority="high"
-                 alt="{e(t(p['portrait_alt'], lang))}">
-          </picture>
-        </span>
-        <figcaption class="media-caption">{e(t(ui['portrait_caption'], lang))}</figcaption>
-      </figure>
-    </div>
-  </section>
-"""
-
-
-def about(lang):
-    a = DATA["about"]
-    cards = "\n".join(
-        f"""        <article class="focus-card reveal">
-          <h3>{e(t(f['title'], lang))}</h3>
-          <p>{e(t(f['text'], lang))}</p>
-        </article>"""
-        for f in a["focus"]
-    )
-    return f"""
-  <section class="section" id="about" aria-labelledby="about-title">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">01</p>
-        <h2 id="about-title">{e(t(a['heading'], lang))}</h2>
-      </header>
-      <p class="lead reveal">{e(t(a['body'], lang))}</p>
-      <h3 class="sub-heading reveal">{e(t(a['focus_heading'], lang))}</h3>
-      <div class="bento">
-{cards}
-      </div>
-    </div>
-  </section>
-"""
-
-
-def experience(lang):
-    x = DATA["experience"]
-    items = []
-    for it in x["items"]:
-        note = f'<p class="note">{e(t(it["note"], lang))}</p>' if it.get("note") else ""
-        items.append(
-            f"""        <li class="tl-item reveal">
-          <span class="tl-period">{e(t(it['period'], lang))}</span>
-          <div class="tl-body">
-            <h3>{e(t(it['role'], lang))}</h3>
-            <p class="org">{e(t(it['org'], lang))}</p>
-            {note}
-          </div>
-        </li>"""
-        )
-    return f"""
-  <section class="section section-tint" id="experience" aria-labelledby="experience-title">
-    <div class="wrap section-split">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">02</p>
-        <h2 id="experience-title">{e(t(x['heading'], lang))}</h2>
-        <p class="section-intro">{e(t(x['intro'], lang))}</p>
-      </header>
-      <div class="split-body">
-        <ol class="timeline">
-{chr(10).join(items)}
+    name = t(p["name_short"], lang)
+    title = t(p["title"], lang)
+    home_label = i18n(lang, "الرئيسية", "Home")
+    share_label = i18n(lang, "مشاركة الصفحة", "Share Page")
+    return f"""  <main>
+    <section class="nds-hero-section nds-sub nds-flat" id="top">
+      <nav class="nds-breadcrumb-nav" aria-label="{e(i18n(lang, 'مسار التنقل', 'Breadcrumb'))}" data-i18n-aria-label="breadcrumb.breadcrumb">
+        <ol class="nds-breadcrumb">
+          <li><a href="{LANGS[lang]['path']}">{e(home_label)}</a></li>
+          <li class="nds-truncate" aria-current="page">{e(name)}</li>
         </ol>
+      </nav>
+      <div class="nds-section-wrapper">
+        <div class="nds-section-image">
+          <div class="nds-avatar nds-image-border alq-hero-avatar">
+            <img src="/assets/img/portrait-480.webp" width="120" height="120" alt="{e(t(p['portrait_alt'], lang))}" fetchpriority="high">
+          </div>
+        </div>
+        <div class="nds-section-head">
+          <h1 class="nds-section-title">{e(name)}</h1>
+          <p class="nds-section-description">{e(title)}. {e(t(p['tagline'], lang))}</p>
+        </div>
+        <div class="nds-section-action">
+          <a class="nds-btn nds-primary" href="{CV_PATH}" download="{e(CV_NAME)}">
+            <i class="hgi hgi-stroke hgi-download-01" aria-hidden="true"></i>
+            <span class="nds-label">{e(t(ui['download'], lang))}</span>
+          </a>
+          <a class="nds-btn nds-secondary-outline" href="#contact">
+            <i class="nds-icon nds-hgi-mail-01" aria-hidden="true"></i>
+            <span class="nds-label">{e(t(ui['contact_btn'], lang))}</span>
+          </a>
+          <div class="nds-share nds-dropmenu">
+            <button class="nds-btn nds-secondary-outline nds-dropmenu-trigger" type="button" aria-label="{e(share_label)}" data-i18n-aria-label="share.share_page">
+              <i class="nds-icon nds-hgi-share-01" aria-hidden="true"></i>
+              <span class="nds-label" data-i18n="share.share_page">{e(share_label)}</span>
+            </button>
+            <div class="nds-dropmenu-menu" hidden>
+              <button class="nds-btn nds-subtle nds-dropmenu-item nds-share-x" type="button" aria-label="Share on X" data-i18n-aria-label="share.share_on_x">
+                <i class="nds-icon nds-hgi-new-twitter" aria-hidden="true"></i>
+                <span class="nds-label">X</span>
+              </button>
+              <button class="nds-btn nds-subtle nds-dropmenu-item nds-share-linkedin" type="button" aria-label="Share on LinkedIn" data-i18n-aria-label="share.share_on_linkedin">
+                <i class="nds-icon nds-hgi-linkedin-02" aria-hidden="true"></i>
+                <span class="nds-label">LinkedIn</span>
+              </button>
+              <button class="nds-btn nds-subtle nds-dropmenu-item nds-share-whatsapp" type="button" aria-label="Share on WhatsApp" data-i18n-aria-label="share.share_on_whatsapp">
+                <i class="nds-icon nds-hgi-whatsapp" aria-hidden="true"></i>
+                <span class="nds-label">WhatsApp</span>
+              </button>
+              <button class="nds-btn nds-subtle nds-dropmenu-item nds-share-copy" type="button" aria-label="{e(i18n(lang, 'نسخ الرابط', 'Copy Link'))}" data-i18n-aria-label="share.copy_link" data-copy-label data-no-auto-close>
+                <i class="nds-icon nds-hgi-link-04" aria-hidden="true"></i>
+                <span class="nds-label" data-i18n="share.copy_link">{e(i18n(lang, 'نسخ الرابط', 'Copy Link'))}</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 """
 
 
-def community(lang):
-    c = DATA["community"]
-    groups = []
-    for index, g in enumerate(c["groups"]):
-        lis = "\n".join(f'            <li>{e(t(i, lang))}</li>' for i in g["items"])
-        wide = " card--wide" if index == len(c["groups"]) - 1 else ""
-        groups.append(
-            f"""        <article class="card{wide} reveal">
-          <h3>{e(t(g['title'], lang))}</h3>
-          <ul class="list">
-{lis}
-          </ul>
-        </article>"""
+def section_head(title, description=""):
+    desc = f'\\n          <p class="nds-section-description">{e(description)}</p>' if description else ""
+    return f"""        <div class="nds-section-head">
+          <h2 class="nds-section-title">{e(title)}</h2>{desc}
+        </div>"""
+
+
+def about_block(lang):
+    a = DATA["about"]
+    facts = []
+    icons = ["hgi-mosque-01", "hgi-calendar-03", "hgi-user-group", "hgi-book-open-02"]
+    for i, fact in enumerate(DATA["hero_facts"]):
+        icon = icons[i % len(icons)]
+        facts.append(
+            f"""              <div class="nds-definition-item nds-card nds-stroke">
+                <dt>
+                  <i class="hgi hgi-stroke {icon}" aria-hidden="true"></i>
+                  <span class="nds-label">{e(t(fact['label'], lang))}</span>
+                </dt>
+                <dd>{e(fill_tokens(t(fact['value'], lang), lang))}</dd>
+              </div>"""
         )
-    ach = "\n".join(f'          <p>{e(t(a, lang))}</p>' for a in c["achievements"])
-    return f"""
-  <section class="section" id="community" aria-labelledby="community-title">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">03</p>
-        <h2 id="community-title">{e(t(c['heading'], lang))}</h2>
-      </header>
-      <div class="cards-2">
-{chr(10).join(groups)}
-      </div>
-      <div class="callout reveal">
-        <h3>{e(t(c['achievements_heading'], lang))}</h3>
-{ach}
-      </div>
-    </div>
-  </section>
-"""
+    tags = []
+    for item in a["focus"]:
+        tags.append(
+            f"""              <span class="nds-tag nds-green nds-sm"><span class="nds-label">{e(t(item['title'], lang))}</span></span>"""
+        )
+    focus_notes = "".join(
+        f"<p><strong>{e(t(item['title'], lang))}</strong> — {e(t(item['text'], lang))}</p>"
+        for item in a["focus"]
+    )
+    return f"""            <div class="nds-section-wrapper" id="about">
+{section_head(t(a['heading'], lang), t(DATA['person']['intro'], lang))}
+              <div class="nds-section-body">
+                <dl class="nds-definition-list nds-grid alq-facts">
+{chr(10).join(facts)}
+                </dl>
+                <div class="nds-block nds-prose">
+                  <p>{e(t(a['body'], lang))}</p>
+                  {focus_notes}
+                </div>
+                <div class="nds-block">
+                  <h3 class="nds-block-title">{e(t(a['focus_heading'], lang))}</h3>
+                  <div class="nds-flex nds-wrap alq-tags">
+{chr(10).join(tags)}
+                  </div>
+                </div>
+              </div>
+            </div>"""
 
 
-def skills(lang):
+def experience_block(lang):
+    exp = DATA["experience"]
+    items = list(reversed(exp["items"]))
+    total = len(items)
+    steps = []
+    for i, item in enumerate(items, start=1):
+        note = ""
+        if item.get("note"):
+            note = f"""
+                                <ul>
+                                  <li>{e(t(item['note'], lang))}</li>
+                                </ul>"""
+        steps.append(
+            f"""                        <div class="nds-stepper-step">
+                          <div class="nds-stepper-base">
+                            <div class="nds-stepper-circle" data-step-text="{i}"></div>
+                          </div>
+                          <div class="nds-stepper-content">
+                            <div class="nds-divider">{e(t(item['period'], lang))}</div>
+                            <div class="nds-stepper-text">
+                              <span class="nds-stepper-title">{e(t(item['role'], lang))}</span>
+                              <span class="nds-stepper-description">{e(t(item['org'], lang))}</span>
+                            </div>{note}
+                          </div>
+                        </div>"""
+        )
+    return f"""            <div class="nds-section-wrapper" id="experience">
+{section_head(t(exp['heading'], lang), t(exp['intro'], lang))}
+              <div class="nds-section-body">
+                <div class="nds-stepper nds-vertical nds-dot nds-reverse" data-current="{total}" data-total="{total}">
+{chr(10).join(steps)}
+                </div>
+              </div>
+            </div>"""
+
+
+def community_block(lang):
+    c = DATA["community"]
+    cards = []
+    for group in c["groups"]:
+        lis = "".join(f"<li>{e(t(item, lang))}</li>" for item in group["items"])
+        cards.append(
+            f"""                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">{e(t(group['title'], lang))}</span>
+                      <ul>{lis}</ul>
+                    </div>
+                  </div>
+                </div>"""
+        )
+    achievements = "".join(f"<li>{e(t(item, lang))}</li>" for item in c["achievements"])
+    return f"""            <div class="nds-section-wrapper" id="community">
+{section_head(t(c['heading'], lang))}
+              <div class="nds-section-body">
+                <div class="nds-flex nds-col alq-stack">
+{chr(10).join(cards)}
+                </div>
+                <div class="nds-alert nds-card nds-color" data-status="success" role="status">
+                  <span class="nds-feedback nds-alert-icon nds-outline">
+                    <span class="nds-feedback-icon">
+                      <i class="nds-icon" aria-hidden="true"></i>
+                    </span>
+                  </span>
+                  <div class="nds-alert-content">
+                    <div class="nds-alert-text">
+                      <span class="nds-alert-title">{e(t(c['achievements_heading'], lang))}</span>
+                      <ul class="nds-alert-description">{achievements}</ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>"""
+
+
+def skills_block(lang):
     s = DATA["skills"]
     groups = []
-    for g in s["groups"]:
-        tags = "\n".join(f'            <li>{e(t(tg, lang))}</li>' for tg in g["tags"])
+    for group in s["groups"]:
+        tags = "".join(
+            f'<span class="nds-tag nds-green nds-sm"><span class="nds-label">{e(t(tag, lang))}</span></span>'
+            for tag in group["tags"]
+        )
         groups.append(
-            f"""        <article class="card reveal">
-          <h3>{e(t(g['title'], lang))}</h3>
-          <ul class="tags">
-{tags}
-          </ul>
-        </article>"""
+            f"""                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">{e(t(group['title'], lang))}</span>
+                    </div>
+                    <div class="nds-flex nds-wrap alq-tags">{tags}</div>
+                  </div>
+                </div>"""
         )
-    return f"""
-  <section class="section section--compact section-tint" id="skills" aria-labelledby="skills-title">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">04</p>
-        <h2 id="skills-title">{e(t(s['heading'], lang))}</h2>
-        <p class="section-intro">{e(t(s['intro'], lang))}</p>
-      </header>
-      <div class="cards-2">
+    return f"""            <div class="nds-section-wrapper" id="skills">
+{section_head(t(s['heading'], lang), t(s['intro'], lang))}
+              <div class="nds-section-body">
+                <div class="nds-flex nds-col alq-stack">
 {chr(10).join(groups)}
-      </div>
-    </div>
-  </section>
-"""
+                </div>
+              </div>
+            </div>"""
 
 
-def publications(lang):
+def publications_block(lang):
     p = DATA["publications"]
-    items = "\n".join(
-        f"""        <li class="pub reveal"><span class="pub-no">{i:02d}</span><span>{e(t(it, lang))}</span></li>"""
-        for i, it in enumerate(p["items"], start=1)
-    )
-    return f"""
-  <section class="section section--compact" id="publications" aria-labelledby="publications-title">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">05</p>
-        <h2 id="publications-title">{e(t(p['heading'], lang))}</h2>
-        <p class="section-intro">{e(t(p['intro'], lang))}</p>
-      </header>
-      <ol class="pub-grid">
-{items}
-      </ol>
-    </div>
-  </section>
-"""
-
-
-def education(lang):
-    ed = DATA["education"]
-    items = []
-    for it in ed["items"]:
-        period = (
-            f'<p class="period">{e(t(it["period"], lang))}</p>' if it.get("period") else ""
+    cards = []
+    for item in p["items"]:
+        cards.append(
+            f"""                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">{e(t(item, lang))}</span>
+                    </div>
+                    <div class="nds-card-meta">
+                      <div class="nds-card-tags">
+                        <span class="nds-tag nds-green nds-sm"><span class="nds-label">{e(i18n(lang, 'كتيب / بحث', 'Booklet / paper'))}</span></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>"""
         )
-        items.append(
-            f"""        <li class="edu-item reveal">
-          <h3>{e(t(it['title'], lang))}</h3>
-          <p class="org">{e(t(it['org'], lang))}</p>
-          {period}
-        </li>"""
+    return f"""            <div class="nds-section-wrapper" id="publications">
+{section_head(t(p['heading'], lang), t(p['intro'], lang))}
+              <div class="nds-section-body">
+                <div class="nds-flex nds-col alq-stack">
+{chr(10).join(cards)}
+                </div>
+              </div>
+            </div>"""
+
+
+def education_block(lang):
+    edu = DATA["education"]
+    cards = []
+    for item in edu["items"]:
+        period = t(item["period"], lang) if item.get("period") else ""
+        meta = ""
+        if period:
+            meta = f"""                    <div class="nds-card-meta">
+                      <div class="nds-card-tags">
+                        <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">{e(period)}</span></span>
+                      </div>
+                    </div>"""
+        cards.append(
+            f"""                <div class="nds-card nds-stroke nds-horizontal alq-full">
+                  <div class="nds-card-header">
+                    <div class="nds-card-featured-icon">
+                      <span class="nds-featured-icon">
+                        <i class="hgi hgi-stroke hgi-mortarboard-02" aria-hidden="true"></i>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">{e(t(item['title'], lang))}</span>
+                      <p class="nds-card-description">{e(t(item['org'], lang))}</p>
+                    </div>
+{meta}
+                  </div>
+                </div>"""
         )
-    return f"""
-  <section class="section section--compact section-tint" id="education" aria-labelledby="education-title">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">06</p>
-        <h2 id="education-title">{e(t(ed['heading'], lang))}</h2>
-      </header>
-      <ul class="edu-list">
-{chr(10).join(items)}
-      </ul>
-    </div>
-  </section>
-"""
+    return f"""            <div class="nds-section-wrapper" id="education">
+{section_head(t(edu['heading'], lang))}
+              <div class="nds-section-body">
+                <div class="nds-flex nds-col alq-stack">
+{chr(10).join(cards)}
+                </div>
+              </div>
+            </div>"""
 
 
-def training(lang):
+def training_block(lang):
     tr = DATA["training"]
-    items = "\n".join(
-        f'        <li class="reveal">{icon("check", "ico-check")}<span>{e(t(i, lang))}</span></li>'
-        for i in tr["items"]
-    )
-    return f"""
-  <section class="section section--compact" id="training" aria-labelledby="training-title">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">07</p>
-        <h2 id="training-title">{e(t(tr['heading'], lang))}</h2>
-      </header>
-      <ul class="cert-list">
-{items}
-      </ul>
-    </div>
-  </section>
-"""
+    lis = "".join(f"<li>{e(t(item, lang))}</li>" for item in tr["items"])
+    return f"""            <div class="nds-section-wrapper" id="training">
+{section_head(t(tr['heading'], lang))}
+              <div class="nds-section-body">
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-prose">
+                      <ul>{lis}</ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>"""
 
 
-def contact(lang):
+def contact_block(lang):
     c = DATA["contact"]
     ui = DATA["ui"]
-    return f"""
-<section class="contact" id="contact" aria-labelledby="contact-title">
-  <div class="wrap contact-inner reveal">
-    <div>
-      <p class="kicker kicker-light" aria-hidden="true">08</p>
-      <h2 id="contact-title">{e(t(c['heading'], lang))}</h2>
-      <p class="contact-text">{e(t(c['text'], lang))}</p>
-    </div>
-    <div class="contact-actions">
-      <a class="btn btn-light" href="mailto:{e(EMAIL)}">{icon('mail')}<span>{e(t(ui['email_btn'], lang))}</span></a>
-      <p class="email-line"><span>{e(t(c['email_label'], lang))}:</span> <a href="mailto:{e(EMAIL)}" dir="ltr">{e(EMAIL)}</a></p>
-    </div>
-  </div>
-</section>
-"""
+    return f"""            <div class="nds-section-wrapper" id="contact">
+{section_head(t(c['heading'], lang), t(c['text'], lang))}
+              <div class="nds-section-action">
+                <a class="nds-btn nds-primary" href="mailto:{e(EMAIL)}">
+                  <i class="nds-icon nds-hgi-mail-01" aria-hidden="true"></i>
+                  <span class="nds-label">{e(t(ui['email_btn'], lang))}</span>
+                </a>
+                <a class="nds-btn nds-secondary-outline" href="{CV_PATH}" download="{e(CV_NAME)}">
+                  <i class="hgi hgi-stroke hgi-download-01" aria-hidden="true"></i>
+                  <span class="nds-label">{e(t(ui['download'], lang))}</span>
+                </a>
+              </div>
+              <div class="nds-section-body">
+                <dl class="nds-definition-list nds-grid alq-facts">
+                  <div class="nds-definition-item nds-card nds-stroke">
+                    <dt>
+                      <i class="hgi hgi-stroke hgi-mail-01" aria-hidden="true"></i>
+                      <span class="nds-label">{e(t(c['email_label'], lang))}</span>
+                    </dt>
+                    <dd><a class="nds-link" href="mailto:{e(EMAIL)}">{e(EMAIL)}</a></dd>
+                  </div>
+                </dl>
+              </div>
+            </div>"""
 
 
-def to_top(lang):
-    ui = DATA["ui"]
-    return f"""
-<div class="to-top-wrap">
-  <button class="to-top" type="button" data-back-to-top aria-label="{e(t(ui['back_to_top'], lang))}" hidden>
-    {icon('arrow-up')}<span class="to-top-label">{e(t(ui['back_to_top'], lang))}</span>
-  </button>
-</div>
-</main>
+def content_layout(lang):
+    name = t(DATA["person"]["name_short"], lang)
+    toc_label = t(DATA["ui"]["toc_title"], lang)
+    return f"""    <div class="nds-content-layout nds-has-sideinfo">
+      <div class="nds-content" id="main-content">
+        <section id="profile" class="nds-content-section nds-sideinfo-section">
+          <div class="nds-section-body">
+            <aside class="nds-sideinfo nds-sticky nds-top" aria-label="{e(i18n(lang, 'في هذه الصفحة', 'On this page'))}" data-i18n-aria-label="toc.on_this_page">
+              <nav class="nds-toc alq-toc" aria-label="{e(t(DATA['ui']['index_aria'], lang))}" data-i18n-aria-label="toc.table_of_contents" data-toc-source="#profile .nds-info-content" data-toc-levels="h2">
+                <div class="nds-toc-head">
+                  <span class="nds-label" data-i18n="toc.on_this_page">{e(i18n(lang, 'في هذه الصفحة', 'On this page'))}</span>
+                  <h2 class="nds-toc-title nds-truncate">{e(name)}</h2>
+                </div>
+                <div class="nds-drawer nds-lined">
+                  <ul class="nds-drawer-list"></ul>
+                </div>
+              </nav>
+            </aside>
+            <div class="nds-info-content">
+{about_block(lang)}
+{experience_block(lang)}
+{community_block(lang)}
+{skills_block(lang)}
+{publications_block(lang)}
+{education_block(lang)}
+{training_block(lang)}
+{contact_block(lang)}
+            </div>
+          </div>
+        </section>
+        <section class="nds-last-edit nds-content-section">
+          {e(t(DATA['ui']['updated_note'], lang))}
+        </section>
+      </div>
+    </div>
+  </main>
 """
 
 
 def footer(lang):
     ui = DATA["ui"]
-    other = other_lang(lang)
-    return f"""<footer class="site-footer">
-  <div class="wrap footer-inner">
-    <div class="footer-id">
-      <p class="footer-name">{e(t(DATA['person']['name_short'], lang))}</p>
-      <p class="footer-role">{e(t(DATA['person']['title'], lang))}</p>
-      <p class="footer-note">{e(t(ui['updated_note'], lang))}</p>
+    name = t(DATA["person"]["name_short"], lang)
+    nav_links = []
+    for n in DATA["nav"]:
+        nav_links.append(
+            f"""        <li>
+          <a class="nds-link nds-footer-link" href="#{n['id']}">
+            <span class="nds-label">{e(t(n['label'], lang))}</span>
+          </a>
+        </li>"""
+        )
+    sections_heading = i18n(lang, "أقسام الصفحة", "Page sections")
+    contact_heading = t(DATA["contact"]["heading"], lang)
+    rights = t(ui["footer_rights"], lang)
+    aria = i18n(lang, "تذييل الموقع", "Site Footer")
+    return f"""  <footer class="nds-footer nds-content-wrapper nds-brand" role="contentinfo" aria-label="{e(aria)}" data-i18n-aria-label="footer.site_footer">
+    <nav class="nds-footer-content" aria-label="{e(i18n(lang, 'تنقل التذييل', 'Footer navigation'))}" data-i18n-aria-label="footer.footer_navigation">
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="footer-col-1">{e(sections_heading)}</span>
+        <ul class="nds-footer-list" aria-labelledby="footer-col-1">
+{chr(10).join(nav_links)}
+        </ul>
+      </div>
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="footer-col-2">{e(contact_heading)}</span>
+        <ul class="nds-footer-list" aria-labelledby="footer-col-2">
+          <li>
+            <a class="nds-link nds-footer-link" href="mailto:{e(EMAIL)}">
+              <i class="nds-icon nds-hgi-mail-01" aria-hidden="true"></i>
+              <span class="nds-label">{e(EMAIL)}</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="{CV_PATH}" download="{e(CV_NAME)}">
+              <i class="hgi hgi-stroke hgi-download-01" aria-hidden="true"></i>
+              <span class="nds-label">{e(t(ui['download'], lang))}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="nds-footer-bottom">
+      <div class="nds-footer-meta">
+        <div class="nds-footer-legal">
+          <div class="nds-footer-copyright">
+            <span>{e(name)} &copy; {YEAR_FALLBACK}. {e(rights)}</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="footer-actions">
-      <a class="footer-link" href="mailto:{e(EMAIL)}" dir="ltr">{e(EMAIL)}</a>
-      <a class="footer-link footer-lang" href="{LANGS[other]['path']}" hreflang="{LANGS[other]['html_lang']}" lang="{LANGS[other]['html_lang']}">{e(t(ui['switch_label'], lang))}</a>
-      <button class="footer-link footer-action" type="button" data-print hidden>{e(t(ui['print_action'], lang))}</button>
-    </div>
-    <p class="footer-note footer-cv">{e(t(ui['cv_note'], lang))}</p>
-    <p class="copy">© <span data-year>{YEAR_FALLBACK}</span> {e(t(ui['footer_rights'], lang))}</p>
-  </div>
-</footer>
+  </footer>
+  <script defer src="/assets/js/nds-main.min.js?ver={ASSET_VER}"></script>
 </body>
 </html>
 """
 
 
-def render(lang):
-    return head(lang) + header(lang) + hero(lang) + about(lang) + experience(lang) + community(lang) + \
-        skills(lang) + publications(lang) + education(lang) + training(lang) + contact(lang) + \
-        to_top(lang) + footer(lang)
+def page(lang):
+    seo = DATA["seo"][lang]
+    return (
+        head(lang, seo["title"], seo["description"])
+        + header(lang)
+        + hero(lang)
+        + content_layout(lang)
+        + footer(lang)
+    )
 
 
-def render_404():
-    ar_title = "الصفحة غير موجودة"
-    return f"""<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex">
-  <title>404 | {e(ar_title)}</title>
-  <link rel="stylesheet" href="/assets/css/styles.css">
-</head>
-<body class="page-404">
-  <main class="notfound" id="main">
-    <div class="wrap notfound-inner">
-      <p class="kicker" aria-hidden="true">404</p>
-      <h1>{ar_title}</h1>
-      <p class="notfound-text">الرابط الذي فتحته غير موجود أو تم نقله.</p>
-      <div class="actions">
-        <a class="btn btn-primary" href="/">الصفحة الرئيسية</a>
-        <a class="btn btn-ghost" href="/en/" lang="en">Home (English)</a>
+def page_404():
+    seo_title = "404 | الصفحة غير موجودة"
+    extra = '<meta name="robots" content="noindex">'
+    head_html = head("ar", seo_title, "الصفحة غير موجودة", extra_meta=extra)
+    main_html = f"""  <main>
+    <div class="nds-content-layout">
+      <div class="nds-content" id="main-content">
+        <section id="not-found" class="nds-content-section nds-status-section">
+          <div class="nds-section-wrapper">
+            <div class="nds-section-image">
+              <img src="/assets/img/404.svg" width="458" height="324" alt="">
+            </div>
+            <div class="nds-section-head">
+              <h1 class="nds-section-title">الصفحة غير موجودة</h1>
+              <p class="nds-section-description">الرابط الذي فتحته غير موجود أو تم نقله.</p>
+            </div>
+            <div class="nds-section-action">
+              <a href="/" class="nds-btn nds-primary"><span class="nds-label">الصفحة الرئيسية</span></a>
+              <a href="/en/" class="nds-btn nds-secondary-outline" lang="en"><span class="nds-label">Home (English)</span></a>
+            </div>
+          </div>
+        </section>
       </div>
-      <p class="notfound-en" lang="en" dir="ltr">The page you requested does not exist or has moved.</p>
     </div>
   </main>
-</body>
-</html>
 """
+    return head_html + header("ar") + main_html + footer("ar")
 
 
-def render_sitemap():
+def sitemap():
     urls = []
-    for lang in LANGS:
-        alts = "\n".join(
-            f'    <xhtml:link rel="alternate" hreflang="{k}" href="{e(SITE_URL + v["path"])}"/>'
+    for lang, meta in LANGS.items():
+        loc = SITE_URL + meta["path"]
+        alts = chr(10).join(
+            f'    <xhtml:link rel="alternate" hreflang="{k}" href="{SITE_URL + v["path"]}"/>'
             for k, v in LANGS.items()
         )
         urls.append(
-            f"  <url>\n    <loc>{e(page_url(lang))}</loc>\n{alts}\n"
-            f"    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"{e(SITE_URL + '/')}\"/>\n  </url>"
+            f"""  <url>
+    <loc>{loc}</loc>
+{alts}
+    <xhtml:link rel="alternate" hreflang="x-default" href="{SITE_URL}/"/>
+  </url>"""
         )
-    return (
-        '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
-        'xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + "\n".join(urls) + "\n</urlset>\n"
-    )
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+{chr(10).join(urls)}
+</urlset>
+"""
 
 
 def main():
     validate_nav_counts()
-
-    def clean(s):
-        return re.sub(r"[ \t]+$", "", s, flags=re.M)
-
-    (ROOT / "index.html").write_text(clean(render("ar")), encoding="utf-8")
-    (ROOT / "en").mkdir(exist_ok=True)
-    (ROOT / "en" / "index.html").write_text(clean(render("en")), encoding="utf-8")
-    (ROOT / "404.html").write_text(clean(render_404()), encoding="utf-8")
-    (ROOT / "sitemap.xml").write_text(clean(render_sitemap()), encoding="utf-8")
-    print("built: index.html, en/index.html, 404.html, sitemap.xml")
+    (ROOT / "index.html").write_text(page("ar"), encoding="utf-8")
+    en_dir = ROOT / "en"
+    en_dir.mkdir(exist_ok=True)
+    (en_dir / "index.html").write_text(page("en"), encoding="utf-8")
+    (ROOT / "404.html").write_text(page_404(), encoding="utf-8")
+    (ROOT / "sitemap.xml").write_text(sitemap(), encoding="utf-8")
+    print("Built index.html, en/index.html, 404.html, sitemap.xml")
 
 
 if __name__ == "__main__":

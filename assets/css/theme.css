@@ -1,0 +1,61 @@
+/* Project brand overrides for NDS semantic tokens.
+   Why: this is a personal biographical site, not a government portal.
+   NDS default identity (DGA stamp, Vision 2030, government chrome) is replaced.
+   Rebinds semantic tokens only (NDS IQ rule 5). No .nds-* internals. */
+
+:root {
+  --background-body: #f8f5ee;
+  --background-stripe: #f3efe4;
+  --background-card: #fffdf8;
+  --background-nav: #fffdf8;
+  --background-sub-hero: #e8f0ec;
+  --background-primary: #0e5a49;
+  --background-primary-strong: #0a3d32;
+  --background-primary-light: #e8f0ec;
+  --background-hero: #0a3d32;
+  --background-footer: #0a3d32;
+  --text-display: #15201c;
+  --text-default: #15201c;
+  --text-primary-paragraph: #3d4a45;
+  --text-secondary-paragraph: #5c6b65;
+  --text-primary-strong: #0e5a49;
+  --background-image-overlay: #0a3d32;
+}
+
+html[data-theme~="dark"] {
+  --background-body: #111927;
+  --background-stripe: #1a2430;
+  --background-card: #1f2a37;
+  --background-nav: #1f2a37;
+  --text-display: #f3f4f6;
+  --text-primary-paragraph: #d1d5db;
+}
+
+/* CSP knob conversions (NDS IQ rule 3): inline style="--…" moved here. */
+.alq-facts {
+  --max-col: 2;
+  --mid-col: 2;
+  --min-col: 1;
+}
+
+.alq-full {
+  --card-width: 100%;
+}
+
+.alq-stack {
+  --gap: var(--spacing-xl);
+}
+
+.alq-tags {
+  --gap: var(--spacing-sm);
+}
+
+.alq-toc {
+  --toc-skeleton-rows: 8;
+}
+
+.alq-hero-avatar img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}

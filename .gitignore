@@ -1,6 +1,9 @@
 # Generated Cloudflare Pages deployment output
 /dist/
 
+# NDS template (read-only reference; runtime lives in assets/)
+.nds/
+
 # Python bytecode
 __pycache__/
 *.py[cod]

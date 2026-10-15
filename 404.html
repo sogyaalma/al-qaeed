@@ -1,24 +1,258 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 | الصفحة غير موجودة</title>
-  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    html[data-theme~=dark] :where(.nds-main-nav .nds-brand.nds-oncolor :is(img,svg)){filter:brightness(0) invert(1)}
+    html{background-color:var(--background-body, #f8f5ee)}
+    html[data-theme~=dark]{background-color:var(--background-body, #111927)}
+    :where(.nds-topbar){background-color:var(--background-topbar, #f3f4f6)}
+    html[data-theme~=dark] :where(.nds-topbar){background-color:var(--background-topbar, #111927)}
+    :where(.nds-main-nav){background-color:var(--background-nav, #fffdf8)}
+    html[data-theme~=dark] :where(.nds-main-nav){background-color:var(--background-nav, #1f2a37)}
+    :where(.nds-hero-image-wrapper)::before{content:"";position:absolute;inset:0;background:color-mix(in srgb, var(--background-image-overlay, #0a3d32) calc(var(--overlay, 0.7) * 100%), transparent);pointer-events:none}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{overflow-anchor:none}
+    html :where(header){display:contents}
+    html :where(.nds-topbar){height:40px}
+    html :where(.nds-main-nav){height:var(--nds-nav-height, 72px)}
+    html .nds-swiper.nds-hero:not([data-nds-swiper-initialized],[data-swiper-preset]) .nds-swiper-slide:not(:first-child){display:none}
+    :where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-user-feedback-section,.nds-footer){visibility:hidden}
+    html:not([data-nds-loaded]) main{overflow-x:clip}
+    .nds-skip-link:not(:focus){position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0}
+    :root{--nds-icons-opacity: 0}
+    :is(.nds-hidden,[hidden],[data-state~=hidden],[data-filtered]){display:none !important}
+    :where(.nds-hero-section){position:relative;height:550px}
+    :where(.nds-hero-section.nds-sub){height:auto;min-height:220px}
+    :where(.nds-hero-image-wrapper){position:absolute;inset:0}
+    :where(.nds-hero-image){width:100%;height:100%;object-fit:cover;display:block}
+    :where(.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:hidden}
+  </style>
+  <link rel="preload" as="image" href="/assets/img/portrait-480.webp" fetchpriority="high">
+  <link rel="preload" href="/assets/css/nds.critical.min.css?ver=1.12.x-dev" as="style" fetchpriority="high" data-nds-defer>
+  <link rel="preload" href="/assets/css/nds-main.min.css?ver=1.12.x-dev" as="style" fetchpriority="low" data-nds-defer="main">
+  <link rel="preload" href="/assets/css/theme.css?ver=1.12.x-dev" as="style" data-nds-defer>
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" fetchpriority="low">
+  <meta name="description" content="الصفحة غير موجودة">
+  <meta name="theme-color" content="#0e5a49">
+  <link rel="canonical" href="https://al-qaeed.pages.dev/">
+  <link rel="alternate" hreflang="x-default" href="https://al-qaeed.pages.dev/">
+  <link rel="alternate" hreflang="ar" href="https://al-qaeed.pages.dev/">
+  <link rel="alternate" hreflang="en" href="https://al-qaeed.pages.dev/en/">
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="الشيخ عبدالعزيز القعيد">
+  <meta property="og:title" content="404 | الصفحة غير موجودة">
+  <meta property="og:description" content="الصفحة غير موجودة">
+  <meta property="og:url" content="https://al-qaeed.pages.dev/">
+  <meta property="og:image" content="https://al-qaeed.pages.dev/assets/img/portrait.jpg">
+  <meta property="og:image:alt" content="الشيخ عبدالعزيز القعيد جالسًا خلف مكتبه أثناء لقاء إذاعي">
+  <meta property="og:locale" content="ar_SA">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="robots" content="noindex">
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "عبد العزيز بن عبد الرحمن بن إبراهيم القعيد",
+  "alternateName": [
+    "الشيخ عبدالعزيز القعيد",
+    "Sheikh Abdulaziz Al-Qaeed"
+  ],
+  "jobTitle": "إمام مسجد ومدير تنفيذي في العمل الاجتماعي والإصلاح الأسري",
+  "description": "الصفحة غير موجودة",
+  "email": "mailto:aq5164@hotmail.com",
+  "url": "https://al-qaeed.pages.dev/",
+  "image": "https://al-qaeed.pages.dev/assets/img/portrait.jpg",
+  "alumniOf": {
+    "@type": "CollegeOrUniversity",
+    "name": "Imam Muhammad ibn Saud Islamic University"
+  },
+  "inLanguage": "ar"
+}</script>
+  <script>
+    (function() {
+      var v; try { v = localStorage.getItem('nds-theme'); } catch (e) {}
+      if (v) {
+        var d = document.documentElement;
+        var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\s+/)
+          .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+        d.setAttribute('data-theme', t.join(' '));
+      }
+    })();
+    (function () {
+      document.querySelectorAll('link[rel="preload"][data-nds-defer]').forEach(function (p) {
+        var l = document.createElement('link');
+        for (var i = 0; i < p.attributes.length; i++) {
+          var a = p.attributes[i];
+          if (a.name !== 'rel' && a.name !== 'as') l.setAttribute(a.name, a.value);
+        }
+        l.rel = 'stylesheet';
+        p.removeAttribute('data-nds-defer');
+        document.head.appendChild(l);
+      });
+    })();
+  </script>
+  <noscript>
+    <link rel="stylesheet" href="/assets/css/nds.critical.min.css?ver=1.12.x-dev">
+    <link rel="stylesheet" href="/assets/css/nds-main.min.css?ver=1.12.x-dev">
+    <link rel="stylesheet" href="/assets/css/theme.css?ver=1.12.x-dev">
+    <style>:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-footer,.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:visible}</style>
+  </noscript>
 </head>
-<body class="page-404">
-  <main class="notfound" id="main">
-    <div class="wrap notfound-inner">
-      <p class="kicker" aria-hidden="true">404</p>
-      <h1>الصفحة غير موجودة</h1>
-      <p class="notfound-text">الرابط الذي فتحته غير موجود أو تم نقله.</p>
-      <div class="actions">
-        <a class="btn btn-primary" href="/">الصفحة الرئيسية</a>
-        <a class="btn btn-ghost" href="/en/" lang="en">Home (English)</a>
+<body>
+  <a class="nds-skip-link" href="#main-content">تخطي إلى المحتوى</a>
+  <header>
+    <nav class="nds-main-nav nds-content-wrapper" id="nds-main-nav" aria-label="التنقل الرئيسي" data-i18n-aria-label="mainnav.primary_navigation">
+      <div class="nds-nav-container">
+        <a href="/" class="nds-brand">
+          <img class="nds-brand-logo" src="/assets/img/favicon.svg" width="40" height="40" alt="">
+          <span class="nds-brand-name">الشيخ عبدالعزيز القعيد
+            <span class="nds-brand-slogan">إمام مسجد ومدير تنفيذي في العمل الاجتماعي والإصلاح الأسري</span>
+          </span>
+        </a>
+        <ul class="nds-nav-minimal" hidden>
+          <li class="nds-nav-toggler nds-nav-item">
+            <button class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="فتح قائمة التنقل" data-i18n-aria-label="mainnav.toggle_menu" aria-expanded="false" aria-controls="nds-nav-collapse">
+              <i class="nds-icon nds-hgi-menu-01" aria-hidden="true"></i>
+            </button>
+          </li>
+        </ul>
+        <div class="nds-nav-collapse" id="nds-nav-collapse" hidden>
+          <div class="nds-nav-collapse-content">
+            <ul class="nds-nav-primary">
+          <li class="nds-nav-item">
+            <a href="#about" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+              <span class="nds-label">نبذة</span>
+            </a>
+          </li>
+          <li class="nds-nav-item">
+            <a href="#experience" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+              <span class="nds-label">الخبرة</span>
+            </a>
+          </li>
+          <li class="nds-nav-item">
+            <a href="#community" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+              <span class="nds-label">الأعمال</span>
+            </a>
+          </li>
+          <li class="nds-nav-item">
+            <a href="#contact" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+              <span class="nds-label">تواصل</span>
+            </a>
+          </li>
+            </ul>
+            <div class="nds-nav-item nds-show-more">
+              <a href="#about" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full" title="المزيد" data-i18n-title="scroll-more.show_more" aria-label="المزيد" data-i18n-aria-label="scroll-more.show_more">
+                <i class="nds-icon nds-hgi-arrow-down-01" aria-hidden="true"></i>
+              </a>
+            </div>
+            <ul class="nds-nav-actions">
+              <li class="nds-nav-item nds-icon-only nds-pinned" id="nav-language">
+                <a href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="English" lang="en" hreflang="en"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sm md sr">English</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <p class="notfound-en" lang="en" dir="ltr">The page you requested does not exist or has moved.</p>
+    </nav>
+  </header>
+  <main>
+    <div class="nds-content-layout">
+      <div class="nds-content" id="main-content">
+        <section id="not-found" class="nds-content-section nds-status-section">
+          <div class="nds-section-wrapper">
+            <div class="nds-section-image">
+              <img src="/assets/img/404.svg" width="458" height="324" alt="">
+            </div>
+            <div class="nds-section-head">
+              <h1 class="nds-section-title">الصفحة غير موجودة</h1>
+              <p class="nds-section-description">الرابط الذي فتحته غير موجود أو تم نقله.</p>
+            </div>
+            <div class="nds-section-action">
+              <a href="/" class="nds-btn nds-primary"><span class="nds-label">الصفحة الرئيسية</span></a>
+              <a href="/en/" class="nds-btn nds-secondary-outline" lang="en"><span class="nds-label">Home (English)</span></a>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   </main>
+  <footer class="nds-footer nds-content-wrapper nds-brand" role="contentinfo" aria-label="تذييل الموقع" data-i18n-aria-label="footer.site_footer">
+    <nav class="nds-footer-content" aria-label="تنقل التذييل" data-i18n-aria-label="footer.footer_navigation">
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="footer-col-1">أقسام الصفحة</span>
+        <ul class="nds-footer-list" aria-labelledby="footer-col-1">
+        <li>
+          <a class="nds-link nds-footer-link" href="#about">
+            <span class="nds-label">نبذة</span>
+          </a>
+        </li>
+        <li>
+          <a class="nds-link nds-footer-link" href="#experience">
+            <span class="nds-label">الخبرة</span>
+          </a>
+        </li>
+        <li>
+          <a class="nds-link nds-footer-link" href="#community">
+            <span class="nds-label">الأعمال</span>
+          </a>
+        </li>
+        <li>
+          <a class="nds-link nds-footer-link" href="#skills">
+            <span class="nds-label">المهارات</span>
+          </a>
+        </li>
+        <li>
+          <a class="nds-link nds-footer-link" href="#publications">
+            <span class="nds-label">الإصدارات</span>
+          </a>
+        </li>
+        <li>
+          <a class="nds-link nds-footer-link" href="#education">
+            <span class="nds-label">التعليم</span>
+          </a>
+        </li>
+        <li>
+          <a class="nds-link nds-footer-link" href="#training">
+            <span class="nds-label">الدورات</span>
+          </a>
+        </li>
+        <li>
+          <a class="nds-link nds-footer-link" href="#contact">
+            <span class="nds-label">تواصل</span>
+          </a>
+        </li>
+        </ul>
+      </div>
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="footer-col-2">التواصل مع الشيخ</span>
+        <ul class="nds-footer-list" aria-labelledby="footer-col-2">
+          <li>
+            <a class="nds-link nds-footer-link" href="mailto:aq5164@hotmail.com">
+              <i class="nds-icon nds-hgi-mail-01" aria-hidden="true"></i>
+              <span class="nds-label">aq5164@hotmail.com</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/assets/docs/abdulaziz-al-qaeed-cv.pdf" download="abdulaziz-al-qaeed-cv.pdf">
+              <i class="hgi hgi-stroke hgi-download-01" aria-hidden="true"></i>
+              <span class="nds-label">تنزيل السيرة الذاتية (PDF)</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="nds-footer-bottom">
+      <div class="nds-footer-meta">
+        <div class="nds-footer-legal">
+          <div class="nds-footer-copyright">
+            <span>الشيخ عبدالعزيز القعيد &copy; 2026. جميع الحقوق محفوظة.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script defer src="/assets/js/nds-main.min.js?ver=1.12.x-dev"></script>
 </body>
 </html>

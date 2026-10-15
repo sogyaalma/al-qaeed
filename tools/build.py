@@ -175,7 +175,7 @@ def head(lang):
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{e(seo['title'])}</title>
   <meta name="description" content="{e(seo['description'])}">
-  <meta name="theme-color" content="#0e5a49">
+  <meta name="theme-color" content="#0b5a49">
   <link rel="canonical" href="{e(page_url(lang))}">
   <link rel="alternate" hreflang="x-default" href="{e(SITE_URL + '/')}">
 {alt_links}
@@ -188,9 +188,14 @@ def head(lang):
   <meta property="og:image:alt" content="{e(t(person['portrait_alt'], lang))}">
   <meta property="og:locale" content="{L['locale']}">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{e(seo['title'])}">
+  <meta name="twitter:description" content="{e(seo['description'])}">
+  <meta name="twitter:image" content="{e(SITE_URL + '/assets/img/portrait.jpg')}">
+  <meta name="twitter:image:alt" content="{e(t(person['portrait_alt'], lang))}">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   {preload}
-  <link rel="preload" as="image" href="/assets/img/portrait.webp" imagesrcset="/assets/img/portrait-480.webp 480w, /assets/img/portrait.webp 950w" imagesizes="(max-width: 1024px) 90vw, 500px" type="image/webp">
+  <link rel="preload" as="image" href="/assets/img/portrait.webp" imagesrcset="/assets/img/portrait-480.webp 480w, /assets/img/portrait.webp 950w" imagesizes="(max-width: 639px) calc(100vw - 40px), (max-width: 1023px) 544px, (max-width: 1399px) 42vw, 560px" type="image/webp">
+  <link rel="stylesheet" href="/assets/css/nds-1.12-primitives.css">
   <link rel="stylesheet" href="/assets/css/styles.css">
   <script type="application/ld+json">{json.dumps(jsonld, ensure_ascii=False, indent=2)}</script>
   <script src="/assets/js/main.js" defer></script>
@@ -256,7 +261,7 @@ def hero(lang):
     facts = "\n".join(
         f"""          <li>
             <span class="facts-label">{e(t(f['label'], lang))}</span>
-            <span class="facts-value">{e(fill_tokens(t(f['value'], lang), lang))}</span>
+            <span class="facts-value" dir="auto">{e(fill_tokens(t(f['value'], lang), lang))}</span>
           </li>"""
         for f in DATA["hero_facts"]
     )
@@ -265,9 +270,6 @@ def hero(lang):
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <div class="hero-identity">
-          <span class="hero-avatar" aria-hidden="true">
-            <img src="/assets/img/portrait-480.webp" width="480" height="432" alt="" loading="lazy" decoding="async">
-          </span>
           <p class="eyebrow">{e(t(p['title'], lang))}</p>
           <h1 id="hero-title">{e(t(p['name_short'], lang))}</h1>
           <p class="fullname">{e(t(p['name_full'], lang))}</p>
@@ -330,7 +332,7 @@ def experience(lang):
         note = f'<p class="note">{e(t(it["note"], lang))}</p>' if it.get("note") else ""
         items.append(
             f"""        <li class="tl-item reveal">
-          <span class="tl-period">{e(t(it['period'], lang))}</span>
+          <span class="tl-period" dir="auto">{e(t(it['period'], lang))}</span>
           <div class="tl-body">
             <h3>{e(t(it['role'], lang))}</h3>
             <p class="org">{e(t(it['org'], lang))}</p>
@@ -446,7 +448,7 @@ def education(lang):
     items = []
     for it in ed["items"]:
         period = (
-            f'<p class="period">{e(t(it["period"], lang))}</p>' if it.get("period") else ""
+            f'<p class="period" dir="auto">{e(t(it["period"], lang))}</p>' if it.get("period") else ""
         )
         items.append(
             f"""        <li class="edu-item reveal">
@@ -562,6 +564,7 @@ def render_404():
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>404 | {e(ar_title)}</title>
+  <link rel="stylesheet" href="/assets/css/nds-1.12-primitives.css">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
 <body class="page-404">

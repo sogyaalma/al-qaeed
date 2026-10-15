@@ -9,15 +9,18 @@ A bilingual Arabic (RTL) and English (LTR) profile built with plain HTML/CSS/Jav
 | `index.html` | الصفحة العربية (الافتراضية) |
 | `en/index.html` | English page |
 | `404.html` | صفحة الخطأ 404 |
-| `assets/css/styles.css` | التصميم كله (الخطوط + الأنماط) |
+| `assets/css/nds-1.12-primitives.css` | توكنات المسافات وأنصاف الأقطار فقط من NDS Vanilla `v1.12.0` المثبت |
+| `assets/css/styles.css` | تصميم المشروع المحلي (الخطوط + الألوان + التخطيط والمكونات) |
 | `assets/js/main.js` | تحسين تدريجي فقط: سنة الحقوق + ظهور العناصر (المحتوى مكتمل بدونه) |
 | `assets/fonts/` | الخطوط مستضافة محليًا (woff2) مع ملفات الترخيص |
+| `assets/licenses/NDS-vanilla-MIT.txt` | إشعار MIT لمقتطف توكنات NDS المحدود |
 | `assets/img/` | الصورة الشخصية (JPG/WebP بأحجام متعددة)، وfavicon.svg |
 | `assets/docs/abdulaziz-al-qaeed-cv.pdf` | ملف السيرة الذاتية للتنزيل |
 | `content/content.json` | مصدر المحتوى الثنائي اللغة (ملف مصدر، لا يدخل حزمة النشر) |
 | `tools/build.py` | يولّد الصفحات وملف sitemap من `content.json` |
 | `tools/package.py` | ينشئ `dist/` بقائمة ملفات الموقع العامة فقط |
-| `tests/run_checks.py` | اختبارات المتصفح (Playwright وaxe-core) |
+| `tests/run_static_checks.py` | فحوص build/package والروابط والأصول وCSP (Python قياسي) |
+| `tests/run_checks.py` | اختبارات المتصفح (Playwright وaxe-core وChromium) |
 | `docs/` | تقارير الاختبارات واللقطات وقائمة اعتماد المحتوى؛ لا تدخل حزمة النشر |
 | `_headers` | ترويسات Cloudflare Pages الأمنية |
 | `robots.txt`, `sitemap.xml` | إعدادات SEO |
@@ -39,6 +42,7 @@ python3 -m http.server 8000 --bind 0.0.0.0 --directory dist
 2. أعد توليد الصفحات وتجهيز حزمة النشر:
    ```bash
    python3 tools/build.py && python3 tools/package.py
+   python3 tests/run_static_checks.py
    ```
 3. شغّل اختبارات المتصفح (تحتاج Playwright وaxe-core وChromium):
    ```bash

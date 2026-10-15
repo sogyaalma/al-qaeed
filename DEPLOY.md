@@ -58,9 +58,10 @@
 ```bash
 python3 tools/build.py
 python3 tools/package.py
+python3 tests/run_static_checks.py
 ```
 
-اختبر الحزمة محليًا:
+اختبر الحزمة في متصفح محليًا (يتطلب Playwright وaxe-core وChromium):
 
 ```bash
 python3 -m http.server 8000 --bind 0.0.0.0 --directory dist

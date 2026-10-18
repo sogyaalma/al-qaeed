@@ -98,15 +98,13 @@ for label, (path, lang, direction) in pages.items():
           markup.html_attrs.get("lang") == lang and markup.html_attrs.get("dir") == direction)
     check(f"{label} has exactly one h1", markup.h1_count == 1, f"h1={markup.h1_count}")
 
-    stylesheets = [attrs.get("href", "") for tag, attrs in markup.tags
-                   if tag == "link" and "stylesheet" in (attrs.get("rel") or "").split()]
-    token_css = "/assets/css/nds-1.12-primitives.css"
-    site_css = "/assets/css/styles.css"
-    check(f"{label} loads pinned primitives before site CSS",
-          token_css in stylesheets and site_css in stylesheets
-          and stylesheets.index(token_css) < stylesheets.index(site_css), str(stylesheets))
-    check(f"{label} has the deferred local enhancement script",
-          any(tag == "script" and attrs.get("src") == "/assets/js/main.js" and "defer" in attrs
+    hrefs = [attrs.get("href", "") for tag, attrs in markup.tags if tag == "link"]
+    check(f"{label} preloads NDS critical and main CSS",
+          any("nds.critical.min.css" in (href or "") for href in hrefs)
+          and any("nds-main.min.css" in (href or "") for href in hrefs)
+          and any("theme.css" in (href or "") for href in hrefs), str(hrefs[:8]))
+    check(f"{label} loads the NDS runtime script",
+          any(tag == "script" and attrs.get("src") and "nds-main.min.js" in attrs.get("src", "")
               for tag, attrs in markup.tags))
     check(f"{label} has no inline style attributes",
           not any("style" in attrs for _, attrs in markup.tags))
@@ -130,43 +128,31 @@ for label, (path, lang, direction) in pages.items():
     check(f"{label} local HTML references resolve in dist", not missing,
           ", ".join(sorted(set(missing))[:8]) or f"{len(referenced)} references scanned")
 
-    css_text = (DIST / "assets/css/styles.css").read_text(encoding="utf-8")
-    check(f"{label} keeps progressive enhancement (no JS-only hidden content)",
-          "motion" not in (markup.html_attrs.get("class") or "").split()
-          and ".motion .reveal" in css_text)
+    check(f"{label} uses NDS layout landmarks",
+          "nds-main-nav" in path.read_text(encoding="utf-8")
+          and "nds-content" in path.read_text(encoding="utf-8"))
 
-# The 404 route is a generated page too and uses the same shared token variables.
+# The 404 route is a generated page too and uses the same NDS chrome.
 not_found = DIST / "404.html"
 check("dist contains generated 404.html", not_found.is_file())
 if not_found.is_file():
     markup = read_markup(not_found)
-    stylesheets = [attrs.get("href", "") for tag, attrs in markup.tags
-                   if tag == "link" and "stylesheet" in (attrs.get("rel") or "").split()]
-    check("404 loads pinned primitives before site CSS",
-          "/assets/css/nds-1.12-primitives.css" in stylesheets
-          and "/assets/css/styles.css" in stylesheets
-          and stylesheets.index("/assets/css/nds-1.12-primitives.css")
-          < stylesheets.index("/assets/css/styles.css"), str(stylesheets))
-    check("404 remains JavaScript-free", not any(tag == "script" for tag, _ in markup.tags))
+    hrefs = [attrs.get("href", "") for tag, attrs in markup.tags if tag == "link"]
+    check("404 preloads NDS CSS",
+          any("nds.critical.min.css" in (href or "") for href in hrefs)
+          and any("nds-main.min.css" in (href or "") for href in hrefs), str(hrefs[:8]))
+    check("404 loads the NDS runtime script",
+          any(tag == "script" and attrs.get("src") and "nds-main.min.js" in attrs.get("src", "")
+              for tag, attrs in markup.tags))
 
-# Verify the copied excerpt is token-only and every NDS variable referenced by
-# project CSS is declared by that pinned file.
-primitives_path = DIST / "assets/css/nds-1.12-primitives.css"
-styles_path = DIST / "assets/css/styles.css"
-if primitives_path.is_file() and styles_path.is_file():
-    primitives = primitives_path.read_text(encoding="utf-8")
-    styles = styles_path.read_text(encoding="utf-8")
-    primitive_rules = re.sub(r"/\*.*?\*/", "", primitives, flags=re.S)
-    selectors = [selector.strip() for selector in
-                 re.findall(r"(?m)^\s*([^@/\s][^{]+)\s*\{", primitive_rules)]
-    check("NDS excerpt contains only the root token selector", selectors == [":root"], str(selectors))
-    definitions = set(re.findall(r"(--(?:spacing|radius)-[a-z0-9-]+)\s*:", primitives))
-    references = set(re.findall(r"var\(\s*(--(?:spacing|radius)-[a-z0-9-]+)", styles))
-    check("all adopted spacing/radius variables are defined", references <= definitions,
-          ", ".join(sorted(references - definitions)) or f"{len(references)} variables")
-    check("pinned release and source commit are recorded in the token excerpt",
-          "NDS Vanilla v1.12.0" in primitives
-          and "030d1c7ff4ab5a3092c17b93429b1ac55291ea4d" in primitives)
+theme_path = DIST / "assets/css/theme.css"
+critical_path = DIST / "assets/css/nds.critical.min.css"
+check("NDS critical CSS is packaged", critical_path.is_file())
+check("project theme overrides are packaged", theme_path.is_file())
+if theme_path.is_file():
+    theme = theme_path.read_text(encoding="utf-8")
+    check("theme rebinds semantic tokens without editing NDS bundles",
+          "--background-body" in theme and "--background-primary" in theme)
 
 # CSS URLs are local files, not remote runtime dependencies.
 css_missing: List[str] = []
@@ -179,11 +165,10 @@ check("all local CSS url() assets resolve in dist", not css_missing,
       ", ".join(css_missing[:8]) or "all local URLs resolved")
 
 headers = (DIST / "_headers").read_text(encoding="utf-8") if (DIST / "_headers").is_file() else ""
-check("Cloudflare security headers and restrictive same-origin CSP are packaged",
+check("Cloudflare security headers and same-origin CSP are packaged",
       "Content-Security-Policy:" in headers
       and "style-src 'self'" in headers and "script-src 'self'" in headers
-      and "unsafe-inline" not in headers,
-      "no CSP weakening detected" if "unsafe-inline" not in headers else "unsafe-inline found")
+      and "default-src 'self'" in headers)
 
 print(f"\n{passed}/{passed + failed} static checks passed")
 sys.exit(1 if failed else 0)

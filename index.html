@@ -1,11 +1,42 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>الشيخ عبدالعزيز القعيد | السيرة التعريفية</title>
+  <style>
+    html[data-theme~=dark] :where(.nds-main-nav .nds-brand.nds-oncolor :is(img,svg)){filter:brightness(0) invert(1)}
+    html{background-color:var(--background-body, #f8f5ee)}
+    html[data-theme~=dark]{background-color:var(--background-body, #111927)}
+    :where(.nds-topbar){background-color:var(--background-topbar, #f3f4f6)}
+    html[data-theme~=dark] :where(.nds-topbar){background-color:var(--background-topbar, #111927)}
+    :where(.nds-main-nav){background-color:var(--background-nav, #fffdf8)}
+    html[data-theme~=dark] :where(.nds-main-nav){background-color:var(--background-nav, #1f2a37)}
+    :where(.nds-hero-image-wrapper)::before{content:"";position:absolute;inset:0;background:color-mix(in srgb, var(--background-image-overlay, #0a3d32) calc(var(--overlay, 0.7) * 100%), transparent);pointer-events:none}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{overflow-anchor:none}
+    html :where(header){display:contents}
+    html :where(.nds-topbar){height:40px}
+    html :where(.nds-main-nav){height:var(--nds-nav-height, 72px)}
+    html .nds-swiper.nds-hero:not([data-nds-swiper-initialized],[data-swiper-preset]) .nds-swiper-slide:not(:first-child){display:none}
+    :where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-user-feedback-section,.nds-footer){visibility:hidden}
+    html:not([data-nds-loaded]) main{overflow-x:clip}
+    .nds-skip-link:not(:focus){position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0}
+    :root{--nds-icons-opacity: 0}
+    :is(.nds-hidden,[hidden],[data-state~=hidden],[data-filtered]){display:none !important}
+    :where(.nds-hero-section){position:relative;height:550px}
+    :where(.nds-hero-section.nds-sub){height:auto;min-height:220px}
+    :where(.nds-hero-image-wrapper){position:absolute;inset:0}
+    :where(.nds-hero-image){width:100%;height:100%;object-fit:cover;display:block}
+    :where(.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:hidden}
+  </style>
+  <link rel="preload" as="image" href="/assets/img/portrait-480.webp" fetchpriority="high">
+  <link rel="preload" href="/assets/css/nds.critical.min.css?ver=1.12.x-dev" as="style" fetchpriority="high" data-nds-defer>
+  <link rel="preload" href="/assets/css/nds-main.min.css?ver=1.12.x-dev" as="style" fetchpriority="low" data-nds-defer="main">
+  <link rel="preload" href="/assets/css/theme.css?ver=1.12.x-dev" as="style" data-nds-defer>
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" fetchpriority="low">
   <meta name="description" content="نبذة عن الشيخ عبدالعزيز القعيد، إمام مسجد قصر الحكم، وخبرته في إصلاح ذات البين والعمل المجتمعي وتعليم القرآن الكريم.">
-  <meta name="theme-color" content="#0b5a49">
+  <meta name="theme-color" content="#0e5a49">
   <link rel="canonical" href="https://al-qaeed.pages.dev/">
   <link rel="alternate" hreflang="x-default" href="https://al-qaeed.pages.dev/">
   <link rel="alternate" hreflang="ar" href="https://al-qaeed.pages.dev/">
@@ -19,17 +50,7 @@
   <meta property="og:image:alt" content="الشيخ عبدالعزيز القعيد جالسًا خلف مكتبه أثناء لقاء إذاعي">
   <meta property="og:locale" content="ar_SA">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="الشيخ عبدالعزيز القعيد | السيرة التعريفية">
-  <meta name="twitter:description" content="نبذة عن الشيخ عبدالعزيز القعيد، إمام مسجد قصر الحكم، وخبرته في إصلاح ذات البين والعمل المجتمعي وتعليم القرآن الكريم.">
-  <meta name="twitter:image" content="https://al-qaeed.pages.dev/assets/img/portrait.jpg">
-  <meta name="twitter:image:alt" content="الشيخ عبدالعزيز القعيد جالسًا خلف مكتبه أثناء لقاء إذاعي">
-  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="/assets/fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/assets/fonts/noto-naskh-arabic-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" as="image" href="/assets/img/portrait.webp" imagesrcset="/assets/img/portrait-480.webp 480w, /assets/img/portrait.webp 950w" imagesizes="(max-width: 639px) calc(100vw - 40px), (max-width: 1023px) 544px, (max-width: 1399px) 42vw, 560px" type="image/webp">
-  <link rel="stylesheet" href="/assets/css/nds-1.12-primitives.css">
-  <link rel="stylesheet" href="/assets/css/styles.css">
+  
   <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Person",
@@ -49,413 +70,614 @@
   },
   "inLanguage": "ar"
 }</script>
-  <script src="/assets/js/main.js" defer></script>
+  <script>
+    (function() {
+      var v; try { v = localStorage.getItem('nds-theme'); } catch (e) {}
+      if (v) {
+        var d = document.documentElement;
+        var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\s+/)
+          .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+        d.setAttribute('data-theme', t.join(' '));
+      }
+    })();
+    (function () {
+      document.querySelectorAll('link[rel="preload"][data-nds-defer]').forEach(function (p) {
+        var l = document.createElement('link');
+        for (var i = 0; i < p.attributes.length; i++) {
+          var a = p.attributes[i];
+          if (a.name !== 'rel' && a.name !== 'as') l.setAttribute(a.name, a.value);
+        }
+        l.rel = 'stylesheet';
+        p.removeAttribute('data-nds-defer');
+        document.head.appendChild(l);
+      });
+    })();
+  </script>
+  <noscript>
+    <link rel="stylesheet" href="/assets/css/nds.critical.min.css?ver=1.12.x-dev">
+    <link rel="stylesheet" href="/assets/css/nds-main.min.css?ver=1.12.x-dev">
+    <link rel="stylesheet" href="/assets/css/theme.css?ver=1.12.x-dev">
+    <style>:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-footer,.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:visible}</style>
+  </noscript>
 </head>
 <body>
-<a class="skip-link" href="#main">تخطي إلى المحتوى</a>
-<div class="print-only print-head">
-  <p class="print-name">الشيخ عبدالعزيز القعيد</p>
-  <p class="print-role">إمام مسجد ومدير تنفيذي في العمل الاجتماعي والإصلاح الأسري</p>
-  <p class="print-meta">al-qaeed.pages.dev · aq5164@hotmail.com</p>
-</div>
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="/">
-      <span class="monogram" aria-hidden="true">ع ق</span>
-      <span class="brand-name">الشيخ عبدالعزيز القعيد</span>
-    </a>
-    <nav class="primary-nav" aria-label="التنقل الرئيسي">
-      <ul>
-        <li><a href="#about">نبذة</a></li>
-        <li><a href="#experience">الخبرة</a></li>
-        <li><a href="#community">الأعمال</a></li>
-        <li><a href="#contact">تواصل</a></li>
-      </ul>
-    </nav>
-    <div class="header-tools">
-      <details class="toc" data-toc>
-        <summary class="toc-toggle">
-          <svg class="ico ico-toc" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg><span class="toc-label">الفهرس</span>
-        </summary>
-        <div class="toc-panel">
-          <p class="toc-title" id="toc-title">أقسام الصفحة</p>
-          <nav aria-labelledby="toc-title" aria-label="فهرس أقسام الصفحة">
-            <ol class="toc-list">
-          <li><a href="#about">
-            <span class="toc-no" aria-hidden="true">01</span>
-            <span class="toc-name">نبذة عن الشيخ</span>
-            <span class="toc-meta" aria-hidden="true">4 مجالات عمل</span>
-          </a></li>
-          <li><a href="#experience">
-            <span class="toc-no" aria-hidden="true">02</span>
-            <span class="toc-name">الخبرة المهنية</span>
-            <span class="toc-meta" aria-hidden="true">5 وظائف موثّقة</span>
-          </a></li>
-          <li><a href="#community">
-            <span class="toc-no" aria-hidden="true">03</span>
-            <span class="toc-name">الأعمال الاجتماعية والوطنية</span>
-            <span class="toc-meta" aria-hidden="true">5 مجموعات · 18 بندًا</span>
-          </a></li>
-          <li><a href="#skills">
-            <span class="toc-no" aria-hidden="true">04</span>
-            <span class="toc-name">المهارات والكفاءات</span>
-            <span class="toc-meta" aria-hidden="true">4 مجموعات كفاءات</span>
-          </a></li>
-          <li><a href="#publications">
-            <span class="toc-no" aria-hidden="true">05</span>
-            <span class="toc-name">الإصدارات والبحوث</span>
-            <span class="toc-meta" aria-hidden="true">4 إصدارات</span>
-          </a></li>
-          <li><a href="#education">
-            <span class="toc-no" aria-hidden="true">06</span>
-            <span class="toc-name">التعليم</span>
-            <span class="toc-meta" aria-hidden="true">مؤهلان دراسيان</span>
-          </a></li>
-          <li><a href="#training">
-            <span class="toc-no" aria-hidden="true">07</span>
-            <span class="toc-name">الدورات والشهادات</span>
-            <span class="toc-meta" aria-hidden="true">10 دورات وشهادات</span>
-          </a></li>
-          <li><a href="#contact">
-            <span class="toc-no" aria-hidden="true">08</span>
-            <span class="toc-name">التواصل مع الشيخ</span>
-            <span class="toc-meta" aria-hidden="true">بريد إلكتروني</span>
-          </a></li>
-            </ol>
-          </nav>
-          <p class="toc-foot"><a href="#top"><svg class="ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6M6 12l6-6 6 6"/></svg><span>أعلى الصفحة</span></a></p>
-        </div>
-      </details>
-      <a class="lang-switch" href="/en/" hreflang="en" lang="en"><span class="lang-full">English</span><span class="lang-compact">EN</span></a>
-    </div>
-  </div>
-  <div class="progress" aria-hidden="true"><span class="progress-bar"></span></div>
-</header>
-<main id="main">
-  <section class="hero" id="top" aria-labelledby="hero-title">
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <div class="hero-identity">
-          <p class="eyebrow">إمام مسجد ومدير تنفيذي في العمل الاجتماعي والإصلاح الأسري</p>
-          <h1 id="hero-title">الشيخ عبدالعزيز القعيد</h1>
-          <p class="fullname">عبد العزيز بن عبد الرحمن بن إبراهيم القعيد</p>
-        </div>
-        <p class="tagline">إصلاح ذات البين، وخدمة المجتمع، وتعليم القرآن الكريم.</p>
-        <ul class="facts">
-          <li>
-            <span class="facts-label">المنصب الحالي</span>
-            <span class="facts-value" dir="auto">إمام مسجد قصر الحكم — إمارة منطقة الرياض</span>
-          </li>
-          <li>
-            <span class="facts-label">الإمامة منذ</span>
-            <span class="facts-value" dir="auto">1413هـ</span>
-          </li>
-          <li>
-            <span class="facts-label">مدير تنفيذي سابق</span>
-            <span class="facts-value" dir="auto">لجنة إصلاح ذات البين (1437–1444هـ)</span>
-          </li>
-          <li>
-            <span class="facts-label">الإصدارات والبحوث</span>
-            <span class="facts-value" dir="auto">4 عناوين</span>
+  <a class="nds-skip-link" href="#main-content">تخطي إلى المحتوى</a>
+  <header>
+    <nav class="nds-main-nav nds-content-wrapper" id="nds-main-nav" aria-label="التنقل الرئيسي" data-i18n-aria-label="mainnav.primary_navigation">
+      <div class="nds-nav-container">
+        <a href="/" class="nds-brand">
+          <img class="nds-brand-logo" src="/assets/img/favicon.svg" width="40" height="40" alt="">
+          <span class="nds-brand-name">الشيخ عبدالعزيز القعيد
+            <span class="nds-brand-slogan">إمام مسجد ومدير تنفيذي في العمل الاجتماعي والإصلاح الأسري</span>
+          </span>
+        </a>
+        <ul class="nds-nav-minimal" hidden>
+          <li class="nds-nav-toggler nds-nav-item">
+            <button class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="فتح قائمة التنقل" data-i18n-aria-label="mainnav.toggle_menu" aria-expanded="false" aria-controls="nds-nav-collapse">
+              <i class="nds-icon nds-hgi-menu-01" aria-hidden="true"></i>
+            </button>
           </li>
         </ul>
-        <p class="intro">تولّى الشيخ عبدالعزيز القعيد الإمامة منذ عام 1413هـ، وعمل مديرًا تنفيذيًا سابقًا للجنة إصلاح ذات البين بإمارة منطقة الرياض. وتجمع مسيرته بين الإمامة والتعليم والعمل التنموي والإعلام والتأليف.</p>
-        <div class="actions">
-          <a class="btn btn-primary" href="/assets/docs/abdulaziz-al-qaeed-cv.pdf" download="abdulaziz-al-qaeed-cv.pdf"><svg class="ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg><span>تنزيل السيرة الذاتية (PDF)</span></a>
-          <a class="btn btn-ghost" href="#contact">تواصل مع الشيخ</a>
+        <div class="nds-nav-collapse" id="nds-nav-collapse" hidden>
+          <div class="nds-nav-collapse-content">
+            <ul class="nds-nav-primary">
+          <li class="nds-nav-item">
+            <a href="#about" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+              <span class="nds-label">نبذة</span>
+            </a>
+          </li>
+          <li class="nds-nav-item">
+            <a href="#experience" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+              <span class="nds-label">الخبرة</span>
+            </a>
+          </li>
+          <li class="nds-nav-item">
+            <a href="#community" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+              <span class="nds-label">الأعمال</span>
+            </a>
+          </li>
+          <li class="nds-nav-item">
+            <a href="#contact" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+              <span class="nds-label">تواصل</span>
+            </a>
+          </li>
+            </ul>
+            <div class="nds-nav-item nds-show-more">
+              <a href="#about" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full" title="المزيد" data-i18n-title="scroll-more.show_more" aria-label="المزيد" data-i18n-aria-label="scroll-more.show_more">
+                <i class="nds-icon nds-hgi-arrow-down-01" aria-hidden="true"></i>
+              </a>
+            </div>
+            <ul class="nds-nav-actions">
+              <li class="nds-nav-item nds-icon-only nds-pinned" id="nav-language">
+                <a href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="English" lang="en" hreflang="en"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sm md sr">English</span></a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-      <figure class="hero-media">
-        <span class="hero-frame">
-          <picture>
-            <source type="image/webp" srcset="/assets/img/portrait-480.webp 480w, /assets/img/portrait.webp 950w" sizes="(max-width: 1024px) 90vw, 500px">
-            <img src="/assets/img/portrait.jpg" width="950" height="855" fetchpriority="high"
-                 alt="الشيخ عبدالعزيز القعيد جالسًا خلف مكتبه أثناء لقاء إذاعي">
-          </picture>
-        </span>
-        <figcaption class="media-caption">لقطة أثناء لقاء إذاعي</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <section class="section" id="about" aria-labelledby="about-title">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">01</p>
-        <h2 id="about-title">نبذة عن الشيخ</h2>
-      </header>
-      <p class="lead reveal">الشيخ عبدالعزيز القعيد إمام مسجد قصر الحكم بإمارة منطقة الرياض. عمل مديرًا تنفيذيًا للجنة إصلاح ذات البين بإمارة منطقة الرياض (1437–1444هـ) بقرار من صاحب السمو الملكي أمير المنطقة، وتولى رئاسة لجنة الحماية الأسرية بالإمارة سابقًا. وقبل ذلك، عمل مديرًا تنفيذيًا لجمعية سقيا الماء بمنطقة الرياض وإمامًا لمسجد العبيكان بحي شبرا. وتشمل مجالات اهتمامه الإصلاح والوساطة الأسرية، والعمل الأهلي والتنموي، وتحفيظ القرآن الكريم، وإعداد البرامج الثقافية والتربوية والمطبوعات التوعوية.</p>
-      <h3 class="sub-heading reveal">مجالات العمل</h3>
-      <div class="bento">
-        <article class="focus-card reveal">
-          <h3>الإصلاح والأسرة</h3>
-          <p>لجان إصلاح ذات البين والحماية الأسرية والصلح.</p>
-        </article>
-        <article class="focus-card reveal">
-          <h3>العمل الأهلي والتنموي</h3>
-          <p>جمعيات التنمية الأهلية، وجمعية سقيا الماء، ومؤسسات خيرية.</p>
-        </article>
-        <article class="focus-card reveal">
-          <h3>القرآن الكريم والتعليم</h3>
-          <p>مدارس ودور تحفيظ القرآن الكريم، ودورات تربوية وتعليمية.</p>
-        </article>
-        <article class="focus-card reveal">
-          <h3>الإعلام والثقافة</h3>
-          <p>برامج ولقاءات ثقافية، ومشاركات إعلامية في قنوات تلفزيونية.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-tint" id="experience" aria-labelledby="experience-title">
-    <div class="wrap section-split">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">02</p>
-        <h2 id="experience-title">الخبرة المهنية</h2>
-        <p class="section-intro">مرتبة من الأحدث إلى الأقدم.</p>
-      </header>
-      <div class="split-body">
-        <ol class="timeline">
-        <li class="tl-item reveal">
-          <span class="tl-period" dir="auto">حالياً</span>
-          <div class="tl-body">
-            <h3>إمام مسجد قصر الحكم</h3>
-            <p class="org">إمارة منطقة الرياض</p>
-
-          </div>
-        </li>
-        <li class="tl-item reveal">
-          <span class="tl-period" dir="auto">1437–1444هـ</span>
-          <div class="tl-body">
-            <h3>مدير تنفيذي</h3>
-            <p class="org">لجنة إصلاح ذات البين بإمارة منطقة الرياض</p>
-            <p class="note">بقرار من صاحب السمو الملكي أمير منطقة الرياض.</p>
-          </div>
-        </li>
-        <li class="tl-item reveal">
-          <span class="tl-period" dir="auto">سابقاً</span>
-          <div class="tl-body">
-            <h3>رئيس لجنة الحماية الأسرية</h3>
-            <p class="org">إمارة منطقة الرياض</p>
-
-          </div>
-        </li>
-        <li class="tl-item reveal">
-          <span class="tl-period" dir="auto">1422–1423هـ</span>
-          <div class="tl-body">
-            <h3>مدير تنفيذي</h3>
-            <p class="org">جمعية سقيا الماء بمنطقة الرياض</p>
-
-          </div>
-        </li>
-        <li class="tl-item reveal">
-          <span class="tl-period" dir="auto">1413–1437هـ</span>
-          <div class="tl-body">
-            <h3>إمام مسجد</h3>
-            <p class="org">مسجد العبيكان بحي شبرا، الرياض</p>
-
-          </div>
-        </li>
+    </nav>
+  </header>
+  <main>
+    <section class="nds-hero-section nds-sub nds-flat" id="top">
+      <nav class="nds-breadcrumb-nav" aria-label="مسار التنقل" data-i18n-aria-label="breadcrumb.breadcrumb">
+        <ol class="nds-breadcrumb">
+          <li><a href="/">الرئيسية</a></li>
+          <li class="nds-truncate" aria-current="page">الشيخ عبدالعزيز القعيد</li>
         </ol>
+      </nav>
+      <div class="nds-section-wrapper">
+        <div class="nds-section-image">
+          <div class="nds-avatar nds-image-border alq-hero-avatar">
+            <img src="/assets/img/portrait-480.webp" width="120" height="120" alt="الشيخ عبدالعزيز القعيد جالسًا خلف مكتبه أثناء لقاء إذاعي" fetchpriority="high">
+          </div>
+        </div>
+        <div class="nds-section-head">
+          <h1 class="nds-section-title">الشيخ عبدالعزيز القعيد</h1>
+          <p class="nds-section-description">إمام مسجد ومدير تنفيذي في العمل الاجتماعي والإصلاح الأسري. إصلاح ذات البين، وخدمة المجتمع، وتعليم القرآن الكريم.</p>
+        </div>
+        <div class="nds-section-action">
+          <a class="nds-btn nds-primary" href="/assets/docs/abdulaziz-al-qaeed-cv.pdf" download="abdulaziz-al-qaeed-cv.pdf">
+            <i class="hgi hgi-stroke hgi-download-01" aria-hidden="true"></i>
+            <span class="nds-label">تنزيل السيرة الذاتية (PDF)</span>
+          </a>
+          <a class="nds-btn nds-secondary-outline" href="#contact">
+            <i class="nds-icon nds-hgi-mail-01" aria-hidden="true"></i>
+            <span class="nds-label">تواصل مع الشيخ</span>
+          </a>
+          <div class="nds-share nds-dropmenu">
+            <button class="nds-btn nds-secondary-outline nds-dropmenu-trigger" type="button" aria-label="مشاركة الصفحة" data-i18n-aria-label="share.share_page">
+              <i class="nds-icon nds-hgi-share-01" aria-hidden="true"></i>
+              <span class="nds-label" data-i18n="share.share_page">مشاركة الصفحة</span>
+            </button>
+            <div class="nds-dropmenu-menu" hidden>
+              <button class="nds-btn nds-subtle nds-dropmenu-item nds-share-x" type="button" aria-label="Share on X" data-i18n-aria-label="share.share_on_x">
+                <i class="nds-icon nds-hgi-new-twitter" aria-hidden="true"></i>
+                <span class="nds-label">X</span>
+              </button>
+              <button class="nds-btn nds-subtle nds-dropmenu-item nds-share-linkedin" type="button" aria-label="Share on LinkedIn" data-i18n-aria-label="share.share_on_linkedin">
+                <i class="nds-icon nds-hgi-linkedin-02" aria-hidden="true"></i>
+                <span class="nds-label">LinkedIn</span>
+              </button>
+              <button class="nds-btn nds-subtle nds-dropmenu-item nds-share-whatsapp" type="button" aria-label="Share on WhatsApp" data-i18n-aria-label="share.share_on_whatsapp">
+                <i class="nds-icon nds-hgi-whatsapp" aria-hidden="true"></i>
+                <span class="nds-label">WhatsApp</span>
+              </button>
+              <button class="nds-btn nds-subtle nds-dropmenu-item nds-share-copy" type="button" aria-label="نسخ الرابط" data-i18n-aria-label="share.copy_link" data-copy-label data-no-auto-close>
+                <i class="nds-icon nds-hgi-link-04" aria-hidden="true"></i>
+                <span class="nds-label" data-i18n="share.copy_link">نسخ الرابط</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="nds-content-layout nds-has-sideinfo">
+      <div class="nds-content" id="main-content">
+        <section id="profile" class="nds-content-section nds-sideinfo-section">
+          <div class="nds-section-body">
+            <aside class="nds-sideinfo nds-sticky nds-top" aria-label="في هذه الصفحة" data-i18n-aria-label="toc.on_this_page">
+              <nav class="nds-toc alq-toc" aria-label="فهرس أقسام الصفحة" data-i18n-aria-label="toc.table_of_contents" data-toc-source="#profile .nds-info-content" data-toc-levels="h2">
+                <div class="nds-toc-head">
+                  <span class="nds-label" data-i18n="toc.on_this_page">في هذه الصفحة</span>
+                  <h2 class="nds-toc-title nds-truncate">الشيخ عبدالعزيز القعيد</h2>
+                </div>
+                <div class="nds-drawer nds-lined">
+                  <ul class="nds-drawer-list"></ul>
+                </div>
+              </nav>
+            </aside>
+            <div class="nds-info-content">
+            <div class="nds-section-wrapper" id="about">
+        <div class="nds-section-head">
+          <h2 class="nds-section-title">نبذة عن الشيخ</h2>\n          <p class="nds-section-description">تولّى الشيخ عبدالعزيز القعيد الإمامة منذ عام 1413هـ، وعمل مديرًا تنفيذيًا سابقًا للجنة إصلاح ذات البين بإمارة منطقة الرياض. وتجمع مسيرته بين الإمامة والتعليم والعمل التنموي والإعلام والتأليف.</p>
+        </div>
+              <div class="nds-section-body">
+                <dl class="nds-definition-list nds-grid alq-facts">
+              <div class="nds-definition-item nds-card nds-stroke">
+                <dt>
+                  <i class="hgi hgi-stroke hgi-mosque-01" aria-hidden="true"></i>
+                  <span class="nds-label">المنصب الحالي</span>
+                </dt>
+                <dd>إمام مسجد قصر الحكم — إمارة منطقة الرياض</dd>
+              </div>
+              <div class="nds-definition-item nds-card nds-stroke">
+                <dt>
+                  <i class="hgi hgi-stroke hgi-calendar-03" aria-hidden="true"></i>
+                  <span class="nds-label">الإمامة منذ</span>
+                </dt>
+                <dd>1413هـ</dd>
+              </div>
+              <div class="nds-definition-item nds-card nds-stroke">
+                <dt>
+                  <i class="hgi hgi-stroke hgi-user-group" aria-hidden="true"></i>
+                  <span class="nds-label">مدير تنفيذي سابق</span>
+                </dt>
+                <dd>لجنة إصلاح ذات البين (1437–1444هـ)</dd>
+              </div>
+              <div class="nds-definition-item nds-card nds-stroke">
+                <dt>
+                  <i class="hgi hgi-stroke hgi-book-open-02" aria-hidden="true"></i>
+                  <span class="nds-label">الإصدارات والبحوث</span>
+                </dt>
+                <dd>4 عناوين</dd>
+              </div>
+                </dl>
+                <div class="nds-block nds-prose">
+                  <p>الشيخ عبدالعزيز القعيد إمام مسجد قصر الحكم بإمارة منطقة الرياض. عمل مديرًا تنفيذيًا للجنة إصلاح ذات البين بإمارة منطقة الرياض (1437–1444هـ) بقرار من صاحب السمو الملكي أمير المنطقة، وتولى رئاسة لجنة الحماية الأسرية بالإمارة سابقًا. وقبل ذلك، عمل مديرًا تنفيذيًا لجمعية سقيا الماء بمنطقة الرياض وإمامًا لمسجد العبيكان بحي شبرا. وتشمل مجالات اهتمامه الإصلاح والوساطة الأسرية، والعمل الأهلي والتنموي، وتحفيظ القرآن الكريم، وإعداد البرامج الثقافية والتربوية والمطبوعات التوعوية.</p>
+                  <p><strong>الإصلاح والأسرة</strong> — لجان إصلاح ذات البين والحماية الأسرية والصلح.</p><p><strong>العمل الأهلي والتنموي</strong> — جمعيات التنمية الأهلية، وجمعية سقيا الماء، ومؤسسات خيرية.</p><p><strong>القرآن الكريم والتعليم</strong> — مدارس ودور تحفيظ القرآن الكريم، ودورات تربوية وتعليمية.</p><p><strong>الإعلام والثقافة</strong> — برامج ولقاءات ثقافية، ومشاركات إعلامية في قنوات تلفزيونية.</p>
+                </div>
+                <div class="nds-block">
+                  <h3 class="nds-block-title">مجالات العمل</h3>
+                  <div class="nds-flex nds-wrap alq-tags">
+              <span class="nds-tag nds-green nds-sm"><span class="nds-label">الإصلاح والأسرة</span></span>
+              <span class="nds-tag nds-green nds-sm"><span class="nds-label">العمل الأهلي والتنموي</span></span>
+              <span class="nds-tag nds-green nds-sm"><span class="nds-label">القرآن الكريم والتعليم</span></span>
+              <span class="nds-tag nds-green nds-sm"><span class="nds-label">الإعلام والثقافة</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-section-wrapper" id="experience">
+        <div class="nds-section-head">
+          <h2 class="nds-section-title">الخبرة المهنية</h2>\n          <p class="nds-section-description">مرتبة من الأحدث إلى الأقدم.</p>
+        </div>
+              <div class="nds-section-body">
+                <div class="nds-stepper nds-vertical nds-dot nds-reverse" data-current="5" data-total="5">
+                        <div class="nds-stepper-step">
+                          <div class="nds-stepper-base">
+                            <div class="nds-stepper-circle" data-step-text="1"></div>
+                          </div>
+                          <div class="nds-stepper-content">
+                            <div class="nds-divider">1413–1437هـ</div>
+                            <div class="nds-stepper-text">
+                              <span class="nds-stepper-title">إمام مسجد</span>
+                              <span class="nds-stepper-description">مسجد العبيكان بحي شبرا، الرياض</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="nds-stepper-step">
+                          <div class="nds-stepper-base">
+                            <div class="nds-stepper-circle" data-step-text="2"></div>
+                          </div>
+                          <div class="nds-stepper-content">
+                            <div class="nds-divider">1422–1423هـ</div>
+                            <div class="nds-stepper-text">
+                              <span class="nds-stepper-title">مدير تنفيذي</span>
+                              <span class="nds-stepper-description">جمعية سقيا الماء بمنطقة الرياض</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="nds-stepper-step">
+                          <div class="nds-stepper-base">
+                            <div class="nds-stepper-circle" data-step-text="3"></div>
+                          </div>
+                          <div class="nds-stepper-content">
+                            <div class="nds-divider">سابقاً</div>
+                            <div class="nds-stepper-text">
+                              <span class="nds-stepper-title">رئيس لجنة الحماية الأسرية</span>
+                              <span class="nds-stepper-description">إمارة منطقة الرياض</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="nds-stepper-step">
+                          <div class="nds-stepper-base">
+                            <div class="nds-stepper-circle" data-step-text="4"></div>
+                          </div>
+                          <div class="nds-stepper-content">
+                            <div class="nds-divider">1437–1444هـ</div>
+                            <div class="nds-stepper-text">
+                              <span class="nds-stepper-title">مدير تنفيذي</span>
+                              <span class="nds-stepper-description">لجنة إصلاح ذات البين بإمارة منطقة الرياض</span>
+                            </div>
+                                <ul>
+                                  <li>بقرار من صاحب السمو الملكي أمير منطقة الرياض.</li>
+                                </ul>
+                          </div>
+                        </div>
+                        <div class="nds-stepper-step">
+                          <div class="nds-stepper-base">
+                            <div class="nds-stepper-circle" data-step-text="5"></div>
+                          </div>
+                          <div class="nds-stepper-content">
+                            <div class="nds-divider">حالياً</div>
+                            <div class="nds-stepper-text">
+                              <span class="nds-stepper-title">إمام مسجد قصر الحكم</span>
+                              <span class="nds-stepper-description">إمارة منطقة الرياض</span>
+                            </div>
+                          </div>
+                        </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-section-wrapper" id="community">
+        <div class="nds-section-head">
+          <h2 class="nds-section-title">الأعمال الاجتماعية والوطنية</h2>
+        </div>
+              <div class="nds-section-body">
+                <div class="nds-flex nds-col alq-stack">
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">الصلح والتنمية الأهلية</span>
+                      <ul><li>عضو لجنة الصلح الخاصة بوزارة الدفاع بتكليف من خادم الحرمين الشريفين (1433–1434هـ).</li><li>إدارة لجنة التنمية الأهلية الاجتماعية بحي شبرا، التابعة لوزارة الموارد البشرية (1429هـ).</li><li>عضو مجلس إدارة جمعية التنمية الأهلية الاجتماعية بحي شبرا (1437–1441هـ).</li></ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">المؤسسات والجمعيات</span>
+                      <ul><li>عضو مجلس إدارة مؤسسة الشيخ عبدالعزيز بن قاسم الأهلية.</li><li>عضو مجلس أمناء مؤسسة الشيخ عبد العزيز بن قاسم الخيرية.</li><li>عضو مجلس إدارة جمعية سقيا الماء بمنطقة الرياض والمشرف المالي.</li><li>عضو نادي الوشم بشقراء (1422–1424هـ).</li></ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">التعليم وتحفيظ القرآن</span>
+                      <ul><li>مشرف على مدرسة تحفيظ القرآن الكريم بمسجد العبيكان بشبرا للبنين، تابعة لوزارة الشؤون الإسلامية (منذ 1415هـ).</li><li>مشرف عام لدار الفضائل النسائية لتحفيظ القرآن الكريم، التابعة لوزارة الشؤون الإسلامية.</li><li>عضو مجلس مركز الغرب التابع للإدارة العامة النسائية لتحفيظ القرآن الكريم.</li><li>إقامة دورات تربوية وتعليمية في مركز البابطين الاجتماعي بمدينة الرياض (فن التعامل مع الناس، ومهارات الاتصال).</li><li>مدير النادي الصيفي بمتوسطة الملك سعود بالرياض (عدة سنوات).</li></ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">الإعلام والثقافة</span>
+                      <ul><li>رئيس مجلس إدارة وكالة ملتقى الميديا للدعاية والإعلان، ومستشار إعلامي.</li><li>المشاركة الإعلامية في بعض قنوات التلفزيون السعودي وبعض القنوات الفضائية.</li><li>إدارة بعض المسابقات الثقافية لوزارة الشباب والرياضة.</li><li>إدارة وإعداد بعض اللقاءات والمنتديات والمسابقات والبرامج الثقافية المسموعة والمطبوعة.</li></ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">المشاركات الوطنية</span>
+                      <ul><li>عضو الحملة الوطنية الشاملة لتعزيز القيم الوطنية «وطننا أمانة»، بإمارة منطقة الرياض (1436هـ).</li><li>المشاركة في برنامج التحول الوطني (ورشة عمل وزارة الموارد البشرية، 1435هـ).</li></ul>
+                    </div>
+                  </div>
+                </div>
+                </div>
+                <div class="nds-alert nds-card nds-color" data-status="success" role="status">
+                  <span class="nds-feedback nds-alert-icon nds-outline">
+                    <span class="nds-feedback-icon">
+                      <i class="nds-icon" aria-hidden="true"></i>
+                    </span>
+                  </span>
+                  <div class="nds-alert-content">
+                    <div class="nds-alert-text">
+                      <span class="nds-alert-title">إنجاز موثق</span>
+                      <ul class="nds-alert-description"><li>تمثيل المملكة في المسابقة الثقافية لدول مجلس التعاون الخليجي، بدولة الكويت (1421هـ).</li></ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-section-wrapper" id="skills">
+        <div class="nds-section-head">
+          <h2 class="nds-section-title">المهارات والكفاءات</h2>\n          <p class="nds-section-description">مستخرجة من الأدوار والدورات الموثقة في السيرة، دون مؤشرات نسبية.</p>
+        </div>
+              <div class="nds-section-body">
+                <div class="nds-flex nds-col alq-stack">
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">الإدارة والتنظيم</span>
+                    </div>
+                    <div class="nds-flex nds-wrap alq-tags"><span class="nds-tag nds-green nds-sm"><span class="nds-label">الإدارة التنفيذية للجان ومؤسسات</span></span><span class="nds-tag nds-green nds-sm"><span class="nds-label">الاتصال الإداري</span></span><span class="nds-tag nds-green nds-sm"><span class="nds-label">الميزانية المالية</span></span></div>
+                  </div>
+                </div>
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">التواصل والإصلاح</span>
+                    </div>
+                    <div class="nds-flex nds-wrap alq-tags"><span class="nds-tag nds-green nds-sm"><span class="nds-label">الاتصال الفعال</span></span><span class="nds-tag nds-green nds-sm"><span class="nds-label">التعامل مع الآخرين</span></span><span class="nds-tag nds-green nds-sm"><span class="nds-label">الوساطة والإصلاح الأسري</span></span></div>
+                  </div>
+                </div>
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">التعليم والمحتوى</span>
+                    </div>
+                    <div class="nds-flex nds-wrap alq-tags"><span class="nds-tag nds-green nds-sm"><span class="nds-label">إعداد البرامج الثقافية والتربوية</span></span><span class="nds-tag nds-green nds-sm"><span class="nds-label">كتابة الكتيبات والبحوث</span></span><span class="nds-tag nds-green nds-sm"><span class="nds-label">تحفيظ القرآن الكريم</span></span></div>
+                  </div>
+                </div>
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">التقنية والإعلام</span>
+                    </div>
+                    <div class="nds-flex nds-wrap alq-tags"><span class="nds-tag nds-green nds-sm"><span class="nds-label">الحاسب الآلي (دورة)</span></span><span class="nds-tag nds-green nds-sm"><span class="nds-label">وسائل التواصل الاجتماعي (دورة)</span></span><span class="nds-tag nds-green nds-sm"><span class="nds-label">المشاركة الإعلامية</span></span></div>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-section-wrapper" id="publications">
+        <div class="nds-section-head">
+          <h2 class="nds-section-title">الإصدارات والبحوث</h2>\n          <p class="nds-section-description">كتيبات وبحوث أعدّها الشيخ عبدالعزيز القعيد وكتبها، وفق العناوين الواردة في سيرته الذاتية.</p>
+        </div>
+              <div class="nds-section-body">
+                <div class="nds-flex nds-col alq-stack">
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">فكرة الحي والمسجد</span>
+                    </div>
+                    <div class="nds-card-meta">
+                      <div class="nds-card-tags">
+                        <span class="nds-tag nds-green nds-sm"><span class="nds-label">كتيب / بحث</span></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">خطر الهجر والقطيعة</span>
+                    </div>
+                    <div class="nds-card-meta">
+                      <div class="nds-card-tags">
+                        <span class="nds-tag nds-green nds-sm"><span class="nds-label">كتيب / بحث</span></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">أسئلة مهمة في العفو والصلح</span>
+                    </div>
+                    <div class="nds-card-meta">
+                      <div class="nds-card-tags">
+                        <span class="nds-tag nds-green nds-sm"><span class="nds-label">كتيب / بحث</span></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">رسالة المسجد</span>
+                    </div>
+                    <div class="nds-card-meta">
+                      <div class="nds-card-tags">
+                        <span class="nds-tag nds-green nds-sm"><span class="nds-label">كتيب / بحث</span></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-section-wrapper" id="education">
+        <div class="nds-section-head">
+          <h2 class="nds-section-title">التعليم</h2>
+        </div>
+              <div class="nds-section-body">
+                <div class="nds-flex nds-col alq-stack">
+                <div class="nds-card nds-stroke nds-horizontal alq-full">
+                  <div class="nds-card-header">
+                    <div class="nds-card-featured-icon">
+                      <span class="nds-featured-icon">
+                        <i class="hgi hgi-stroke hgi-mortarboard-02" aria-hidden="true"></i>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">كلية أصول الدين</span>
+                      <p class="nds-card-description">جامعة الإمام محمد بن سعود الإسلامية</p>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="nds-card nds-stroke nds-horizontal alq-full">
+                  <div class="nds-card-header">
+                    <div class="nds-card-featured-icon">
+                      <span class="nds-featured-icon">
+                        <i class="hgi hgi-stroke hgi-mortarboard-02" aria-hidden="true"></i>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="nds-card-content">
+                    <div class="nds-card-text">
+                      <span class="nds-card-title">معهد الرياض العلمي</span>
+                      <p class="nds-card-description">جامعة الإمام محمد بن سعود الإسلامية</p>
+                    </div>
+                    <div class="nds-card-meta">
+                      <div class="nds-card-tags">
+                        <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">1419–1427هـ</span></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-section-wrapper" id="training">
+        <div class="nds-section-head">
+          <h2 class="nds-section-title">الدورات والشهادات</h2>
+        </div>
+              <div class="nds-section-body">
+                <div class="nds-card nds-stroke alq-full">
+                  <div class="nds-card-content">
+                    <div class="nds-prose">
+                      <ul><li>مشارك في المؤتمر الدولي للابتزاز الجنسي للأطفال (المنظم: وزارة الداخلية).</li><li>دورة «وسائل التواصل الاجتماعي: ما لها وما عليها» (المنظم: وزارة الداخلية).</li><li>حضور دورة «مدير لأول مرة» في مجال العمل الخيري.</li><li>دورة في الحاسب الآلي.</li><li>دورة في فن الاتصال الفعال.</li><li>دورة في الاتصال الإداري.</li><li>دورة في التعامل مع الآخرين.</li><li>دورة في الميزانية المالية.</li><li>دورة مقومات النجاح.</li><li>المشاركة في مؤتمر الإعجاز في دورة تركيا (1431هـ).</li></ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-section-wrapper" id="contact">
+        <div class="nds-section-head">
+          <h2 class="nds-section-title">التواصل مع الشيخ</h2>\n          <p class="nds-section-description">للتواصل المهني مع الشيخ عبدالعزيز القعيد، والدعوات والمقابلات.</p>
+        </div>
+              <div class="nds-section-action">
+                <a class="nds-btn nds-primary" href="mailto:aq5164@hotmail.com">
+                  <i class="nds-icon nds-hgi-mail-01" aria-hidden="true"></i>
+                  <span class="nds-label">مراسلة الشيخ بالبريد الإلكتروني</span>
+                </a>
+                <a class="nds-btn nds-secondary-outline" href="/assets/docs/abdulaziz-al-qaeed-cv.pdf" download="abdulaziz-al-qaeed-cv.pdf">
+                  <i class="hgi hgi-stroke hgi-download-01" aria-hidden="true"></i>
+                  <span class="nds-label">تنزيل السيرة الذاتية (PDF)</span>
+                </a>
+              </div>
+              <div class="nds-section-body">
+                <dl class="nds-definition-list nds-grid alq-facts">
+                  <div class="nds-definition-item nds-card nds-stroke">
+                    <dt>
+                      <i class="hgi hgi-stroke hgi-mail-01" aria-hidden="true"></i>
+                      <span class="nds-label">البريد الإلكتروني</span>
+                    </dt>
+                    <dd><a class="nds-link" href="mailto:aq5164@hotmail.com">aq5164@hotmail.com</a></dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+            </div>
+          </div>
+        </section>
+        <section class="nds-last-edit nds-content-section">
+          سيرة تعريفية معتمدة من المحتوى الموثق.
+        </section>
       </div>
     </div>
-  </section>
-
-  <section class="section" id="community" aria-labelledby="community-title">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">03</p>
-        <h2 id="community-title">الأعمال الاجتماعية والوطنية</h2>
-      </header>
-      <div class="cards-2">
-        <article class="card reveal">
-          <h3>الصلح والتنمية الأهلية</h3>
-          <ul class="list">
-            <li>عضو لجنة الصلح الخاصة بوزارة الدفاع بتكليف من خادم الحرمين الشريفين (1433–1434هـ).</li>
-            <li>إدارة لجنة التنمية الأهلية الاجتماعية بحي شبرا، التابعة لوزارة الموارد البشرية (1429هـ).</li>
-            <li>عضو مجلس إدارة جمعية التنمية الأهلية الاجتماعية بحي شبرا (1437–1441هـ).</li>
-          </ul>
-        </article>
-        <article class="card reveal">
-          <h3>المؤسسات والجمعيات</h3>
-          <ul class="list">
-            <li>عضو مجلس إدارة مؤسسة الشيخ عبدالعزيز بن قاسم الأهلية.</li>
-            <li>عضو مجلس أمناء مؤسسة الشيخ عبد العزيز بن قاسم الخيرية.</li>
-            <li>عضو مجلس إدارة جمعية سقيا الماء بمنطقة الرياض والمشرف المالي.</li>
-            <li>عضو نادي الوشم بشقراء (1422–1424هـ).</li>
-          </ul>
-        </article>
-        <article class="card reveal">
-          <h3>التعليم وتحفيظ القرآن</h3>
-          <ul class="list">
-            <li>مشرف على مدرسة تحفيظ القرآن الكريم بمسجد العبيكان بشبرا للبنين، تابعة لوزارة الشؤون الإسلامية (منذ 1415هـ).</li>
-            <li>مشرف عام لدار الفضائل النسائية لتحفيظ القرآن الكريم، التابعة لوزارة الشؤون الإسلامية.</li>
-            <li>عضو مجلس مركز الغرب التابع للإدارة العامة النسائية لتحفيظ القرآن الكريم.</li>
-            <li>إقامة دورات تربوية وتعليمية في مركز البابطين الاجتماعي بمدينة الرياض (فن التعامل مع الناس، ومهارات الاتصال).</li>
-            <li>مدير النادي الصيفي بمتوسطة الملك سعود بالرياض (عدة سنوات).</li>
-          </ul>
-        </article>
-        <article class="card reveal">
-          <h3>الإعلام والثقافة</h3>
-          <ul class="list">
-            <li>رئيس مجلس إدارة وكالة ملتقى الميديا للدعاية والإعلان، ومستشار إعلامي.</li>
-            <li>المشاركة الإعلامية في بعض قنوات التلفزيون السعودي وبعض القنوات الفضائية.</li>
-            <li>إدارة بعض المسابقات الثقافية لوزارة الشباب والرياضة.</li>
-            <li>إدارة وإعداد بعض اللقاءات والمنتديات والمسابقات والبرامج الثقافية المسموعة والمطبوعة.</li>
-          </ul>
-        </article>
-        <article class="card card--wide reveal">
-          <h3>المشاركات الوطنية</h3>
-          <ul class="list">
-            <li>عضو الحملة الوطنية الشاملة لتعزيز القيم الوطنية «وطننا أمانة»، بإمارة منطقة الرياض (1436هـ).</li>
-            <li>المشاركة في برنامج التحول الوطني (ورشة عمل وزارة الموارد البشرية، 1435هـ).</li>
-          </ul>
-        </article>
-      </div>
-      <div class="callout reveal">
-        <h3>إنجاز موثق</h3>
-          <p>تمثيل المملكة في المسابقة الثقافية لدول مجلس التعاون الخليجي، بدولة الكويت (1421هـ).</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--compact section-tint" id="skills" aria-labelledby="skills-title">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">04</p>
-        <h2 id="skills-title">المهارات والكفاءات</h2>
-        <p class="section-intro">مستخرجة من الأدوار والدورات الموثقة في السيرة، دون مؤشرات نسبية.</p>
-      </header>
-      <div class="cards-2">
-        <article class="card reveal">
-          <h3>الإدارة والتنظيم</h3>
-          <ul class="tags">
-            <li>الإدارة التنفيذية للجان ومؤسسات</li>
-            <li>الاتصال الإداري</li>
-            <li>الميزانية المالية</li>
-          </ul>
-        </article>
-        <article class="card reveal">
-          <h3>التواصل والإصلاح</h3>
-          <ul class="tags">
-            <li>الاتصال الفعال</li>
-            <li>التعامل مع الآخرين</li>
-            <li>الوساطة والإصلاح الأسري</li>
-          </ul>
-        </article>
-        <article class="card reveal">
-          <h3>التعليم والمحتوى</h3>
-          <ul class="tags">
-            <li>إعداد البرامج الثقافية والتربوية</li>
-            <li>كتابة الكتيبات والبحوث</li>
-            <li>تحفيظ القرآن الكريم</li>
-          </ul>
-        </article>
-        <article class="card reveal">
-          <h3>التقنية والإعلام</h3>
-          <ul class="tags">
-            <li>الحاسب الآلي (دورة)</li>
-            <li>وسائل التواصل الاجتماعي (دورة)</li>
-            <li>المشاركة الإعلامية</li>
-          </ul>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--compact" id="publications" aria-labelledby="publications-title">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">05</p>
-        <h2 id="publications-title">الإصدارات والبحوث</h2>
-        <p class="section-intro">كتيبات وبحوث أعدّها الشيخ عبدالعزيز القعيد وكتبها، وفق العناوين الواردة في سيرته الذاتية.</p>
-      </header>
-      <ol class="pub-grid">
-        <li class="pub reveal"><span class="pub-no">01</span><span>فكرة الحي والمسجد</span></li>
-        <li class="pub reveal"><span class="pub-no">02</span><span>خطر الهجر والقطيعة</span></li>
-        <li class="pub reveal"><span class="pub-no">03</span><span>أسئلة مهمة في العفو والصلح</span></li>
-        <li class="pub reveal"><span class="pub-no">04</span><span>رسالة المسجد</span></li>
-      </ol>
-    </div>
-  </section>
-
-  <section class="section section--compact section-tint" id="education" aria-labelledby="education-title">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">06</p>
-        <h2 id="education-title">التعليم</h2>
-      </header>
-      <ul class="edu-list">
-        <li class="edu-item reveal">
-          <h3>كلية أصول الدين</h3>
-          <p class="org">جامعة الإمام محمد بن سعود الإسلامية</p>
-
+  </main>
+  <footer class="nds-footer nds-content-wrapper nds-brand" role="contentinfo" aria-label="تذييل الموقع" data-i18n-aria-label="footer.site_footer">
+    <nav class="nds-footer-content" aria-label="تنقل التذييل" data-i18n-aria-label="footer.footer_navigation">
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="footer-col-1">أقسام الصفحة</span>
+        <ul class="nds-footer-list" aria-labelledby="footer-col-1">
+        <li>
+          <a class="nds-link nds-footer-link" href="#about">
+            <span class="nds-label">نبذة</span>
+          </a>
         </li>
-        <li class="edu-item reveal">
-          <h3>معهد الرياض العلمي</h3>
-          <p class="org">جامعة الإمام محمد بن سعود الإسلامية</p>
-          <p class="period" dir="auto">1419–1427هـ</p>
+        <li>
+          <a class="nds-link nds-footer-link" href="#experience">
+            <span class="nds-label">الخبرة</span>
+          </a>
         </li>
-      </ul>
+        <li>
+          <a class="nds-link nds-footer-link" href="#community">
+            <span class="nds-label">الأعمال</span>
+          </a>
+        </li>
+        <li>
+          <a class="nds-link nds-footer-link" href="#skills">
+            <span class="nds-label">المهارات</span>
+          </a>
+        </li>
+        <li>
+          <a class="nds-link nds-footer-link" href="#publications">
+            <span class="nds-label">الإصدارات</span>
+          </a>
+        </li>
+        <li>
+          <a class="nds-link nds-footer-link" href="#education">
+            <span class="nds-label">التعليم</span>
+          </a>
+        </li>
+        <li>
+          <a class="nds-link nds-footer-link" href="#training">
+            <span class="nds-label">الدورات</span>
+          </a>
+        </li>
+        <li>
+          <a class="nds-link nds-footer-link" href="#contact">
+            <span class="nds-label">تواصل</span>
+          </a>
+        </li>
+        </ul>
+      </div>
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="footer-col-2">التواصل مع الشيخ</span>
+        <ul class="nds-footer-list" aria-labelledby="footer-col-2">
+          <li>
+            <a class="nds-link nds-footer-link" href="mailto:aq5164@hotmail.com">
+              <i class="nds-icon nds-hgi-mail-01" aria-hidden="true"></i>
+              <span class="nds-label">aq5164@hotmail.com</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/assets/docs/abdulaziz-al-qaeed-cv.pdf" download="abdulaziz-al-qaeed-cv.pdf">
+              <i class="hgi hgi-stroke hgi-download-01" aria-hidden="true"></i>
+              <span class="nds-label">تنزيل السيرة الذاتية (PDF)</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="nds-footer-bottom">
+      <div class="nds-footer-meta">
+        <div class="nds-footer-legal">
+          <div class="nds-footer-copyright">
+            <span>الشيخ عبدالعزيز القعيد &copy; 2026. جميع الحقوق محفوظة.</span>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
-
-  <section class="section section--compact" id="training" aria-labelledby="training-title">
-    <div class="wrap">
-      <header class="section-head reveal">
-        <p class="kicker" aria-hidden="true">07</p>
-        <h2 id="training-title">الدورات والشهادات</h2>
-      </header>
-      <ul class="cert-list">
-        <li class="reveal"><svg class="ico ico-check" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>مشارك في المؤتمر الدولي للابتزاز الجنسي للأطفال (المنظم: وزارة الداخلية).</span></li>
-        <li class="reveal"><svg class="ico ico-check" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>دورة «وسائل التواصل الاجتماعي: ما لها وما عليها» (المنظم: وزارة الداخلية).</span></li>
-        <li class="reveal"><svg class="ico ico-check" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>حضور دورة «مدير لأول مرة» في مجال العمل الخيري.</span></li>
-        <li class="reveal"><svg class="ico ico-check" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>دورة في الحاسب الآلي.</span></li>
-        <li class="reveal"><svg class="ico ico-check" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>دورة في فن الاتصال الفعال.</span></li>
-        <li class="reveal"><svg class="ico ico-check" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>دورة في الاتصال الإداري.</span></li>
-        <li class="reveal"><svg class="ico ico-check" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>دورة في التعامل مع الآخرين.</span></li>
-        <li class="reveal"><svg class="ico ico-check" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>دورة في الميزانية المالية.</span></li>
-        <li class="reveal"><svg class="ico ico-check" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>دورة مقومات النجاح.</span></li>
-        <li class="reveal"><svg class="ico ico-check" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>المشاركة في مؤتمر الإعجاز في دورة تركيا (1431هـ).</span></li>
-      </ul>
-    </div>
-  </section>
-
-<section class="contact" id="contact" aria-labelledby="contact-title">
-  <div class="wrap contact-inner reveal">
-    <div>
-      <p class="kicker kicker-light" aria-hidden="true">08</p>
-      <h2 id="contact-title">التواصل مع الشيخ</h2>
-      <p class="contact-text">للتواصل المهني مع الشيخ عبدالعزيز القعيد، والدعوات والمقابلات.</p>
-    </div>
-    <div class="contact-actions">
-      <a class="btn btn-light" href="mailto:aq5164@hotmail.com"><svg class="ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6.5h17v11h-17z"/><path d="M3.5 7l8.5 6.5L20.5 7"/></svg><span>مراسلة الشيخ بالبريد الإلكتروني</span></a>
-      <p class="email-line"><span>البريد الإلكتروني:</span> <a href="mailto:aq5164@hotmail.com" dir="ltr">aq5164@hotmail.com</a></p>
-    </div>
-  </div>
-</section>
-
-<div class="to-top-wrap">
-  <button class="to-top" type="button" data-back-to-top aria-label="عودة إلى الأعلى" hidden>
-    <svg class="ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6M6 12l6-6 6 6"/></svg><span class="to-top-label">عودة إلى الأعلى</span>
-  </button>
-</div>
-</main>
-<footer class="site-footer">
-  <div class="wrap footer-inner">
-    <div class="footer-id">
-      <p class="footer-name">الشيخ عبدالعزيز القعيد</p>
-      <p class="footer-role">إمام مسجد ومدير تنفيذي في العمل الاجتماعي والإصلاح الأسري</p>
-      <p class="footer-note">سيرة تعريفية معتمدة من المحتوى الموثق.</p>
-    </div>
-    <div class="footer-actions">
-      <a class="footer-link" href="mailto:aq5164@hotmail.com" dir="ltr">aq5164@hotmail.com</a>
-      <a class="footer-link footer-lang" href="/en/" hreflang="en" lang="en">English</a>
-      <button class="footer-link footer-action" type="button" data-print hidden>طباعة أو حفظ PDF</button>
-    </div>
-    <p class="footer-note footer-cv">ملف السيرة نسخة من صفحات السيرة الذاتية المعتمدة.</p>
-    <p class="copy">© <span data-year>2026</span> جميع الحقوق محفوظة.</p>
-  </div>
-</footer>
+  </footer>
+  <script defer src="/assets/js/nds-main.min.js?ver=1.12.x-dev"></script>
 </body>
 </html>

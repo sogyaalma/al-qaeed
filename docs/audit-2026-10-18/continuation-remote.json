@@ -1,0 +1,68 @@
+{
+  "recorded_at_utc": "2026-10-18T17:17:47.362207+00:00",
+  "commit": "95e76beb31cb269cda0bd4e58cf43c3579ac6b29",
+  "run_id": 39148533064,
+  "url": "https://github.com/sogyaalma/al-qaeed/actions/runs/39148533064",
+  "status": "completed",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "id": 117737257409,
+      "name": "validate",
+      "url": "https://github.com/sogyaalma/al-qaeed/actions/runs/39148533064/job/117737257409",
+      "status": "completed",
+      "conclusion": "success",
+      "annotations": [
+        {
+          "annotation_level": "notice",
+          "title": "Browser verification",
+          "message": "webkit: 328/328 passed; browser 27.2"
+        },
+        {
+          "annotation_level": "notice",
+          "title": "Browser verification",
+          "message": "firefox: 328/328 passed; browser 157.0"
+        },
+        {
+          "annotation_level": "notice",
+          "title": "Browser verification",
+          "message": "chromium: 328/328 passed; browser 156.0.8078.4"
+        }
+      ]
+    },
+    {
+      "id": 117737257539,
+      "name": "cloudflare-preview",
+      "url": "https://github.com/sogyaalma/al-qaeed/actions/runs/39148533064/job/117737257539",
+      "status": "completed",
+      "conclusion": "success",
+      "annotations": [
+        {
+          "annotation_level": "notice",
+          "title": "Browser verification",
+          "message": "chromium: 328/328 passed; browser 156.0.8078.4"
+        },
+        {
+          "annotation_level": "notice",
+          "title": "Cloudflare preview verification",
+          "message": "38/38 provider checks passed at https://3410ee5b.al-qaeed.pages.dev"
+        }
+      ]
+    }
+  ],
+  "scope": "GitHub API receipts, not downloaded screenshots or a manual assistive-technology review",
+  "cloudflare_check": {
+    "id": 117737300121,
+    "head_sha": "95e76beb31cb269cda0bd4e58cf43c3579ac6b29",
+    "status": "completed",
+    "conclusion": "success",
+    "details_url": "https://dash.cloudflare.com/?to=/8fedb52c922a4cc125b4900bb86ad365/pages/view/al-qaeed/3410ee5b-466c-48c4-88c0-ee62fc0727ae",
+    "output": {
+      "title": "Deployed successfully",
+      "summary": "<table><tr><td><strong>Latest commit:</strong> </td><td>\n<code>95e76be</code>\n</td></tr>\n<tr><td><strong>Status:</strong></td><td>&nbsp;✅&nbsp; Deploy successful!</td></tr>\n<tr><td><strong>Preview URL:</strong></td><td>\n<a href='https://3410ee5b.al-qaeed.pages.dev'>https://3410ee5b.al-qaeed.pages.dev</a>\n</td></tr>\n<tr><td><strong>Branch Preview URL:</strong></td><td>\n<a href='https://arena-2372061c-al-qaeed.al-qaeed.pages.dev'>https://arena-2372061c-al-qaeed.al-qaeed.pages.dev</a>\n</td></tr>\n</table>\n\n[View logs](https://dash.cloudflare.com/?to=/8fedb52c922a4cc125b4900bb86ad365/pages/view/al-qaeed/3410ee5b-466c-48c4-88c0-ee62fc0727ae)\n",
+      "text": null,
+      "annotations_count": 0,
+      "annotations_url": "https://api.github.com/repos/sogyaalma/al-qaeed/check-runs/117737300121/annotations"
+    }
+  }
+}

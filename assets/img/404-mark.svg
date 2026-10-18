@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 458 324" width="458" height="324" role="img" aria-hidden="true">
+  <!-- Project-owned 404 mark (visual audit F-13): brand ink + one gold rule.
+       Decorative only; the page heading carries the meaning. -->
+  <defs>
+    <style>
+      .num { font-family: "IBM Plex Sans Arabic", "IBM Plex Sans", sans-serif; font-weight: 700; }
+    </style>
+  </defs>
+  <!-- quiet mihrab arch motif -->
+  <path d="M149 262 V128 a80 80 0 0 1 160 0 V262" fill="none" stroke="#c9d8d0" stroke-width="3"/>
+  <path d="M179 262 V134 a50 50 0 0 1 100 0 V262" fill="none" stroke="#e2ebe5" stroke-width="3"/>
+  <text class="num" x="229" y="214" text-anchor="middle" font-size="148" fill="#0a3d32">404</text>
+  <rect x="197" y="238" width="64" height="4" rx="2" fill="#b08a4f"/>
+</svg>

@@ -67,6 +67,10 @@ GATE_CSS = """html[data-theme~=dark] :where(.nds-main-nav .nds-brand.nds-oncolor
 
 THEME_BOOT = """(function() {
       var v; try { v = localStorage.getItem('nds-theme'); } catch (e) {}
+      // F-12: follow the OS dark preference when no stored theme exists.
+      if (!v && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        v = 'dark';
+      }
       if (v) {
         var d = document.documentElement;
         var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\\s+/)
@@ -122,8 +126,15 @@ def write_csp(pages):
     vercel_path.write_text(json.dumps(vercel, indent=2) + "\n", encoding="utf-8")
 
 
+DATE_RANGE = re.compile(r"(\d{4}[\u2013-]\d{4}(\u0647\u0640)?)")
+
+
 def e(s):
-    return html.escape(str(s), quote=True)
+    escaped = html.escape(str(s), quote=True)
+    # F-14/F-17: isolate date ranges (e.g. 1437–1444هـ) so both languages show
+    # one consistent order and no viewport breaks a range mid-number. Text nodes
+    # only carry ranges today; no attribute value contains one.
+    return DATE_RANGE.sub(r'<bdi dir="ltr" class="alq-date">\1</bdi>', escaped)
 
 
 def t(value, lang):
@@ -321,7 +332,7 @@ def header(lang, not_found=False):
             </div>
             <ul class="nds-nav-actions">
               <li class="nds-nav-item nds-icon-only nds-pinned" id="nav-language">
-                <a data-language-switch href="{LANGS[other]['path']}" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="{e(other_label)}" lang="{other_lang_attr}" hreflang="{other_lang_attr}"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sm md sr">{e(other_label)}</span></a>
+                <a data-language-switch href="{LANGS[other]['path']}" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="{e(other_label)}" lang="{other_lang_attr}" hreflang="{other_lang_attr}"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sr">{e(other_label)}</span></a>
               </li>
             </ul>
           </div>
@@ -337,6 +348,10 @@ def hero(lang):
     ui = DATA["ui"]
     name = t(p["name_short"], lang)
     title = t(p["title"], lang)
+    h1_name = e(name)
+    if lang == "en":
+        # F-02: keep the surname unbroken in the hero headline.
+        h1_name = h1_name.replace("Al-Qaeed", '<span class="alq-nowrap">Al-Qaeed</span>')
     home_label = i18n(lang, "الرئيسية", "Home")
     share_label = i18n(lang, "مشاركة الصفحة", "Share Page")
     return f"""  <main>
@@ -354,8 +369,8 @@ def hero(lang):
           </div>
         </div>
         <div class="nds-section-head">
-          <h1 class="nds-section-title">{e(name)}</h1>
-          <p class="nds-section-description">{e(title)}. {e(t(p['tagline'], lang))}</p>
+          <h1 class="nds-section-title">{h1_name}</h1>
+          <p class="nds-section-description"><span class="alq-role">{e(title)}</span><span class="alq-tagline">{e(t(p['tagline'], lang))}</span></p>
         </div>
         <div class="nds-section-action">
           <a class="nds-btn nds-primary" href="{e(CV_PATH)}" download="{e(CV_NAME)}">
@@ -486,10 +501,12 @@ def experience_block(lang):
 def community_block(lang):
     c = DATA["community"]
     cards = []
-    for group in c["groups"]:
+    for i, group in enumerate(c["groups"]):
         lis = "".join(f"<li>{e(t(item, lang))}</li>" for item in group["items"])
+        # F-21: the first group carries the royal appointment — featured density.
+        featured = " alq-featured" if i == 0 else ""
         cards.append(
-            f"""                <div class="nds-card nds-stroke alq-full">
+            f"""                <div class="nds-card nds-stroke alq-full{featured}">
                   <div class="nds-card-content">
                     <div class="nds-card-text">
                       <span class="nds-card-title">{e(t(group['title'], lang))}</span>
@@ -788,7 +805,7 @@ def page_404():
         <section id="not-found" class="nds-content-section nds-status-section">
           <div class="nds-section-wrapper">
             <div class="nds-section-image">
-              <img src="/assets/img/404.svg" width="458" height="324" alt="">
+              <img src="/assets/img/404-mark.svg" width="458" height="324" alt="">
             </div>
             <div class="nds-section-head">
               <h1 class="nds-section-title">الصفحة غير موجودة</h1>
@@ -796,7 +813,7 @@ def page_404():
             </div>
             <div class="nds-section-action">
               <a href="/" class="nds-btn nds-primary"><span class="nds-label">الصفحة الرئيسية</span></a>
-              <a href="/en/" class="nds-btn nds-secondary-outline" lang="en"><span class="nds-label">Home (English)</span></a>
+              <a href="/en/" class="nds-btn nds-secondary-outline" lang="en"><span class="nds-label">English</span></a>
             </div>
           </div>
         </section>

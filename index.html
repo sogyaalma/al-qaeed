@@ -73,6 +73,10 @@
   <script>
     (function() {
       var v; try { v = localStorage.getItem('nds-theme'); } catch (e) {}
+      // F-12: follow the OS dark preference when no stored theme exists.
+      if (!v && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        v = 'dark';
+      }
       if (v) {
         var d = document.documentElement;
         var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\s+/)
@@ -167,7 +171,7 @@
             </div>
             <ul class="nds-nav-actions">
               <li class="nds-nav-item nds-icon-only nds-pinned" id="nav-language">
-                <a data-language-switch href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="English" lang="en" hreflang="en"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sm md sr">English</span></a>
+                <a data-language-switch href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="English" lang="en" hreflang="en"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sr">English</span></a>
               </li>
             </ul>
           </div>
@@ -191,7 +195,7 @@
         </div>
         <div class="nds-section-head">
           <h1 class="nds-section-title">الشيخ عبدالعزيز القعيد</h1>
-          <p class="nds-section-description">إمام مسجد ومدير تنفيذي في العمل الاجتماعي والإصلاح الأسري. إصلاح ذات البين، وخدمة المجتمع، وتعليم القرآن الكريم.</p>
+          <p class="nds-section-description"><span class="alq-role">إمام مسجد ومدير تنفيذي في العمل الاجتماعي والإصلاح الأسري</span><span class="alq-tagline">إصلاح ذات البين، وخدمة المجتمع، وتعليم القرآن الكريم.</span></p>
         </div>
         <div class="nds-section-action">
           <a class="nds-btn nds-primary" href="/assets/docs/abdulaziz-al-qaeed-cv.pdf" download="abdulaziz-al-qaeed-cv.pdf">
@@ -278,7 +282,7 @@
                   <i class="hgi hgi-stroke hgi-user-group" aria-hidden="true"></i>
                   <span class="nds-label">مدير تنفيذي سابق</span>
                 </dt>
-                <dd>لجنة إصلاح ذات البين (1437–1444هـ)</dd>
+                <dd>لجنة إصلاح ذات البين (<bdi dir="ltr" class="alq-date">1437–1444هـ</bdi>)</dd>
               </div>
               <div class="nds-definition-item nds-card nds-stroke">
                 <dt>
@@ -289,7 +293,7 @@
               </div>
                 </dl>
                 <div class="nds-block nds-prose">
-                  <p>الشيخ عبدالعزيز القعيد إمام مسجد قصر الحكم بإمارة منطقة الرياض. عمل مديرًا تنفيذيًا للجنة إصلاح ذات البين بإمارة منطقة الرياض (1437–1444هـ) بقرار من صاحب السمو الملكي أمير المنطقة، وتولى رئاسة لجنة الحماية الأسرية بالإمارة سابقًا. وقبل ذلك، عمل مديرًا تنفيذيًا لجمعية سقيا الماء بمنطقة الرياض وإمامًا لمسجد العبيكان بحي شبرا. وتشمل مجالات اهتمامه الإصلاح والوساطة الأسرية، والعمل الأهلي والتنموي، وتحفيظ القرآن الكريم، وإعداد البرامج الثقافية والتربوية والمطبوعات التوعوية.</p>
+                  <p>الشيخ عبدالعزيز القعيد إمام مسجد قصر الحكم بإمارة منطقة الرياض. عمل مديرًا تنفيذيًا للجنة إصلاح ذات البين بإمارة منطقة الرياض (<bdi dir="ltr" class="alq-date">1437–1444هـ</bdi>) بقرار من صاحب السمو الملكي أمير المنطقة، وتولى رئاسة لجنة الحماية الأسرية بالإمارة سابقًا. وقبل ذلك، عمل مديرًا تنفيذيًا لجمعية سقيا الماء بمنطقة الرياض وإمامًا لمسجد العبيكان بحي شبرا. وتشمل مجالات اهتمامه الإصلاح والوساطة الأسرية، والعمل الأهلي والتنموي، وتحفيظ القرآن الكريم، وإعداد البرامج الثقافية والتربوية والمطبوعات التوعوية.</p>
                   <p><strong>الإصلاح والأسرة</strong> — لجان إصلاح ذات البين والحماية الأسرية والصلح.</p><p><strong>العمل الأهلي والتنموي</strong> — جمعيات التنمية الأهلية، وجمعية سقيا الماء، ومؤسسات خيرية.</p><p><strong>القرآن الكريم والتعليم</strong> — مدارس ودور تحفيظ القرآن الكريم، ودورات تربوية وتعليمية.</p><p><strong>الإعلام والثقافة</strong> — برامج ولقاءات ثقافية، ومشاركات إعلامية في قنوات تلفزيونية.</p>
                 </div>
                 <div class="nds-block">
@@ -327,7 +331,7 @@
                             <div class="nds-stepper-circle" data-step-text="2"></div>
                           </div>
                           <div class="nds-stepper-content">
-                            <div class="nds-divider">1437–1444هـ</div>
+                            <div class="nds-divider"><bdi dir="ltr" class="alq-date">1437–1444هـ</bdi></div>
                             <div class="nds-stepper-text">
                               <span class="nds-stepper-title">مدير تنفيذي</span>
                               <span class="nds-stepper-description">لجنة إصلاح ذات البين بإمارة منطقة الرياض</span>
@@ -354,7 +358,7 @@
                             <div class="nds-stepper-circle" data-step-text="4"></div>
                           </div>
                           <div class="nds-stepper-content">
-                            <div class="nds-divider">1422–1423هـ</div>
+                            <div class="nds-divider"><bdi dir="ltr" class="alq-date">1422–1423هـ</bdi></div>
                             <div class="nds-stepper-text">
                               <span class="nds-stepper-title">مدير تنفيذي</span>
                               <span class="nds-stepper-description">جمعية سقيا الماء بمنطقة الرياض</span>
@@ -366,7 +370,7 @@
                             <div class="nds-stepper-circle" data-step-text="5"></div>
                           </div>
                           <div class="nds-stepper-content">
-                            <div class="nds-divider">1413–1437هـ</div>
+                            <div class="nds-divider"><bdi dir="ltr" class="alq-date">1413–1437هـ</bdi></div>
                             <div class="nds-stepper-text">
                               <span class="nds-stepper-title">إمام مسجد</span>
                               <span class="nds-stepper-description">مسجد العبيكان بحي شبرا، الرياض</span>
@@ -382,11 +386,11 @@
         </div>
               <div class="nds-section-body">
                 <div class="nds-flex nds-col alq-stack">
-                <div class="nds-card nds-stroke alq-full">
+                <div class="nds-card nds-stroke alq-full alq-featured">
                   <div class="nds-card-content">
                     <div class="nds-card-text">
                       <span class="nds-card-title">الصلح والتنمية الأهلية</span>
-                      <ul><li>عضو لجنة الصلح الخاصة بوزارة الدفاع بتكليف من خادم الحرمين الشريفين (1433–1434هـ).</li><li>إدارة لجنة التنمية الأهلية الاجتماعية بحي شبرا، التابعة لوزارة الموارد البشرية (1429هـ).</li><li>عضو مجلس إدارة جمعية التنمية الأهلية الاجتماعية بحي شبرا (1437–1441هـ).</li></ul>
+                      <ul><li>عضو لجنة الصلح الخاصة بوزارة الدفاع بتكليف من خادم الحرمين الشريفين (<bdi dir="ltr" class="alq-date">1433–1434هـ</bdi>).</li><li>إدارة لجنة التنمية الأهلية الاجتماعية بحي شبرا، التابعة لوزارة الموارد البشرية (1429هـ).</li><li>عضو مجلس إدارة جمعية التنمية الأهلية الاجتماعية بحي شبرا (<bdi dir="ltr" class="alq-date">1437–1441هـ</bdi>).</li></ul>
                     </div>
                   </div>
                 </div>
@@ -394,7 +398,7 @@
                   <div class="nds-card-content">
                     <div class="nds-card-text">
                       <span class="nds-card-title">المؤسسات والجمعيات</span>
-                      <ul><li>عضو مجلس إدارة مؤسسة الشيخ عبدالعزيز بن قاسم الأهلية.</li><li>عضو مجلس أمناء مؤسسة الشيخ عبد العزيز بن قاسم الخيرية.</li><li>عضو مجلس إدارة جمعية سقيا الماء بمنطقة الرياض والمشرف المالي.</li><li>عضو نادي الوشم بشقراء (1422–1424هـ).</li></ul>
+                      <ul><li>عضو مجلس إدارة مؤسسة الشيخ عبدالعزيز بن قاسم الأهلية.</li><li>عضو مجلس أمناء مؤسسة الشيخ عبد العزيز بن قاسم الخيرية.</li><li>عضو مجلس إدارة جمعية سقيا الماء بمنطقة الرياض والمشرف المالي.</li><li>عضو نادي الوشم بشقراء (<bdi dir="ltr" class="alq-date">1422–1424هـ</bdi>).</li></ul>
                     </div>
                   </div>
                 </div>
@@ -575,7 +579,7 @@
                     </div>
                     <div class="nds-card-meta">
                       <div class="nds-card-tags">
-                        <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">1419–1427هـ</span></span>
+                        <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label"><bdi dir="ltr" class="alq-date">1419–1427هـ</bdi></span></span>
                       </div>
                     </div>
                   </div>

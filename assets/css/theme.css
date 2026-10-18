@@ -20,25 +20,42 @@
   --text-secondary-paragraph: #5c6b65;
   --text-primary-strong: #0e5a49;
   --background-image-overlay: #0a3d32;
+  /* Project tokens for the hero band / accent (design recommendations from
+     docs/visual-audit — not NDS tokens). */
+  --alq-accent: #b08a4f;
+  --alq-hero-ink: #f7f4ec;
+  --alq-hero-muted: #c2d4c9;
+  --alq-hero-faint: #9db8a9;
+  --alq-hero-band: #0a3d32;
+  --alq-hero-plate-bg: #f4efe3;
+  --alq-hero-line: rgba(247, 244, 236, 0.22);
 }
 
+/* Dark palette is green-tinted charcoal (F-24): matches the paper-green
+   identity instead of NDS's default blue-charcoal night theme. */
 :root[data-theme~="dark"] {
-  --background-body: #111927;
-  --background-stripe: #1a2430;
-  --background-card: #1f2a37;
-  --background-nav: #1f2a37;
-  --background-sub-hero: #182d29;
+  --background-body: #111813;
+  --background-stripe: #17201a;
+  --background-card: #1b2620;
+  --background-nav: #1b2620;
+  --background-sub-hero: #16241f;
   --background-primary: #21856d;
   --background-primary-strong: #76c5ae;
-  --background-primary-light: #182d29;
-  --background-hero: #102b24;
-  --background-footer: #102b24;
-  --text-display: #f3f4f6;
-  --text-default: #f3f4f6;
-  --text-primary-paragraph: #d1d5db;
-  --text-secondary-paragraph: #b4c4bd;
+  --background-primary-light: #16241f;
+  --background-hero: #0f231c;
+  --background-footer: #0f231c;
+  --text-display: #f2f5f1;
+  --text-default: #eef2ee;
+  --text-primary-paragraph: #cfd8d1;
+  --text-secondary-paragraph: #aebdb4;
   --text-primary-strong: #76c5ae;
-  --background-image-overlay: #102b24;
+  --background-image-overlay: #0f231c;
+  --alq-hero-ink: #f7f4ec;
+  --alq-hero-muted: #b7c9bf;
+  --alq-hero-faint: #93aa9d;
+  --alq-hero-band: #0f231c;
+  --alq-hero-plate-bg: #23332c;
+  --alq-hero-line: rgba(247, 244, 236, 0.22);
 }
 
 /* CSP knob conversions (NDS IQ rule 3): inline style="--…" moved here. */
@@ -65,8 +82,6 @@
 }
 
 .alq-hero-avatar img {
-  width: 120px;
-  height: 120px;
   object-fit: cover;
 }
 
@@ -103,4 +118,277 @@
   align-items: center;
   min-block-size: 44px;
   min-inline-size: 24px;
+}
+
+/* ============================================================
+   Visual-audit design layer (docs/visual-audit, 2026-10-18).
+   NDS IQ rule 5: overrides are last resort, scoped under the
+   project class/ids with a reason. No .nds-* file is edited.
+   ============================================================ */
+
+/* --- F-04/F-05/F-06/F-20: type scale, Arabic letter-spacing, measure --- */
+.alq-site :is(#top h1, h2, h3, .nds-section-title, .nds-toc-title, .nds-block-title, .nds-card-title, .nds-stepper-title) {
+  letter-spacing: 0; /* Arabic is a connected script: no negative tracking. */
+}
+:root[lang="en"] .alq-site #top h1 {
+  letter-spacing: -0.01em; /* Latin display may tighten slightly. */
+}
+.alq-site #top h1.nds-section-title {
+  font-size: clamp(1.75rem, 1.1rem + 2.2vw, 3.25rem);
+  line-height: 1.22;
+  text-wrap: balance; /* keeps "Al-Qaeed" off its own line when possible */
+}
+.alq-site .nds-info-content .nds-section-title {
+  font-size: clamp(1.5rem, 1.28rem + 0.8vw, 2rem);
+  line-height: 1.35;
+}
+.alq-site .nds-toc-title { font-size: 1.05rem; }
+.alq-site .nds-block-title { font-size: 1.25rem; }
+.alq-site :is(.nds-prose, .nds-prose p, .nds-prose li, .nds-section-description, .nds-card-text li) {
+  max-width: 36em; /* ~60-80 chars/line at 18px; F-06 */
+  text-wrap: pretty;
+}
+:root[lang="en"] .alq-site :is(.nds-prose, .nds-prose p, .nds-prose li, .nds-section-description) {
+  max-width: 34em; /* Latin measures shorter; F-20 */
+}
+.alq-site .alq-nowrap { white-space: nowrap; }
+
+/* F-14/F-17: Hijri ranges render LTR-isolated and never break mid-range. */
+.alq-site .alq-date {
+  white-space: nowrap;
+  unicode-bidi: isolate;
+}
+
+/* --- F-07/F-08/F-19: hero band, balanced composition, portrait plate --- */
+/* NDS's flat-hero modifier forces `background: var(--background-default)
+   !important` (nds.critical.min.css). The brand band is the one deliberate
+   override of that surface, scoped to the project page hero. */
+.alq-site #top.nds-hero-section {
+  background: var(--alq-hero-band) !important;
+  padding-block: clamp(2rem, 4.5vw, 4rem);
+}
+.alq-site #top .nds-breadcrumb-nav { color: var(--alq-hero-faint); }
+.alq-site #top .nds-breadcrumb a { color: var(--alq-hero-muted); }
+.alq-site #top .nds-breadcrumb a:hover { color: var(--alq-hero-ink); }
+.alq-site #top .nds-breadcrumb li[aria-current] { color: var(--alq-hero-ink); }
+.alq-site #top .nds-section-wrapper {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: clamp(1.5rem, 3.5vw, 3rem);
+  row-gap: 1.5rem;
+  align-items: center;
+}
+.alq-site #top .nds-section-image {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+.alq-site #top .nds-section-head {
+  grid-column: 2;
+  grid-row: 1;
+}
+.alq-site #top .nds-section-action {
+  grid-column: 2;
+  grid-row: 2;
+  justify-content: flex-start; /* actions sit under the name, not on a far island */
+}
+.alq-site #top h1.nds-section-title { color: var(--alq-hero-ink); }
+.alq-site #top .nds-section-description {
+  color: var(--alq-hero-muted);
+  max-width: 34em;
+}
+.alq-site #top .alq-role {
+  display: block;
+  color: var(--alq-hero-muted);
+  font-size: 1.06em;
+}
+.alq-site #top .alq-tagline {
+  display: block;
+  margin-block-start: 0.4em;
+  color: var(--alq-hero-faint);
+  font-size: 0.94em;
+}
+/* Portrait plate: same asset, editorial framing (owner-approved source
+   untouched). Sizing goes through the documented `--avatar-size` knob,
+   stretched to a 5:6 editorial plate (≤240px wide => crisp on 2x screens). */
+/* #top scopes past NDS's 3-class `.nds-section-image .nds-avatar` pin. */
+.alq-site #top .alq-hero-avatar {
+  --avatar-size: clamp(9.25rem, 15vw, 14.5rem); /* documented knob */
+  width: var(--avatar-size);
+  height: calc(var(--avatar-size) * 1.2); /* 5:6 plate */
+  background: var(--alq-hero-plate-bg);
+  border-radius: 1.125rem;
+  overflow: hidden;
+  border: 0;
+  box-shadow:
+    0 0 0 1px rgba(176, 138, 79, 0.35),
+    0 22px 44px -20px rgba(0, 0, 0, 0.55);
+}
+.alq-site #top .alq-hero-avatar img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 6; /* out-specifies NDS's square aspect; fills the plate */
+  object-fit: cover;
+  object-position: 52% 18%;
+  border-radius: 1.125rem;
+  display: block;
+}
+
+/* Hero actions on the dark band (scoped restyle of canonical buttons). */
+.alq-site #top .nds-btn.nds-primary {
+  background: var(--alq-hero-ink);
+  color: var(--alq-hero-band);
+}
+.alq-site #top .nds-btn.nds-primary:hover {
+  background: #ffffff;
+  color: var(--alq-hero-band);
+}
+.alq-site #top .nds-btn.nds-secondary-outline {
+  color: var(--alq-hero-ink);
+  border-color: var(--alq-hero-line);
+  background: transparent;
+}
+.alq-site #top .nds-btn.nds-secondary-outline:hover {
+  border-color: var(--alq-hero-ink);
+  background: rgba(247, 244, 236, 0.08);
+}
+.alq-site #top .nds-share .nds-dropmenu-menu {
+  background: var(--background-card);
+  color: var(--text-default);
+}
+
+/* --- F-03: one button rhythm on mobile (equal widths) --- */
+@media (max-width: 700px) {
+  .alq-site #top .nds-section-action {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .alq-site #top .nds-section-action > :is(a, .nds-share) {
+    width: 100%;
+  }
+  .alq-site #top .nds-share .nds-dropmenu-trigger {
+    width: 100%;
+    justify-content: center;
+  }
+  .alq-site #top .nds-section-wrapper {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 1.15rem;
+  }
+  .alq-site #top .nds-section-action { grid-column: 1 / -1; }
+}
+
+/* --- F-01: skill/focus tags wrap instead of truncating mid-word --- */
+.alq-site .alq-tags .nds-label {
+  max-width: none;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* --- F-10: TOC becomes a compact chip strip on tablet/mobile --- */
+@media (max-width: 900px) {
+  .alq-site .nds-sideinfo {
+    position: static;
+    align-self: start;
+  }
+  .alq-site .alq-toc .nds-toc-title { display: none; }
+  .alq-site .alq-toc .nds-toc-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .alq-site .alq-toc .nds-drawer-list {
+    display: flex;
+    flex-direction: row; /* NDS drawer defaults to column */
+    flex-wrap: wrap; /* chips wrap so every link stays visible at 375px */
+    gap: 0.5rem;
+    padding-block: 0.35rem;
+  }
+  .alq-site .alq-toc .nds-drawer-list li {
+    flex: 0 0 auto;
+    width: auto; /* kill the drawer's full-width item sizing */
+    border: 0;
+    padding: 0;
+  }
+  .alq-site .alq-toc .nds-drawer-list .nds-btn {
+    white-space: nowrap;
+    border: 1px solid color-mix(in srgb, var(--text-default) 18%, transparent);
+    border-radius: 999px;
+    padding-inline: 0.95rem;
+    min-block-size: 2.5rem;
+  }
+}
+
+/* --- F-09: publication cards become compact editorial rows --- */
+.alq-site #publications .nds-card-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  padding-block: 0.85rem;
+}
+.alq-site #publications .nds-card-meta { margin: 0; }
+
+/* --- F-21: one featured card (first community group) --- */
+.alq-site .nds-card.alq-featured {
+  border-inline-start: 3px solid var(--alq-accent);
+  background: color-mix(in srgb, var(--background-sub-hero) 55%, var(--background-card));
+}
+
+/* --- F-25: courses list reads as an editorial list --- */
+.alq-site #training .nds-prose li {
+  padding-block: 0.55rem;
+  border-block-end: 1px solid color-mix(in srgb, var(--text-default) 12%, transparent);
+}
+.alq-site #training .nds-prose li:last-child {
+  border-block-end: 0;
+}
+
+/* --- F-16: contact fact card spans the column --- */
+.alq-site #contact .alq-facts { --max-col: 1; }
+
+/* --- F-22: the documentation note becomes a quiet closing strip --- */
+.alq-site .nds-last-edit {
+  max-width: 36em;
+  margin-inline: auto;
+  text-align: center;
+  color: var(--text-secondary-paragraph);
+  font-size: 0.875rem;
+  padding-block: 1.25rem 2rem;
+}
+
+/* --- F-11: brand slogan truncation on small headers --- */
+@media (max-width: 640px) {
+  .alq-site .nds-brand-slogan { display: none; }
+}
+
+/* --- F-23: language switch keeps a visible short label --- */
+.alq-site #nav-language .nds-label {
+  position: static;
+  clip: auto;
+  clip-path: none;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  white-space: nowrap;
+  display: inline-block;
+  font-size: 0.95rem;
+}
+
+/* --- F-15: career timeline dots stay filled (no "unfinished" last step) --- */
+.alq-site .nds-stepper .nds-stepper-circle {
+  background-color: var(--background-primary);
+  background-image: none;
+  box-shadow: none;
+  border: 0;
+}
+
+/* --- F-13: 404 mark sits on a light plate that works in both themes --- */
+.alq-site .nds-status-section .nds-section-image img {
+  background: #fdfbf5;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.35);
 }

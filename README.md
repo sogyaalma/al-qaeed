@@ -70,7 +70,7 @@ python tests/run_checks.py http://127.0.0.1:8000
 
 تشمل اختبارات المتصفح 11 عرضًا للغتين، menu/Escape وTOC واللغة وBack/Forward وshare/download و404 والطباعة وno-JS وdark و200% text وaxe-core. تُكتب النتائج الجديدة في `test-results/` المتجاهل. CI في `.github/workflows/validate.yml` يشغّل المجموعة على Chromium وFirefox وWebKit، ويتحقق من معاينة Cloudflare لنفس commit على الفروع غير الإنتاجية. لا ينشر CI ولا يغيّر إعدادات المزود؛ التكامل الموجود ينشئ المعاينة. النتائج البعيدة الفعلية في الملحق، لا تُستنتج من وجود workflow.
 
-لإعادة الاختبار محليًا: `BROWSER=firefox TEST_RESULTS_DIR=test-results/firefox python tests/run_checks.py http://127.0.0.1:8000`، أو `BROWSER=webkit` مع مجلد أدلة منفصل.
+لإعادة الاختبار محليًا: `BROWSER=firefox TEST_RESULTS_DIR=test-results/firefox python tests/run_checks.py http://localhost:8000`، أو `BROWSER=webkit` مع مجلد أدلة منفصل.
 
 ## بنية المشروع / Structure
 

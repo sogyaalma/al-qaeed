@@ -78,7 +78,7 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
   cloudflare-preview:
-    needs: validate
+    # Independent read-only checks preserve provider evidence if another job fails.
     # Fork PRs do not have this project's Pages integration/preview.
     if: github.event_name == 'push' && github.ref != 'refs/heads/main'
     runs-on: ubuntu-24.04
@@ -112,15 +112,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PREVIEW_COMMIT: ${{ github.sha }}
         run: python tools/wait_for_preview.py
-      - name: Check actual Cloudflare routing, security and public files
-        env:
-          PREVIEW_URL: ${{ steps.preview.outputs.url }}
-        run: python tests/check_preview.py "$PREVIEW_URL"
-      - name: Exercise the deployed preview in Chromium
+      - name: Check actual Cloudflare HTTP and browser behavior (retain both failures)
         env:
           PREVIEW_URL: ${{ steps.preview.outputs.url }}
           TEST_RESULTS_DIR: test-results/cloudflare-chromium
-        run: python tests/run_checks.py "$PREVIEW_URL"
+        run: |
+          result=0
+          python tests/check_preview.py "$PREVIEW_URL" || result=1
+          python tests/run_checks.py "$PREVIEW_URL" || result=1
+          exit "$result"
       - name: Save real provider evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

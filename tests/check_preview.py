@@ -24,6 +24,9 @@ checks = []
 def check(name, ok, detail=''):
     checks.append({'name': name, 'ok': bool(ok), 'detail': detail})
     print(('PASS ' if ok else 'FAIL ') + name + (' ' + detail if detail else ''), flush=True)
+    if not ok and os.environ.get('GITHUB_ACTIONS') == 'true':
+        message = (name + ': ' + detail).replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+        print('::error title=Provider verification::' + message, flush=True)
 
 
 def get(path):
@@ -39,6 +42,10 @@ def main():
                                ('/missing/audit/', '404.html', 404)]:
         with get(path) as response:
             data = response.read()
+            if path == '/' and os.environ.get('GITHUB_ACTIONS') == 'true':
+                title = re.search(rb'<title[^>]*>(.*?)</title>', data, re.I | re.S)
+                diagnostic = json.dumps({'status': response.status, 'server': response.headers.get('server'), 'cf-mitigated': response.headers.get('cf-mitigated'), 'content-type': response.headers.get('content-type'), 'title': title.group(1).decode('utf-8', 'replace')[:200] if title else None})
+                print('::notice title=Provider response diagnostic::' + diagnostic.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'), flush=True)
             check(path + ' HTTP status', response.status == status, str(response.status))
             check(path + ' correct generated HTML', data == (ROOT / 'dist' / file).read_bytes())
             for name, value in expected_headers.items():

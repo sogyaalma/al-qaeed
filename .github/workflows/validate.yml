@@ -62,9 +62,11 @@ jobs:
           else:
               raise SystemExit('Preview did not start')
           PY
+          # NDS cookie deletion walks parent labels: an IP is not a domain.
+          # Keep console assertions intact; use a real localhost hostname.
           result=0
           for browser in chromium firefox webkit; do
-            BROWSER="$browser" TEST_RESULTS_DIR="test-results/$browser" python tests/run_checks.py http://127.0.0.1:8000 || result=1
+            BROWSER="$browser" TEST_RESULTS_DIR="test-results/$browser" python tests/run_checks.py http://localhost:8000 || result=1
           done
           exit "$result"
       - name: Save browser evidence (not deployment)

@@ -1,0 +1,5 @@
+# Development/test only; production build uses Python's standard library.
+playwright==1.64.0
+pypdf==6.21.1
+fonttools==4.67.0
+brotli==1.2.0

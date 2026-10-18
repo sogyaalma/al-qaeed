@@ -8,7 +8,11 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 import re
 import sys
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, unquote
+import base64
+import hashlib
+import json
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parent.parent
 DIST = ROOT / "dist"
@@ -52,11 +56,15 @@ def read_markup(path: Path) -> Markup:
     return parser
 
 
-def local_file(path: str) -> Optional[Path]:
+def local_file(path: str, base: Path = DIST / "index.html") -> Optional[Path]:
     parsed = urlsplit(path)
-    if parsed.scheme or parsed.netloc or not parsed.path.startswith("/"):
+    if parsed.scheme or parsed.netloc:
         return None
-    route = parsed.path
+    route = unquote(parsed.path)
+    if not route:
+        return base
+    if not route.startswith("/"):
+        return (base.parent / route).resolve()
     if route == "/":
         route = "/index.html"
     elif route.endswith("/"):
@@ -158,7 +166,7 @@ if theme_path.is_file():
 css_missing: List[str] = []
 for css_path in sorted((DIST / "assets/css").glob("*.css")):
     for value in re.findall(r"url\(\s*(['\"]?)(.*?)\1\s*\)", css_path.read_text(encoding="utf-8")):
-        candidate = local_file(value[1])
+        candidate = local_file(value[1], css_path)
         if candidate is not None and not candidate.is_file():
             css_missing.append(f"{css_path.name}: {value[1]}")
 check("all local CSS url() assets resolve in dist", not css_missing,
@@ -169,6 +177,68 @@ check("Cloudflare security headers and same-origin CSP are packaged",
       "Content-Security-Policy:" in headers
       and "style-src 'self'" in headers and "script-src 'self'" in headers
       and "default-src 'self'" in headers)
+
+# Guard against the regressions missed by the original 35-check suite.
+all_markup = {name: read_markup(DIST / name) for name in ("index.html", "en/index.html", "404.html")}
+for name, markup in all_markup.items():
+    path = DIST / name
+    ids = [attrs["id"] for _, attrs in markup.tags if attrs.get("id")]
+    check(f"{name} unique IDs", len(ids) == len(set(ids)))
+    missing_anchors = []
+    for tag, attrs in markup.tags:
+        if tag != "a" or not attrs.get("href"):
+            continue
+        href = attrs["href"]
+        parsed = urlsplit(href)
+        dest = local_file(href, path)
+        if dest is None:
+            continue
+        if not dest.is_file():
+            missing_anchors.append(href)
+        elif parsed.fragment:
+            target = read_markup(dest)
+            if not any(a.get("id") == unquote(parsed.fragment) for _, a in target.tags):
+                missing_anchors.append(href)
+    check(f"{name} all local links and fragments resolve without JS", not missing_anchors, str(missing_anchors))
+    text = path.read_text(encoding="utf-8")
+    check(f"{name} no literal escaped newline in content", "\\n" not in text)
+    check(f"{name} exactly one main", sum(tag == "main" for tag, _ in markup.tags) == 1)
+    for tag, directive in (("script", "script-src"), ("style", "style-src")):
+        body_hashes = ["'sha256-" + base64.b64encode(hashlib.sha256(m.group(1).encode()).digest()).decode() + "'"
+                       for m in re.finditer(rf"<{tag}(?:\s[^>]*)?>(.*?)</{tag}>", text, re.S) if m.group(1).strip()]
+        policy = re.search(rf"(?:^|; )?{directive} ([^;]+)", headers).group(1)
+        check(f"{name} exact inline {tag} bodies authorized by CSP", all(h in policy for h in body_hashes))
+
+script_policy = re.search(r"script-src ([^;]+)", headers).group(1)
+style_policy = re.search(r"style-src ([^;]+)", headers).group(1)
+check("CSP forbids arbitrary inline scripts/styles and eval", "'unsafe-inline'" not in script_policy
+      and "'unsafe-eval'" not in headers and "'unsafe-inline'" not in style_policy
+      and "script-src-attr 'none'" in headers and "object-src 'none'" in headers)
+vercel = json.loads((ROOT / "vercel.json").read_text())
+vercel_csp = next(h['value'] for rule in vercel['headers'] for h in rule['headers'] if h['key'] == 'Content-Security-Policy')
+check("optional Vercel CSP matches Cloudflare", vercel_csp == headers.split('Content-Security-Policy: ', 1)[1].splitlines()[0])
+check("unfingerprinted Vercel assets are not immutable", 'immutable' not in json.dumps(vercel))
+check("dist excludes private source/tooling", all(p.name in {'index.html','en','404.html','robots.txt','sitemap.xml','_headers','assets'} for p in DIST.iterdir()))
+check("dist contains no symlinks", not any(p.is_symlink() for p in DIST.rglob('*')))
+check("main CSS has no misplaced BOM", b'\xef\xbb\xbf' not in (DIST / 'assets/css/nds-main.min.css').read_bytes())
+check("HGI lazy stylesheet and fallback font exist", (DIST / 'assets/css/hgi-rounded-stroke-min.css').is_file() and (DIST / 'assets/fonts/hgi-blank.woff2').is_file())
+site_url = json.loads((ROOT / 'content/content.json').read_text())['site']['url'].rstrip('/')
+xml = ET.parse(DIST / 'sitemap.xml')
+locations = [el.text for el in xml.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
+check("sitemap contains only both canonical language routes", locations == [site_url+'/', site_url+'/en/'])
+check("robots points at configured sitemap", f'Sitemap: {site_url}/sitemap.xml' in (DIST / 'robots.txt').read_text())
+check("no runtime JS dependencies in npm manifest", not json.loads((ROOT / 'package.json').read_text()).get('dependencies'))
+
+hgi_css = (DIST / 'assets/css/hgi-rounded-stroke-min.css').read_text()
+hgi_names = {name for markup in all_markup.values() for _, attrs in markup.tags
+             for cls in attrs.get('class', '').split() if cls.startswith('hgi-') and cls != 'hgi-stroke'
+             for name in [cls]}
+check("all authored HGI font icon classes have generated CSS rules", all('.hgi-stroke.'+name+':before' in hgi_css for name in hgi_names))
+
+manifest = json.loads((ROOT / 'docs/nds-assets.json').read_text())
+changed_vendor = [name for name, digest in manifest['sha256'].items()
+                  if not (DIST / name).is_file() or hashlib.sha256((DIST / name).read_bytes()).hexdigest() != digest]
+check("vendored NDS assets match reviewed artifact hashes", not changed_vendor, str(changed_vendor))
 
 print(f"\n{passed}/{passed + failed} static checks passed")
 sys.exit(1 if failed else 0)

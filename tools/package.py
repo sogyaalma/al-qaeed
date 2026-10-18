@@ -27,6 +27,14 @@ def main():
     if not assets.is_dir():
         raise SystemExit("Required public directory is missing: assets/")
 
+    # Reject links before touching an existing output: copytree follows them by
+    # default and could accidentally publish private files outside the repository.
+    inputs = [ROOT / name for name in PUBLIC_FILES] + [ROOT / "en", english, assets]
+    inputs.extend(assets.rglob("*"))
+    for source in inputs:
+        if source.is_symlink():
+            raise SystemExit(f"Refusing to package symlink: {source.relative_to(ROOT)}")
+
     # Do not follow or delete a symlink if dist/ has been replaced unexpectedly.
     if OUTPUT.is_symlink():
         raise SystemExit("Refusing to package: dist/ is a symlink")

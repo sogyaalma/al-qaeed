@@ -1,0 +1,164 @@
+{
+  "measurement": "File bytes and gzip level 9 per resource. Lighthouse mobile simulated lab on uncompressed local HTTP/1.0 preview, not field/Cloudflare performance. Baseline commit 502f0e7 has a missing HGI CSS file; no before/after Lighthouse comparison is claimed.",
+  "file_sizes": {
+    "index.html": {
+      "raw": 44085,
+      "gzip": 7602,
+      "after_raw": 47002,
+      "after_gzip": 8163
+    },
+    "en/index.html": {
+      "raw": 40538,
+      "gzip": 7193,
+      "after_raw": 43352,
+      "after_gzip": 7774
+    },
+    "assets/css/nds-icons.min.css": {
+      "raw": 89503,
+      "gzip": 24628,
+      "after_raw": 89503,
+      "after_gzip": 24628
+    },
+    "assets/css/nds-main.min.css": {
+      "raw": 398860,
+      "gzip": 56273,
+      "after_raw": 398430,
+      "after_gzip": 55785
+    },
+    "assets/css/nds.critical.min.css": {
+      "raw": 56611,
+      "gzip": 9816,
+      "after_raw": 56611,
+      "after_gzip": 9816
+    },
+    "assets/css/theme.css": {
+      "raw": 1420,
+      "gzip": 647,
+      "after_raw": 2569,
+      "after_gzip": 1040
+    },
+    "assets/js/nds-accessibility.min.js": {
+      "raw": 43163,
+      "gzip": 8791,
+      "after_raw": 43163,
+      "after_gzip": 8791
+    },
+    "assets/js/nds-audit.min.js": {
+      "raw": 148599,
+      "gzip": 29455,
+      "after_raw": 148599,
+      "after_gzip": 29455
+    },
+    "assets/js/nds-chart.min.js": {
+      "raw": 18257,
+      "gzip": 6867,
+      "after_raw": 18257,
+      "after_gzip": 6867
+    },
+    "assets/js/nds-code.min.js": {
+      "raw": 9973,
+      "gzip": 3956,
+      "after_raw": 9973,
+      "after_gzip": 3956
+    },
+    "assets/js/nds-cookie-consent.min.js": {
+      "raw": 7492,
+      "gzip": 2544,
+      "after_raw": 7492,
+      "after_gzip": 2544
+    },
+    "assets/js/nds-delegated.min.js": {
+      "raw": 197410,
+      "gzip": 53308,
+      "after_raw": 197410,
+      "after_gzip": 53308
+    },
+    "assets/js/nds-editor.min.js": {
+      "raw": 59421,
+      "gzip": 16130,
+      "after_raw": 59421,
+      "after_gzip": 16130
+    },
+    "assets/js/nds-extras.min.js": {
+      "raw": 99616,
+      "gzip": 25928,
+      "after_raw": 99616,
+      "after_gzip": 25928
+    },
+    "assets/js/nds-main.min.js": {
+      "raw": 159890,
+      "gzip": 45624,
+      "after_raw": 159890,
+      "after_gzip": 45624
+    },
+    "assets/js/site.js": {
+      "raw": 0,
+      "gzip": 0,
+      "after_raw": 941,
+      "after_gzip": 471
+    },
+    "assets/css/hgi-rounded-stroke-min.css": {
+      "raw": 0,
+      "gzip": 0,
+      "after_raw": 1849,
+      "after_gzip": 636
+    }
+  },
+  "lighthouse": {
+    "ar": {
+      "version": "13.5.0",
+      "fetch_time": "2026-10-18T16:32:13.000Z",
+      "scores": {
+        "performance": 88,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 1727.134,
+        "largest-contentful-paint": 3785.134,
+        "cumulative-layout-shift": 0.000914986162738284,
+        "total-blocking-time": 42,
+        "speed-index": 1727.134
+      }
+    },
+    "en": {
+      "version": "13.5.0",
+      "fetch_time": "2026-10-18T16:32:24.601Z",
+      "scores": {
+        "performance": 78,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 2266.4039999999995,
+        "largest-contentful-paint": 5260.936,
+        "cumulative-layout-shift": 0.001201969265713854,
+        "total-blocking-time": 58,
+        "speed-index": 2266.4039999999995
+      }
+    }
+  },
+  "css_totals": {
+    "raw": 546394,
+    "gzip": 91364,
+    "after_raw": 548962,
+    "after_gzip": 91905
+  },
+  "js_totals": {
+    "raw": 743821,
+    "gzip": 192603,
+    "after_raw": 744762,
+    "after_gzip": 193074
+  },
+  "hgi_full_vs_selected": {
+    "full_raw": 320041,
+    "full_gzip": 43014,
+    "selected_raw": 1849,
+    "selected_gzip": 636,
+    "rules_selected": 22,
+    "font_unchanged": true
+  },
+  "assets_total_bytes": 3610794
+}

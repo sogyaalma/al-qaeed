@@ -41,7 +41,9 @@
 - الخطأ: `404.html` في جذر حزمة النشر.
 - لا توجد قواعد إعادة كتابة لازمة للمسارات الحالية، ولا يوجد ملف `_redirects`.
 - ملف `_headers` يضع ترويسات الأمان على Cloudflare Pages. بعد نشر Preview، تحقّق من الترويسات الفعلية ومن تحميل CSS وJavaScript والصور والخطوط.
-- سياسة `Cache-Control: immutable` في `vercel.json` تخص Vercel فقط ولا تُنسخ إلى Pages؛ أسماء الأصول الحالية غير مبصّمة.
+- أسماء الأصول الحالية غير مبصّمة؛ لا تستخدم immutable طويلًا عليها. إعداد Vercel البديل يستخدم إعادة التحقق بدل سنة immutable. لا يُطبق هذا الملف على Cloudflare.
+- يولّد `build.py` بصمات CSP إلى `_headers` و`vercel.json` مع HTML. يُمنع تعديل inline script/style في المخرجات منفردة.
+- `font-src` محصور في self؛ خط fallback مستضاف محليًا. استثناء خصائص style لمكونات NDS لا يسمح بتنفيذ inline JavaScript.
 
 ## 5. التحقق من Preview
 
@@ -61,13 +63,19 @@ python3 tools/package.py
 python3 tests/run_static_checks.py
 ```
 
-اختبر الحزمة في متصفح محليًا (يتطلب Playwright وaxe-core وChromium):
+اختبر الحزمة في متصفح محليًا (يتطلب تهيئة أدوات الاختبار كما في README، ومنها Playwright وaxe-core وChromium):
 
 ```bash
-python3 -m http.server 8000 --bind 0.0.0.0 --directory dist
+python3 tools/serve.py --port 8000
 python3 tests/run_checks.py http://127.0.0.1:8000
 ```
 
 ## 7. Vercel كخيار منفصل
 
-يوجد `vercel.json` لإعداد Vercel بديلًا، لكنه **ليس إعداد Cloudflare Pages**. إذا استُخدم Vercel لاحقًا، اختبر توافق `cleanUrls` و`trailingSlash` مع الروابط canonical، ولا تطبق تخزينًا طويلًا immutable على أسماء ملفات ثابتة دون versioning.
+يوجد `vercel.json` لإعداد Vercel بديلًا، لكنه **ليس إعداد Cloudflare Pages**. إذا استُخدم Vercel لاحقًا، اختبر توافق `cleanUrls` و`trailingSlash` مع الروابط canonical، والإعداد الحالي يبني `dist/` فقط، يوحد trailing slash للمسارات ويعيد التحقق من الأصول غير المبصّمة بدل immutable. لم يُختبر نشر Vercel بعيدًا.
+
+## 8. بوابة الاعتماد
+
+قبل الإنتاج: راجع [تقرير التدقيق](docs/AUDIT-2026-10-18.md) و[تأكيدات المحتوى](docs/UPDATE-CHECKLIST.md)، واعتمد حقوق الصورة وPDF والخطوط، خصوصًا SaudiWeb/Maqroo الموروثة. لا تعني صلاحية الحزمة التقنية اكتمال حقوق النشر.
+
+خادم `tools/serve.py` للمعاينة المحلية فقط: يخفف **framing فقط محليًا** لإتاحة Arena، ولا يغيّر `_headers` المنشور. لا يحاكي URL normalization الخاصة بـPages؛ فحص `/index.html` و`/en` و`/en/index.html` إلى canonical الصحيح مع HTTPS والترويسات و404 مطلوب على Preview فعلي. لم يحدث نشر أو تعديل DNS ضمن التدقيق.

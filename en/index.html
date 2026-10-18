@@ -73,6 +73,10 @@
   <script>
     (function() {
       var v; try { v = localStorage.getItem('nds-theme'); } catch (e) {}
+      // F-12: follow the OS dark preference when no stored theme exists.
+      if (!v && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        v = 'dark';
+      }
       if (v) {
         var d = document.documentElement;
         var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\s+/)
@@ -167,7 +171,7 @@
             </div>
             <ul class="nds-nav-actions">
               <li class="nds-nav-item nds-icon-only nds-pinned" id="nav-language">
-                <a data-language-switch href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="العربية" lang="ar" hreflang="ar"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sm md sr">العربية</span></a>
+                <a data-language-switch href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="العربية" lang="ar" hreflang="ar"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sr">العربية</span></a>
               </li>
             </ul>
           </div>
@@ -190,8 +194,8 @@
           </div>
         </div>
         <div class="nds-section-head">
-          <h1 class="nds-section-title">Sheikh Abdulaziz Al-Qaeed</h1>
-          <p class="nds-section-description">Imam and Executive Leader in Social Reform and Community Service. Reconciliation, community service, and Quran education.</p>
+          <h1 class="nds-section-title">Sheikh Abdulaziz <span class="alq-nowrap">Al-Qaeed</span></h1>
+          <p class="nds-section-description"><span class="alq-role">Imam and Executive Leader in Social Reform and Community Service</span><span class="alq-tagline">Reconciliation, community service, and Quran education.</span></p>
         </div>
         <div class="nds-section-action">
           <a class="nds-btn nds-primary" href="/assets/docs/abdulaziz-al-qaeed-cv.pdf" download="abdulaziz-al-qaeed-cv.pdf">
@@ -278,7 +282,7 @@
                   <i class="hgi hgi-stroke hgi-user-group" aria-hidden="true"></i>
                   <span class="nds-label">Former executive director</span>
                 </dt>
-                <dd>Reconciliation Committee (1437–1444 AH)</dd>
+                <dd>Reconciliation Committee (<bdi dir="ltr" class="alq-date">1437–1444</bdi> AH)</dd>
               </div>
               <div class="nds-definition-item nds-card nds-stroke">
                 <dt>
@@ -289,7 +293,7 @@
               </div>
                 </dl>
                 <div class="nds-block nds-prose">
-                  <p>Sheikh Abdulaziz Al-Qaeed is the Imam of Qasr Al-Hukm Mosque in the Riyadh Region. He served as Executive Director of the Riyadh Region Reconciliation Committee (1437–1444 AH), by decision of His Royal Highness the Emir of the Region, and formerly chaired its Family Protection Committee. Earlier, he led the Saqia Al-Maa Association in Riyadh and served as Imam of Al-Obaikan Mosque in Shubra. His work focuses on family reconciliation, community development, Quran memorization, and cultural, educational and awareness publications.</p>
+                  <p>Sheikh Abdulaziz Al-Qaeed is the Imam of Qasr Al-Hukm Mosque in the Riyadh Region. He served as Executive Director of the Riyadh Region Reconciliation Committee (<bdi dir="ltr" class="alq-date">1437–1444</bdi> AH), by decision of His Royal Highness the Emir of the Region, and formerly chaired its Family Protection Committee. Earlier, he led the Saqia Al-Maa Association in Riyadh and served as Imam of Al-Obaikan Mosque in Shubra. His work focuses on family reconciliation, community development, Quran memorization, and cultural, educational and awareness publications.</p>
                   <p><strong>Reconciliation and family</strong> — Reconciliation, family protection and dispute settlement committees.</p><p><strong>Community development</strong> — Community development associations, the Saqia Al-Maa Association and charitable foundations.</p><p><strong>Quran and education</strong> — Quran memorization schools and houses, and educational training courses.</p><p><strong>Media and culture</strong> — Cultural programs and forums, and media appearances on television channels.</p>
                 </div>
                 <div class="nds-block">
@@ -327,7 +331,7 @@
                             <div class="nds-stepper-circle" data-step-text="2"></div>
                           </div>
                           <div class="nds-stepper-content">
-                            <div class="nds-divider">1437–1444 AH</div>
+                            <div class="nds-divider"><bdi dir="ltr" class="alq-date">1437–1444</bdi> AH</div>
                             <div class="nds-stepper-text">
                               <span class="nds-stepper-title">Executive Director</span>
                               <span class="nds-stepper-description">Reconciliation Committee (Islah Dhat al-Bayn), Riyadh Region Emirate</span>
@@ -354,7 +358,7 @@
                             <div class="nds-stepper-circle" data-step-text="4"></div>
                           </div>
                           <div class="nds-stepper-content">
-                            <div class="nds-divider">1422–1423 AH</div>
+                            <div class="nds-divider"><bdi dir="ltr" class="alq-date">1422–1423</bdi> AH</div>
                             <div class="nds-stepper-text">
                               <span class="nds-stepper-title">Executive Director</span>
                               <span class="nds-stepper-description">Saqia Al-Maa Association, Riyadh Region</span>
@@ -366,7 +370,7 @@
                             <div class="nds-stepper-circle" data-step-text="5"></div>
                           </div>
                           <div class="nds-stepper-content">
-                            <div class="nds-divider">1413–1437 AH</div>
+                            <div class="nds-divider"><bdi dir="ltr" class="alq-date">1413–1437</bdi> AH</div>
                             <div class="nds-stepper-text">
                               <span class="nds-stepper-title">Imam</span>
                               <span class="nds-stepper-description">Al-Obaikan Mosque, Shubra District, Riyadh</span>
@@ -382,11 +386,11 @@
         </div>
               <div class="nds-section-body">
                 <div class="nds-flex nds-col alq-stack">
-                <div class="nds-card nds-stroke alq-full">
+                <div class="nds-card nds-stroke alq-full alq-featured">
                   <div class="nds-card-content">
                     <div class="nds-card-text">
                       <span class="nds-card-title">Reconciliation and community development</span>
-                      <ul><li>Member, Reconciliation Committee of the Ministry of Defense, appointed by the Custodian of the Two Holy Mosques (1433–1434 AH).</li><li>Head, Social Community Development Committee, Shubra District, under the Ministry of Human Resources (1429 AH).</li><li>Board member, Shubra Social Community Development Association (1437–1441 AH).</li></ul>
+                      <ul><li>Member, Reconciliation Committee of the Ministry of Defense, appointed by the Custodian of the Two Holy Mosques (<bdi dir="ltr" class="alq-date">1433–1434</bdi> AH).</li><li>Head, Social Community Development Committee, Shubra District, under the Ministry of Human Resources (1429 AH).</li><li>Board member, Shubra Social Community Development Association (<bdi dir="ltr" class="alq-date">1437–1441</bdi> AH).</li></ul>
                     </div>
                   </div>
                 </div>
@@ -394,7 +398,7 @@
                   <div class="nds-card-content">
                     <div class="nds-card-text">
                       <span class="nds-card-title">Foundations and associations</span>
-                      <ul><li>Board member, Sheikh Abdulaziz bin Qasim Al-Ahliya Foundation.</li><li>Member of the Board of Trustees, Sheikh Abdulaziz bin Qasim Charitable Foundation.</li><li>Board member and financial supervisor, Saqia Al-Maa Association, Riyadh Region.</li><li>Member, Al-Washm Club, Shaqra (1422–1424 AH).</li></ul>
+                      <ul><li>Board member, Sheikh Abdulaziz bin Qasim Al-Ahliya Foundation.</li><li>Member of the Board of Trustees, Sheikh Abdulaziz bin Qasim Charitable Foundation.</li><li>Board member and financial supervisor, Saqia Al-Maa Association, Riyadh Region.</li><li>Member, Al-Washm Club, Shaqra (<bdi dir="ltr" class="alq-date">1422–1424</bdi> AH).</li></ul>
                     </div>
                   </div>
                 </div>
@@ -575,7 +579,7 @@
                     </div>
                     <div class="nds-card-meta">
                       <div class="nds-card-tags">
-                        <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">1419–1427 AH</span></span>
+                        <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label"><bdi dir="ltr" class="alq-date">1419–1427</bdi> AH</span></span>
                       </div>
                     </div>
                   </div>

@@ -55,6 +55,10 @@
   <script>
     (function() {
       var v; try { v = localStorage.getItem('nds-theme'); } catch (e) {}
+      // F-12: follow the OS dark preference when no stored theme exists.
+      if (!v && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        v = 'dark';
+      }
       if (v) {
         var d = document.documentElement;
         var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\s+/)
@@ -149,7 +153,7 @@
             </div>
             <ul class="nds-nav-actions">
               <li class="nds-nav-item nds-icon-only nds-pinned" id="nav-language">
-                <a data-language-switch href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="English" lang="en" hreflang="en"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sm md sr">English</span></a>
+                <a data-language-switch href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="English" lang="en" hreflang="en"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sr">English</span></a>
               </li>
             </ul>
           </div>
@@ -163,7 +167,7 @@
         <section id="not-found" class="nds-content-section nds-status-section">
           <div class="nds-section-wrapper">
             <div class="nds-section-image">
-              <img src="/assets/img/404.svg" width="458" height="324" alt="">
+              <img src="/assets/img/404-mark.svg" width="458" height="324" alt="">
             </div>
             <div class="nds-section-head">
               <h1 class="nds-section-title">الصفحة غير موجودة</h1>
@@ -171,7 +175,7 @@
             </div>
             <div class="nds-section-action">
               <a href="/" class="nds-btn nds-primary"><span class="nds-label">الصفحة الرئيسية</span></a>
-              <a href="/en/" class="nds-btn nds-secondary-outline" lang="en"><span class="nds-label">Home (English)</span></a>
+              <a href="/en/" class="nds-btn nds-secondary-outline" lang="en"><span class="nds-label">English</span></a>
             </div>
           </div>
         </section>

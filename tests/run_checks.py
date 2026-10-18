@@ -11,10 +11,10 @@ Playwright WebKit is not a real Safari or manual VoiceOver test.
 import io
 import json
 import os
+import re
 from pathlib import Path
 import sys
 from urllib.parse import urlsplit
-from urllib.request import urlopen
 
 from playwright.sync_api import sync_playwright
 from pypdf import PdfReader
@@ -62,7 +62,7 @@ try:
                 page = ctx.new_page()
                 errors, bad_responses, external, warnings = [], [], [], []
                 page.on('pageerror', lambda e: errors.append(str(e)))
-                page.on('console', lambda m: errors.append(m.text) if m.type == 'error' and not (lang == '404' and m.text == 'Failed to load resource: the server responded with a status of 404 (Not Found)' and m.location.get('url') == BASE + path) else warnings.append(m.text) if m.type == 'warning' else None)
+                page.on('console', lambda m: errors.append(m.text) if m.type == 'error' and not (lang == '404' and re.fullmatch(r'Failed to load resource: the server responded with a status of 404(?: \([^)]*\))?', m.text) is not None and m.location.get('url') == BASE + path) else warnings.append(m.text) if m.type == 'warning' else None)
                 page.on('response', lambda r: bad_responses.append(f'{r.status} {r.url}') if r.status >= 400 and r.request.resource_type != 'document' else None)
                 page.on('request', lambda r: external.append(r.url) if urlsplit(r.url).netloc != urlsplit(BASE).netloc else None)
                 response = ready(page, path)
@@ -139,6 +139,7 @@ try:
                 with page.expect_download() as info:
                     page.locator('.nds-hero-section a[download]').click()
                 check(f'{lang}/{width} CV download', info.value.suggested_filename == 'abdulaziz-al-qaeed-cv.pdf')
+                downloaded_cv = Path(info.value.path()).read_bytes()
                 page.emulate_media(media='print')
                 check(f'{lang}/{width} print content visible', all(page.locator('#' + section).is_visible() for section in ['about','experience','contact']))
                 ctx.close()
@@ -182,8 +183,9 @@ try:
         ctx.close()
         browser.close()
 
-    with urlopen(BASE + '/assets/docs/abdulaziz-al-qaeed-cv.pdf') as response:
-        data = response.read()
+    # Inspect the bytes actually downloaded by the browser above. Cloudflare
+    # rejects urllib clients; a separate Python request is not the user download.
+    data = downloaded_cv
     pdf = PdfReader(io.BytesIO(data))
     check('existing CV A4 selectable text', abs(float(pdf.pages[0].mediabox.width)-595)<2 and sum(len(p.extract_text() or '') for p in pdf.pages)>2000, f'{len(pdf.pages)} pages, {len(data)} bytes')
 except Exception as exc:
@@ -194,4 +196,7 @@ finally:
     print('\n' + summary)
     if os.environ.get('GITHUB_ACTIONS') == 'true':
         print('::notice title=Browser verification::' + summary)
+        if report['failures']:
+            failures = json.dumps([c for c in report['checks'] if not c['ok']], ensure_ascii=False)
+            print('::notice title=Browser failure details::' + failures.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
 sys.exit(1 if report['failures'] else 0)

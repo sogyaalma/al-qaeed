@@ -1,0 +1,67 @@
+PASS dist contains index.html
+PASS dist copy matches index.html
+PASS dist contains en/index.html
+PASS dist copy matches en/index.html
+PASS dist contains 404.html
+PASS dist copy matches 404.html
+PASS dist contains robots.txt
+PASS dist copy matches robots.txt
+PASS dist contains sitemap.xml
+PASS dist copy matches sitemap.xml
+PASS dist contains _headers
+PASS dist copy matches _headers
+PASS all source assets are copied byte-for-byte into dist [48 assets]
+PASS Arabic route has lang=ar and dir=rtl
+PASS Arabic route has exactly one h1 [h1=1]
+PASS Arabic route preloads NDS critical and main CSS [['/assets/img/portrait-480.webp', '/assets/css/nds.critical.min.css?ver=1.12.x-dev', '/assets/css/nds-main.min.css?ver=1.12.x-dev', '/assets/css/theme.css?ver=1.12.x-dev', '/assets/img/favicon.svg', 'https://al-qaeed.pages.dev/', 'https://al-qaeed.pages.dev/', 'https://al-qaeed.pages.dev/']]
+PASS Arabic route loads the NDS runtime script
+PASS Arabic route has no inline style attributes
+PASS Arabic route local HTML references resolve in dist [58 references scanned]
+PASS Arabic route uses NDS layout landmarks
+PASS English route has lang=en and dir=ltr
+PASS English route has exactly one h1 [h1=1]
+PASS English route preloads NDS critical and main CSS [['/assets/img/portrait-480.webp', '/assets/css/nds.critical.min.css?ver=1.12.x-dev', '/assets/css/nds-main.min.css?ver=1.12.x-dev', '/assets/css/theme.css?ver=1.12.x-dev', '/assets/img/favicon.svg', 'https://al-qaeed.pages.dev/en/', 'https://al-qaeed.pages.dev/', 'https://al-qaeed.pages.dev/']]
+PASS English route loads the NDS runtime script
+PASS English route has no inline style attributes
+PASS English route local HTML references resolve in dist [58 references scanned]
+PASS English route uses NDS layout landmarks
+PASS dist contains generated 404.html
+PASS 404 preloads NDS CSS [['/assets/css/nds.critical.min.css?ver=1.12.x-dev', '/assets/css/nds-main.min.css?ver=1.12.x-dev', '/assets/css/theme.css?ver=1.12.x-dev', '/assets/img/favicon.svg', 'https://al-qaeed.pages.dev/', 'https://al-qaeed.pages.dev/', 'https://al-qaeed.pages.dev/', 'https://al-qaeed.pages.dev/en/']]
+PASS 404 loads the NDS runtime script
+PASS NDS critical CSS is packaged
+PASS project theme overrides are packaged
+PASS theme rebinds semantic tokens without editing NDS bundles
+PASS all local CSS url() assets resolve in dist [all local URLs resolved]
+PASS Cloudflare security headers and same-origin CSP are packaged
+PASS index.html unique IDs
+PASS index.html all local links and fragments resolve without JS [[]]
+PASS index.html no literal escaped newline in content
+PASS index.html exactly one main
+PASS index.html exact inline script bodies authorized by CSP
+PASS index.html exact inline style bodies authorized by CSP
+PASS en/index.html unique IDs
+PASS en/index.html all local links and fragments resolve without JS [[]]
+PASS en/index.html no literal escaped newline in content
+PASS en/index.html exactly one main
+PASS en/index.html exact inline script bodies authorized by CSP
+PASS en/index.html exact inline style bodies authorized by CSP
+PASS 404.html unique IDs
+PASS 404.html all local links and fragments resolve without JS [[]]
+PASS 404.html no literal escaped newline in content
+PASS 404.html exactly one main
+PASS 404.html exact inline script bodies authorized by CSP
+PASS 404.html exact inline style bodies authorized by CSP
+PASS CSP forbids arbitrary inline scripts/styles and eval
+PASS optional Vercel CSP matches Cloudflare
+PASS unfingerprinted Vercel assets are not immutable
+PASS dist excludes private source/tooling
+PASS dist contains no symlinks
+PASS main CSS has no misplaced BOM
+PASS HGI lazy stylesheet and fallback font exist
+PASS sitemap contains only both canonical language routes
+PASS robots points at configured sitemap
+PASS no runtime JS dependencies in npm manifest
+PASS all authored HGI font icon classes have generated CSS rules
+PASS vendored NDS assets match reviewed artifact hashes [[]]
+
+65/65 static checks passed

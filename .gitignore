@@ -7,3 +7,11 @@
 # Python bytecode
 __pycache__/
 *.py[cod]
+
+# Local tooling and fresh test artifacts
+.venv/
+node_modules/
+test-results/
+.env
+.env.*
+!.env.example

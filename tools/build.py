@@ -11,15 +11,18 @@ Canonical sources (NDS IQ):
   ui-shell/mainnav.md             — header navigation
   ui-shell/footer.md              — footer
   templates/404-template.md       — not-found page
-  ui-shell/head.md                — document head (blocking critical CSS)
+  ui-shell/head.md                — document head (preloads + bootstrap, blocking noscript CSS)
 
 Generated:
   index.html, en/index.html, 404.html, sitemap.xml
 """
 import html
+import base64
+import hashlib
 import json
 import pathlib
 import re
+from urllib.parse import urlsplit
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = json.loads((ROOT / "content" / "content.json").read_text(encoding="utf-8"))
@@ -85,6 +88,40 @@ THEME_BOOT = """(function() {
     })();"""
 
 
+def safe_json(value):
+    """Keep JSON data from terminating its HTML script container."""
+    return json.dumps(value, ensure_ascii=False, indent=2).replace("<", "\\u003c").replace(
+        ">", "\\u003e").replace("&", "\\u0026")
+
+
+def write_csp(pages):
+    """Refresh only the CSP line; preserve other owner-maintained headers."""
+    def hashes(tag):
+        bodies = {m.group(1) for page in pages for m in re.finditer(
+            rf"<{tag}(?:\s[^>]*)?>(.*?)</{tag}>", page, re.S) if m.group(1).strip()}
+        return " ".join("'sha256-" + base64.b64encode(hashlib.sha256(body.encode()).digest()).decode()
+                        + "'" for body in sorted(bodies))
+    policy = ("default-src 'self'; img-src 'self' data:; font-src 'self'; "
+              "style-src 'self' " + hashes("style") + "; style-src-attr 'unsafe-inline'; "
+              "script-src 'self' " + hashes("script") + "; script-src-attr 'none'; "
+              "object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'")
+    path = ROOT / "_headers"
+    headers = path.read_text(encoding="utf-8")
+    headers, count = re.subn(r"(?m)^  Content-Security-Policy:.*$",
+                            "  Content-Security-Policy: " + policy, headers)
+    if count != 1:
+        raise SystemExit("Expected exactly one CSP header in _headers")
+    path.write_text(headers, encoding="utf-8")
+    # Vercel remains an optional static host with identical security policy.
+    vercel_path = ROOT / "vercel.json"
+    vercel = json.loads(vercel_path.read_text(encoding="utf-8"))
+    for rule in vercel["headers"]:
+        for header in rule["headers"]:
+            if header["key"] == "Content-Security-Policy":
+                header["value"] = policy
+    vercel_path.write_text(json.dumps(vercel, indent=2) + "\n", encoding="utf-8")
+
+
 def e(s):
     return html.escape(str(s), quote=True)
 
@@ -147,7 +184,7 @@ def i18n(lang, ar, en):
     return ar if lang == "ar" else en
 
 
-def head(lang, title, description, extra_meta=""):
+def head(lang, title, description, extra_meta="", not_found=False):
     L = LANGS[lang]
     person = DATA["person"]
     name = t(person["name_short"], lang)
@@ -176,7 +213,7 @@ def head(lang, title, description, extra_meta=""):
   <style>
     {GATE_CSS}
   </style>
-  <link rel="preload" as="image" href="/assets/img/portrait-480.webp" fetchpriority="high">
+  {'' if not_found else '<link rel="preload" as="image" href="/assets/img/portrait-480.webp" fetchpriority="high">'}
   <link rel="preload" href="/assets/css/nds.critical.min.css?ver={ASSET_VER}" as="style" fetchpriority="high" data-nds-defer>
   <link rel="preload" href="/assets/css/nds-main.min.css?ver={ASSET_VER}" as="style" fetchpriority="low" data-nds-defer="main">
   <link rel="preload" href="/assets/css/theme.css?ver={ASSET_VER}" as="style" data-nds-defer>
@@ -196,7 +233,7 @@ def head(lang, title, description, extra_meta=""):
   <meta property="og:locale" content="{L['locale']}">
   <meta name="twitter:card" content="summary_large_image">
   {extra_meta}
-  <script type="application/ld+json">{json.dumps(jsonld, ensure_ascii=False, indent=2)}</script>
+  {'' if not_found else '<script type="application/ld+json">' + safe_json(jsonld) + '</script>'}
   <script>
     {THEME_BOOT}
   </script>
@@ -204,13 +241,24 @@ def head(lang, title, description, extra_meta=""):
     <link rel="stylesheet" href="/assets/css/nds.critical.min.css?ver={ASSET_VER}">
     <link rel="stylesheet" href="/assets/css/nds-main.min.css?ver={ASSET_VER}">
     <link rel="stylesheet" href="/assets/css/theme.css?ver={ASSET_VER}">
-    <style>:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-footer,.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){{visibility:visible}}</style>
+    <style>:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-footer,.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){{visibility:visible}}
+    .alq-site .nds-main-nav,.alq-site .nds-breadcrumb-nav,.alq-site .nds-sideinfo,.alq-site .nds-share{{display:none !important}}
+    .alq-site .nds-sideinfo-section > .nds-section-body{{display:block}}
+    /* NDS's pre-init card/definition skeletons never release without JS.
+       Scoped no-JS adaptation: preserve readable authored text, not fake init state. */
+    .alq-site .nds-card,.alq-site .nds-definition-list{{animation:none !important}}
+    .alq-site #main-content .nds-card :is(.nds-card-title,.nds-card-subtitle,.nds-card-description,.nds-tag,.nds-label),
+    .alq-site #main-content .nds-definition-list :is(dt,dd,dt *,dd *){{color:var(--text-default) !important;background:none !important}}
+    .alq-site #main-content .nds-card .nds-tag > *{{visibility:visible !important}}
+    .alq-site .nds-content-section{{content-visibility:visible;contain-intrinsic-size:none}}
+    .alq-fallback{{display:flex;flex-wrap:wrap;gap:12px;padding:16px;background:#fffdf8;color:#15201c}}
+    .alq-fallback a{{display:inline-flex;align-items:center;min-height:44px;padding:8px;color:#0e5a49}}</style>
   </noscript>
 </head>
 """
 
 
-def header(lang):
+def header(lang, not_found=False):
     ui = DATA["ui"]
     other = other_lang(lang)
     home = LANGS[lang]["path"]
@@ -224,16 +272,27 @@ def header(lang):
             continue
         nav_items.append(
             f"""          <li class="nds-nav-item">
-            <a href="#{n['id']}" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+            <a href="{home if not_found else ''}#{n['id']}" class="nds-nav-link nds-btn nds-subtle nds-indicator">
               <span class="nds-label">{e(t(n['label'], lang))}</span>
             </a>
           </li>"""
         )
     links = chr(10).join(nav_items)
+    fallback_links = " ".join(
+        f'<a href="{home if not_found else ""}#{n["id"]}">{e(t(n["label"], lang))}</a>'
+        for n in DATA["nav"]
+    )
     skip = t(ui["skip"], lang)
     toggle = i18n(lang, "فتح قائمة التنقل", "Toggle navigation menu")
-    return f"""<body>
+    return f"""<body class="alq-site">
   <a class="nds-skip-link" href="#main-content">{e(skip)}</a>
+  <noscript>
+    <nav class="alq-fallback" aria-label="{e(i18n(lang, 'التنقل دون جافاسكربت', 'Navigation without JavaScript'))}">
+      <a href="{home}">{e(name)}</a>
+      {fallback_links}
+      <a data-language-switch href="{LANGS[other]['path']}" lang="{other_lang_attr}" hreflang="{other_lang_attr}">{e(other_label)}</a>
+    </nav>
+  </noscript>
   <header>
     <nav class="nds-main-nav nds-content-wrapper" id="nds-main-nav" aria-label="{e(i18n(lang, 'التنقل الرئيسي', 'Primary navigation'))}" data-i18n-aria-label="mainnav.primary_navigation">
       <div class="nds-nav-container">
@@ -245,7 +304,7 @@ def header(lang):
         </a>
         <ul class="nds-nav-minimal" hidden>
           <li class="nds-nav-toggler nds-nav-item">
-            <button class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="{e(toggle)}" data-i18n-aria-label="mainnav.toggle_menu" aria-expanded="false" aria-controls="nds-nav-collapse">
+            <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="{e(toggle)}" data-i18n-aria-label="mainnav.toggle_menu" aria-expanded="false" aria-controls="nds-nav-collapse">
               <i class="nds-icon nds-hgi-menu-01" aria-hidden="true"></i>
             </button>
           </li>
@@ -256,13 +315,13 @@ def header(lang):
 {links}
             </ul>
             <div class="nds-nav-item nds-show-more">
-              <a href="#about" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full" title="{e(i18n(lang, 'المزيد', 'Show more'))}" data-i18n-title="scroll-more.show_more" aria-label="{e(i18n(lang, 'المزيد', 'Show more'))}" data-i18n-aria-label="scroll-more.show_more">
+              <a href="{home if not_found else ''}#about" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full" title="{e(i18n(lang, 'المزيد', 'Show more'))}" data-i18n-title="scroll-more.show_more" aria-label="{e(i18n(lang, 'المزيد', 'Show more'))}" data-i18n-aria-label="scroll-more.show_more">
                 <i class="nds-icon nds-hgi-arrow-down-01" aria-hidden="true"></i>
               </a>
             </div>
             <ul class="nds-nav-actions">
               <li class="nds-nav-item nds-icon-only nds-pinned" id="nav-language">
-                <a href="{LANGS[other]['path']}" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="{e(other_label)}" lang="{other_lang_attr}" hreflang="{other_lang_attr}"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sm md sr">{e(other_label)}</span></a>
+                <a data-language-switch href="{LANGS[other]['path']}" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="{e(other_label)}" lang="{other_lang_attr}" hreflang="{other_lang_attr}"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sm md sr">{e(other_label)}</span></a>
               </li>
             </ul>
           </div>
@@ -291,7 +350,7 @@ def hero(lang):
       <div class="nds-section-wrapper">
         <div class="nds-section-image">
           <div class="nds-avatar nds-image-border alq-hero-avatar">
-            <img src="/assets/img/portrait-480.webp" width="120" height="120" alt="{e(t(p['portrait_alt'], lang))}" fetchpriority="high">
+            <img src="/assets/img/portrait-480.webp" width="480" height="432" alt="{e(t(p['portrait_alt'], lang))}" fetchpriority="high">
           </div>
         </div>
         <div class="nds-section-head">
@@ -299,7 +358,7 @@ def hero(lang):
           <p class="nds-section-description">{e(title)}. {e(t(p['tagline'], lang))}</p>
         </div>
         <div class="nds-section-action">
-          <a class="nds-btn nds-primary" href="{CV_PATH}" download="{e(CV_NAME)}">
+          <a class="nds-btn nds-primary" href="{e(CV_PATH)}" download="{e(CV_NAME)}">
             <i class="hgi hgi-stroke hgi-download-01" aria-hidden="true"></i>
             <span class="nds-label">{e(t(ui['download'], lang))}</span>
           </a>
@@ -338,7 +397,7 @@ def hero(lang):
 
 
 def section_head(title, description=""):
-    desc = f'\\n          <p class="nds-section-description">{e(description)}</p>' if description else ""
+    desc = f'\n          <p class="nds-section-description">{e(description)}</p>' if description else ""
     return f"""        <div class="nds-section-head">
           <h2 class="nds-section-title">{e(title)}</h2>{desc}
         </div>"""
@@ -390,7 +449,7 @@ def about_block(lang):
 
 def experience_block(lang):
     exp = DATA["experience"]
-    items = list(reversed(exp["items"]))
+    items = exp["items"]
     total = len(items)
     steps = []
     for i, item in enumerate(items, start=1):
@@ -417,7 +476,7 @@ def experience_block(lang):
     return f"""            <div class="nds-section-wrapper" id="experience">
 {section_head(t(exp['heading'], lang), t(exp['intro'], lang))}
               <div class="nds-section-body">
-                <div class="nds-stepper nds-vertical nds-dot nds-reverse" data-current="{total}" data-total="{total}">
+                <div class="nds-stepper nds-vertical nds-dot" data-current="{total}" data-total="{total}">
 {chr(10).join(steps)}
                 </div>
               </div>
@@ -586,7 +645,7 @@ def contact_block(lang):
                   <i class="nds-icon nds-hgi-mail-01" aria-hidden="true"></i>
                   <span class="nds-label">{e(t(ui['email_btn'], lang))}</span>
                 </a>
-                <a class="nds-btn nds-secondary-outline" href="{CV_PATH}" download="{e(CV_NAME)}">
+                <a class="nds-btn nds-secondary-outline" href="{e(CV_PATH)}" download="{e(CV_NAME)}">
                   <i class="hgi hgi-stroke hgi-download-01" aria-hidden="true"></i>
                   <span class="nds-label">{e(t(ui['download'], lang))}</span>
                 </a>
@@ -598,7 +657,7 @@ def contact_block(lang):
                       <i class="hgi hgi-stroke hgi-mail-01" aria-hidden="true"></i>
                       <span class="nds-label">{e(t(c['email_label'], lang))}</span>
                     </dt>
-                    <dd><a class="nds-link" href="mailto:{e(EMAIL)}">{e(EMAIL)}</a></dd>
+                    <dd><a class="nds-link alq-text-link" href="mailto:{e(EMAIL)}"><bdi dir="ltr">{e(EMAIL)}</bdi></a></dd>
                   </div>
                 </dl>
               </div>
@@ -608,18 +667,23 @@ def contact_block(lang):
 def content_layout(lang):
     name = t(DATA["person"]["name_short"], lang)
     toc_label = t(DATA["ui"]["toc_title"], lang)
+    toc_links = "\n".join(
+        f'<li><a href="#{n["id"]}" class="nds-btn nds-subtle nds-indicator">'
+        f'<span class="nds-label nds-truncate">{e(t(n["label"], lang))}</span></a></li>'
+        for n in DATA["nav"]
+    )
     return f"""    <div class="nds-content-layout nds-has-sideinfo">
       <div class="nds-content" id="main-content">
         <section id="profile" class="nds-content-section nds-sideinfo-section">
           <div class="nds-section-body">
             <aside class="nds-sideinfo nds-sticky nds-top" aria-label="{e(i18n(lang, 'في هذه الصفحة', 'On this page'))}" data-i18n-aria-label="toc.on_this_page">
-              <nav class="nds-toc alq-toc" aria-label="{e(t(DATA['ui']['index_aria'], lang))}" data-i18n-aria-label="toc.table_of_contents" data-toc-source="#profile .nds-info-content" data-toc-levels="h2">
+              <nav class="nds-toc alq-toc" aria-label="{e(t(DATA['ui']['index_aria'], lang))}" data-i18n-aria-label="toc.table_of_contents">
                 <div class="nds-toc-head">
                   <span class="nds-label" data-i18n="toc.on_this_page">{e(i18n(lang, 'في هذه الصفحة', 'On this page'))}</span>
                   <h2 class="nds-toc-title nds-truncate">{e(name)}</h2>
                 </div>
                 <div class="nds-drawer nds-lined">
-                  <ul class="nds-drawer-list"></ul>
+                  <ul class="nds-drawer-list">{toc_links}</ul>
                 </div>
               </nav>
             </aside>
@@ -644,14 +708,14 @@ def content_layout(lang):
 """
 
 
-def footer(lang):
+def footer(lang, not_found=False):
     ui = DATA["ui"]
     name = t(DATA["person"]["name_short"], lang)
     nav_links = []
     for n in DATA["nav"]:
         nav_links.append(
             f"""        <li>
-          <a class="nds-link nds-footer-link" href="#{n['id']}">
+          <a class="nds-link nds-footer-link alq-text-link" href="{LANGS[lang]['path'] if not_found else ''}#{n['id']}">
             <span class="nds-label">{e(t(n['label'], lang))}</span>
           </a>
         </li>"""
@@ -660,7 +724,7 @@ def footer(lang):
     contact_heading = t(DATA["contact"]["heading"], lang)
     rights = t(ui["footer_rights"], lang)
     aria = i18n(lang, "تذييل الموقع", "Site Footer")
-    return f"""  <footer class="nds-footer nds-content-wrapper nds-brand" role="contentinfo" aria-label="{e(aria)}" data-i18n-aria-label="footer.site_footer">
+    return f"""  <footer class="nds-footer nds-content-wrapper nds-brand" aria-label="{e(aria)}" data-i18n-aria-label="footer.site_footer">
     <nav class="nds-footer-content" aria-label="{e(i18n(lang, 'تنقل التذييل', 'Footer navigation'))}" data-i18n-aria-label="footer.footer_navigation">
       <div class="nds-footer-column">
         <span class="nds-footer-heading" id="footer-col-1">{e(sections_heading)}</span>
@@ -672,13 +736,13 @@ def footer(lang):
         <span class="nds-footer-heading" id="footer-col-2">{e(contact_heading)}</span>
         <ul class="nds-footer-list" aria-labelledby="footer-col-2">
           <li>
-            <a class="nds-link nds-footer-link" href="mailto:{e(EMAIL)}">
+            <a class="nds-link nds-footer-link alq-text-link" href="mailto:{e(EMAIL)}">
               <i class="nds-icon nds-hgi-mail-01" aria-hidden="true"></i>
-              <span class="nds-label">{e(EMAIL)}</span>
+              <span class="nds-label"><bdi dir="ltr">{e(EMAIL)}</bdi></span>
             </a>
           </li>
           <li>
-            <a class="nds-link nds-footer-link" href="{CV_PATH}" download="{e(CV_NAME)}">
+            <a class="nds-link nds-footer-link alq-text-link" href="{e(CV_PATH)}" download="{e(CV_NAME)}">
               <i class="hgi hgi-stroke hgi-download-01" aria-hidden="true"></i>
               <span class="nds-label">{e(t(ui['download'], lang))}</span>
             </a>
@@ -697,6 +761,7 @@ def footer(lang):
     </div>
   </footer>
   <script defer src="/assets/js/nds-main.min.js?ver={ASSET_VER}"></script>
+  <script type="module" src="/assets/js/site.js"></script>
 </body>
 </html>
 """
@@ -716,7 +781,7 @@ def page(lang):
 def page_404():
     seo_title = "404 | الصفحة غير موجودة"
     extra = '<meta name="robots" content="noindex">'
-    head_html = head("ar", seo_title, "الصفحة غير موجودة", extra_meta=extra)
+    head_html = head("ar", seo_title, "الصفحة غير موجودة", extra_meta=extra, not_found=True)
     main_html = f"""  <main>
     <div class="nds-content-layout">
       <div class="nds-content" id="main-content">
@@ -739,7 +804,7 @@ def page_404():
     </div>
   </main>
 """
-    return head_html + header("ar") + main_html + footer("ar")
+    return head_html + header("ar", not_found=True) + main_html + footer("ar", not_found=True)
 
 
 def sitemap():
@@ -747,12 +812,12 @@ def sitemap():
     for lang, meta in LANGS.items():
         loc = SITE_URL + meta["path"]
         alts = chr(10).join(
-            f'    <xhtml:link rel="alternate" hreflang="{k}" href="{SITE_URL + v["path"]}"/>'
+            f'    <xhtml:link rel="alternate" hreflang="{k}" href="{e(SITE_URL + v["path"])}"/>'
             for k, v in LANGS.items()
         )
         urls.append(
             f"""  <url>
-    <loc>{loc}</loc>
+    <loc>{e(loc)}</loc>
 {alts}
     <xhtml:link rel="alternate" hreflang="x-default" href="{SITE_URL}/"/>
   </url>"""
@@ -765,7 +830,22 @@ def sitemap():
 """
 
 
+def validate_config():
+    origin = urlsplit(SITE_URL)
+    if origin.scheme != "https" or not origin.netloc or origin.path or origin.query or origin.fragment or origin.username:
+        raise SystemExit("site.url must be an HTTPS origin without credentials, path, query or fragment")
+    cv = pathlib.PurePosixPath(DATA["site"]["cv_file"])
+    if cv.is_absolute() or ".." in cv.parts or cv.parts[:2] != ("assets", "docs"):
+        raise SystemExit("site.cv_file must be a relative path inside assets/docs/")
+    if DEFAULT not in LANGS:
+        raise SystemExit("Unsupported default language")
+    for item in DATA["nav"]:
+        if not re.fullmatch(r"[a-z][a-z0-9-]*", item["id"]):
+            raise SystemExit("Navigation IDs must be stable ASCII slugs")
+
+
 def main():
+    validate_config()
     validate_nav_counts()
     (ROOT / "index.html").write_text(page("ar"), encoding="utf-8")
     en_dir = ROOT / "en"
@@ -773,7 +853,12 @@ def main():
     (en_dir / "index.html").write_text(page("en"), encoding="utf-8")
     (ROOT / "404.html").write_text(page_404(), encoding="utf-8")
     (ROOT / "sitemap.xml").write_text(sitemap(), encoding="utf-8")
-    print("Built index.html, en/index.html, 404.html, sitemap.xml")
+    for name in ("index.html", "en/index.html", "404.html"):
+        path = ROOT / name
+        path.write_text("\n".join(line.rstrip() for line in path.read_text(encoding="utf-8").splitlines()) + "\n", encoding="utf-8")
+    write_csp([(ROOT / name).read_text(encoding="utf-8")
+               for name in ("index.html", "en/index.html", "404.html")])
+    print("Built index.html, en/index.html, 404.html, sitemap.xml and CSP hashes")
 
 
 if __name__ == "__main__":

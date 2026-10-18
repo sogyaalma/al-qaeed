@@ -1,24 +1,16 @@
 #!/usr/bin/env python3
-"""Rebuild the downloadable CV (assets/docs/*.pdf) as a real, searchable A4 document.
+"""Generate a review-only, searchable A4 PDF from the current Arabic page.
 
-The CV file used to be a scan-like PDF made of two page images: it had no text
-layer, no embedded fonts and a non-A4 page size, so it could not be searched,
-copied, translated or read by a screen reader. This script prints the built
-Arabic page with the site's print stylesheet and saves the result, so the
-download has selectable text and A4 pages.
+  python3 tools/build.py
+  python3 tools/make_cv_pdf.py --output test-results/cv-preview.pdf
 
-Requirements (optional tooling, same as tests/run_checks.py):
-    pip install playwright && python3 -m playwright install chromium
-
-Usage:
-    python3 tools/build.py && python3 tools/make_cv_pdf.py
-
-Notes:
-  * Run it after content changes so the file matches the site.
-  * Replace the output with the original signed CV whenever one is available;
-    see docs/UPDATE-CHECKLIST.md.
+Requires Playwright/Chromium. Output is required to prevent overwriting an
+owner-approved or signed downloadable CV by accident. Publishing a replacement
+at assets/docs/abdulaziz-al-qaeed-cv.pdf requires explicit owner approval.
 """
 import pathlib
+import argparse
+import os
 import sys
 import tempfile
 from http.server import SimpleHTTPRequestHandler
@@ -27,7 +19,6 @@ from threading import Thread
 from functools import partial
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "assets" / "docs" / "abdulaziz-al-qaeed-cv.pdf"
 
 
 class QuietHandler(SimpleHTTPRequestHandler):
@@ -36,6 +27,12 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=pathlib.Path, required=True)
+    args = parser.parse_args()
+    output = args.output.resolve()
+    if output.exists():
+        raise SystemExit("Refusing to overwrite an existing PDF; choose a new review output")
     try:
         from playwright.sync_api import sync_playwright
     except ImportError:
@@ -52,23 +49,21 @@ def main():
         Thread(target=server.serve_forever, daemon=True).start()
         url = "http://127.0.0.1:%d/index.html" % server.server_address[1]
 
-        OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+        output.parent.mkdir(parents=True, exist_ok=True)
         with sync_playwright() as p:
-            browser = p.chromium.launch()
+            options = {"executable_path": os.environ["CHROMIUM_EXECUTABLE_PATH"]} if os.environ.get("CHROMIUM_EXECUTABLE_PATH") else {}
+            browser = p.chromium.launch(**options)
             page = browser.new_page(viewport={"width": 1240, "height": 1754})
             page.goto(url, wait_until="networkidle")
             page.emulate_media(media="print")
-            hidden = page.evaluate(
-                "Array.from(document.querySelectorAll('.reveal'))"
-                ".filter(e => parseFloat(getComputedStyle(e).opacity) < 0.9).length"
-            )
-            if hidden:
-                raise SystemExit(f"Refusing to write a CV with {hidden} hidden blocks")
-            page.pdf(path=str(OUTPUT), print_background=True, prefer_css_page_size=True)
+            page.evaluate("document.fonts.ready")
+            if not page.locator("#about").is_visible() or not page.locator("#contact").is_visible():
+                raise SystemExit("Refusing to write a PDF with hidden biography content")
+            page.pdf(path=str(output), format="A4", print_background=True, prefer_css_page_size=True)
             browser.close()
         server.shutdown()
 
-    print(f"wrote {OUTPUT.relative_to(ROOT)} ({OUTPUT.stat().st_size // 1024} KB, A4, selectable text)")
+    print(f"wrote {output} ({output.stat().st_size // 1024} KB, A4, selectable text)")
 
 
 if __name__ == "__main__":

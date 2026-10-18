@@ -10,6 +10,8 @@ tests, source content and build tooling.
 import pathlib
 import shutil
 
+from font_policy import BLOCKED, apply_to_package, validate_assets
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "dist"
 PUBLIC_FILES = ("index.html", "404.html", "robots.txt", "sitemap.xml", "_headers")
@@ -26,6 +28,19 @@ def main():
     assets = ROOT / "assets"
     if not assets.is_dir():
         raise SystemExit("Required public directory is missing: assets/")
+
+    # Reject links before touching an existing output: copytree follows them by
+    # default and could accidentally publish private files outside the repository.
+    inputs = [ROOT / name for name in PUBLIC_FILES] + [ROOT / "en", english, assets]
+    inputs.extend(assets.rglob("*"))
+    for source in inputs:
+        if source.is_symlink():
+            raise SystemExit(f"Refusing to package symlink: {source.relative_to(ROOT)}")
+
+    try:
+        validate_assets(assets)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
 
     # Do not follow or delete a symlink if dist/ has been replaced unexpectedly.
     if OUTPUT.is_symlink():
@@ -45,7 +60,8 @@ def main():
 
     (OUTPUT / "en").mkdir(parents=True, exist_ok=True)
     shutil.copy2(english, OUTPUT / "en" / "index.html")
-    shutil.copytree(assets, OUTPUT / "assets")
+    shutil.copytree(assets, OUTPUT / "assets", ignore=lambda directory, names: BLOCKED if pathlib.Path(directory) == assets / 'fonts' else ())
+    apply_to_package(OUTPUT / 'assets')
 
     print("Packaged Cloudflare Pages site into dist/ (repository docs and tooling excluded).")
 

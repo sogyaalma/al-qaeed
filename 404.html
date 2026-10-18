@@ -30,7 +30,7 @@
     :where(.nds-hero-image){width:100%;height:100%;object-fit:cover;display:block}
     :where(.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:hidden}
   </style>
-  <link rel="preload" as="image" href="/assets/img/portrait-480.webp" fetchpriority="high">
+
   <link rel="preload" href="/assets/css/nds.critical.min.css?ver=1.12.x-dev" as="style" fetchpriority="high" data-nds-defer>
   <link rel="preload" href="/assets/css/nds-main.min.css?ver=1.12.x-dev" as="style" fetchpriority="low" data-nds-defer="main">
   <link rel="preload" href="/assets/css/theme.css?ver=1.12.x-dev" as="style" data-nds-defer>
@@ -51,25 +51,7 @@
   <meta property="og:locale" content="ar_SA">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="robots" content="noindex">
-  <script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "عبد العزيز بن عبد الرحمن بن إبراهيم القعيد",
-  "alternateName": [
-    "الشيخ عبدالعزيز القعيد",
-    "Sheikh Abdulaziz Al-Qaeed"
-  ],
-  "jobTitle": "إمام مسجد ومدير تنفيذي في العمل الاجتماعي والإصلاح الأسري",
-  "description": "الصفحة غير موجودة",
-  "email": "mailto:aq5164@hotmail.com",
-  "url": "https://al-qaeed.pages.dev/",
-  "image": "https://al-qaeed.pages.dev/assets/img/portrait.jpg",
-  "alumniOf": {
-    "@type": "CollegeOrUniversity",
-    "name": "Imam Muhammad ibn Saud Islamic University"
-  },
-  "inLanguage": "ar"
-}</script>
+
   <script>
     (function() {
       var v; try { v = localStorage.getItem('nds-theme'); } catch (e) {}
@@ -97,11 +79,29 @@
     <link rel="stylesheet" href="/assets/css/nds.critical.min.css?ver=1.12.x-dev">
     <link rel="stylesheet" href="/assets/css/nds-main.min.css?ver=1.12.x-dev">
     <link rel="stylesheet" href="/assets/css/theme.css?ver=1.12.x-dev">
-    <style>:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-footer,.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:visible}</style>
+    <style>:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-footer,.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:visible}
+    .alq-site .nds-main-nav,.alq-site .nds-breadcrumb-nav,.alq-site .nds-sideinfo,.alq-site .nds-share{display:none !important}
+    .alq-site .nds-sideinfo-section > .nds-section-body{display:block}
+    /* NDS's pre-init card/definition skeletons never release without JS.
+       Scoped no-JS adaptation: preserve readable authored text, not fake init state. */
+    .alq-site .nds-card,.alq-site .nds-definition-list{animation:none !important}
+    .alq-site #main-content .nds-card :is(.nds-card-title,.nds-card-subtitle,.nds-card-description,.nds-tag,.nds-label),
+    .alq-site #main-content .nds-definition-list :is(dt,dd,dt *,dd *){color:var(--text-default) !important;background:none !important}
+    .alq-site #main-content .nds-card .nds-tag > *{visibility:visible !important}
+    .alq-site .nds-content-section{content-visibility:visible;contain-intrinsic-size:none}
+    .alq-fallback{display:flex;flex-wrap:wrap;gap:12px;padding:16px;background:#fffdf8;color:#15201c}
+    .alq-fallback a{display:inline-flex;align-items:center;min-height:44px;padding:8px;color:#0e5a49}</style>
   </noscript>
 </head>
-<body>
+<body class="alq-site">
   <a class="nds-skip-link" href="#main-content">تخطي إلى المحتوى</a>
+  <noscript>
+    <nav class="alq-fallback" aria-label="التنقل دون جافاسكربت">
+      <a href="/">الشيخ عبدالعزيز القعيد</a>
+      <a href="/#about">نبذة</a> <a href="/#experience">الخبرة</a> <a href="/#community">الأعمال</a> <a href="/#skills">المهارات</a> <a href="/#publications">الإصدارات</a> <a href="/#education">التعليم</a> <a href="/#training">الدورات</a> <a href="/#contact">تواصل</a>
+      <a data-language-switch href="/en/" lang="en" hreflang="en">English</a>
+    </nav>
+  </noscript>
   <header>
     <nav class="nds-main-nav nds-content-wrapper" id="nds-main-nav" aria-label="التنقل الرئيسي" data-i18n-aria-label="mainnav.primary_navigation">
       <div class="nds-nav-container">
@@ -113,7 +113,7 @@
         </a>
         <ul class="nds-nav-minimal" hidden>
           <li class="nds-nav-toggler nds-nav-item">
-            <button class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="فتح قائمة التنقل" data-i18n-aria-label="mainnav.toggle_menu" aria-expanded="false" aria-controls="nds-nav-collapse">
+            <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="فتح قائمة التنقل" data-i18n-aria-label="mainnav.toggle_menu" aria-expanded="false" aria-controls="nds-nav-collapse">
               <i class="nds-icon nds-hgi-menu-01" aria-hidden="true"></i>
             </button>
           </li>
@@ -122,34 +122,34 @@
           <div class="nds-nav-collapse-content">
             <ul class="nds-nav-primary">
           <li class="nds-nav-item">
-            <a href="#about" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+            <a href="/#about" class="nds-nav-link nds-btn nds-subtle nds-indicator">
               <span class="nds-label">نبذة</span>
             </a>
           </li>
           <li class="nds-nav-item">
-            <a href="#experience" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+            <a href="/#experience" class="nds-nav-link nds-btn nds-subtle nds-indicator">
               <span class="nds-label">الخبرة</span>
             </a>
           </li>
           <li class="nds-nav-item">
-            <a href="#community" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+            <a href="/#community" class="nds-nav-link nds-btn nds-subtle nds-indicator">
               <span class="nds-label">الأعمال</span>
             </a>
           </li>
           <li class="nds-nav-item">
-            <a href="#contact" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+            <a href="/#contact" class="nds-nav-link nds-btn nds-subtle nds-indicator">
               <span class="nds-label">تواصل</span>
             </a>
           </li>
             </ul>
             <div class="nds-nav-item nds-show-more">
-              <a href="#about" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full" title="المزيد" data-i18n-title="scroll-more.show_more" aria-label="المزيد" data-i18n-aria-label="scroll-more.show_more">
+              <a href="/#about" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full" title="المزيد" data-i18n-title="scroll-more.show_more" aria-label="المزيد" data-i18n-aria-label="scroll-more.show_more">
                 <i class="nds-icon nds-hgi-arrow-down-01" aria-hidden="true"></i>
               </a>
             </div>
             <ul class="nds-nav-actions">
               <li class="nds-nav-item nds-icon-only nds-pinned" id="nav-language">
-                <a href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="English" lang="en" hreflang="en"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sm md sr">English</span></a>
+                <a data-language-switch href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="English" lang="en" hreflang="en"><i class="nds-icon nds-hgi-translation" aria-hidden="true"></i><span class="nds-label" data-hidden="sm md sr">English</span></a>
               </li>
             </ul>
           </div>
@@ -178,48 +178,48 @@
       </div>
     </div>
   </main>
-  <footer class="nds-footer nds-content-wrapper nds-brand" role="contentinfo" aria-label="تذييل الموقع" data-i18n-aria-label="footer.site_footer">
+  <footer class="nds-footer nds-content-wrapper nds-brand" aria-label="تذييل الموقع" data-i18n-aria-label="footer.site_footer">
     <nav class="nds-footer-content" aria-label="تنقل التذييل" data-i18n-aria-label="footer.footer_navigation">
       <div class="nds-footer-column">
         <span class="nds-footer-heading" id="footer-col-1">أقسام الصفحة</span>
         <ul class="nds-footer-list" aria-labelledby="footer-col-1">
         <li>
-          <a class="nds-link nds-footer-link" href="#about">
+          <a class="nds-link nds-footer-link alq-text-link" href="/#about">
             <span class="nds-label">نبذة</span>
           </a>
         </li>
         <li>
-          <a class="nds-link nds-footer-link" href="#experience">
+          <a class="nds-link nds-footer-link alq-text-link" href="/#experience">
             <span class="nds-label">الخبرة</span>
           </a>
         </li>
         <li>
-          <a class="nds-link nds-footer-link" href="#community">
+          <a class="nds-link nds-footer-link alq-text-link" href="/#community">
             <span class="nds-label">الأعمال</span>
           </a>
         </li>
         <li>
-          <a class="nds-link nds-footer-link" href="#skills">
+          <a class="nds-link nds-footer-link alq-text-link" href="/#skills">
             <span class="nds-label">المهارات</span>
           </a>
         </li>
         <li>
-          <a class="nds-link nds-footer-link" href="#publications">
+          <a class="nds-link nds-footer-link alq-text-link" href="/#publications">
             <span class="nds-label">الإصدارات</span>
           </a>
         </li>
         <li>
-          <a class="nds-link nds-footer-link" href="#education">
+          <a class="nds-link nds-footer-link alq-text-link" href="/#education">
             <span class="nds-label">التعليم</span>
           </a>
         </li>
         <li>
-          <a class="nds-link nds-footer-link" href="#training">
+          <a class="nds-link nds-footer-link alq-text-link" href="/#training">
             <span class="nds-label">الدورات</span>
           </a>
         </li>
         <li>
-          <a class="nds-link nds-footer-link" href="#contact">
+          <a class="nds-link nds-footer-link alq-text-link" href="/#contact">
             <span class="nds-label">تواصل</span>
           </a>
         </li>
@@ -229,13 +229,13 @@
         <span class="nds-footer-heading" id="footer-col-2">التواصل مع الشيخ</span>
         <ul class="nds-footer-list" aria-labelledby="footer-col-2">
           <li>
-            <a class="nds-link nds-footer-link" href="mailto:aq5164@hotmail.com">
+            <a class="nds-link nds-footer-link alq-text-link" href="mailto:aq5164@hotmail.com">
               <i class="nds-icon nds-hgi-mail-01" aria-hidden="true"></i>
-              <span class="nds-label">aq5164@hotmail.com</span>
+              <span class="nds-label"><bdi dir="ltr">aq5164@hotmail.com</bdi></span>
             </a>
           </li>
           <li>
-            <a class="nds-link nds-footer-link" href="/assets/docs/abdulaziz-al-qaeed-cv.pdf" download="abdulaziz-al-qaeed-cv.pdf">
+            <a class="nds-link nds-footer-link alq-text-link" href="/assets/docs/abdulaziz-al-qaeed-cv.pdf" download="abdulaziz-al-qaeed-cv.pdf">
               <i class="hgi hgi-stroke hgi-download-01" aria-hidden="true"></i>
               <span class="nds-label">تنزيل السيرة الذاتية (PDF)</span>
             </a>
@@ -254,5 +254,6 @@
     </div>
   </footer>
   <script defer src="/assets/js/nds-main.min.js?ver=1.12.x-dev"></script>
+  <script type="module" src="/assets/js/site.js"></script>
 </body>
 </html>

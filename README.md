@@ -25,7 +25,13 @@ The UI uses **NDS-vanilla** (Saudi National Design System, plain HTML/CSS/JS). P
 | `tools/build.py` | يولّد الصفحات وملف sitemap من `content.json` بترميز NDS |
 | `tools/package.py` | ينشئ `dist/` بقائمة ملفات الموقع العامة فقط |
 | `NDS-IQ.md` | قواعد بناء الواجهة مع NDS (لا تُعدَّل) |
+| `tests/run_static_checks.py` | فحوص build/package والروابط والأصول (Python قياسي) |
+| `tests/run_checks.py` | اختبارات المتصفح (Playwright وaxe-core وChromium) |
 | `docs/` | تقارير داخلية؛ لا تدخل حزمة النشر |
+| `_headers` | ترويسات Cloudflare Pages الأمنية |
+| `robots.txt`, `sitemap.xml` | إعدادات SEO |
+
+> ملاحظة السيرة: ملف PDF الحالي نسخة أُنشئت من صفحتي PNG، وليس PDF أصليًا موقّعًا. راجع `docs/UPDATE-CHECKLIST.md` للتأكيدات المطلوبة قبل النشر العام. هذا الملف والوثائق الداخلية لا يُنسخان إلى `dist/`.
 
 ## البناء والمعاينة محليًا / Build and preview locally
 
@@ -42,6 +48,7 @@ python3 -m http.server 8000 --bind 0.0.0.0 --directory dist
 2. أعد التوليد والتغليف:
    ```bash
    python3 tools/build.py && python3 tools/package.py
+   python3 tests/run_static_checks.py
    ```
 
 **قبل النشر:** تأكد من ضبط `site.url` في `content/content.json` ورابط sitemap في `robots.txt`.

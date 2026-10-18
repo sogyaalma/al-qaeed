@@ -1,0 +1,1662 @@
+{
+  "checks": [
+    {
+      "name": "ar/360 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/360 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/360 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/360 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/360 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/360 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "ar/360 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/360 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/375 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "ar/375 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 axe WCAG 2.2 AA/best practice",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/375 skip link keyboard focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 keyboard focus visibly styled",
+      "ok": true,
+      "detail": "{\"outline\": \"solid\", \"shadow\": \"rgb(255, 255, 255) 0px 0px 0px 3px inset\", \"y\": 6}"
+    },
+    {
+      "name": "ar/375 visible targets at least 24px",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/375 skip link reaches main",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 HGI glyph stylesheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/430 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/430 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/430 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/430 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/430 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/430 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "ar/430 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/430 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/768 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/768 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/768 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/768 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/768 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/768 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "ar/768 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/768 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/861 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/861 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/861 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/861 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/861 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/861 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "ar/861 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/861 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/900 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/900 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/900 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/900 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/900 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/900 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "ar/900 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/900 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1024 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1024 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1024 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1024 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1024 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/1024 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "ar/1024 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1024 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1100 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1100 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1100 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1100 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1100 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/1100 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "ar/1100 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1100 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/1366 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "ar/1366 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 axe WCAG 2.2 AA/best practice",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/1366 skip link keyboard focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 keyboard focus visibly styled",
+      "ok": true,
+      "detail": "{\"outline\": \"solid\", \"shadow\": \"rgb(255, 255, 255) 0px 0px 0px 3px inset\", \"y\": 6}"
+    },
+    {
+      "name": "ar/1366 visible targets at least 24px",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/1366 skip link reaches main",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 HGI glyph stylesheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1440 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1440 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1440 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1440 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1440 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/1440 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "ar/1440 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1440 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1920 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1920 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1920 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1920 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1920 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "ar/1920 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "ar/1920 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1920 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/360 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/360 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/360 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/360 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/360 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/360 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "en/360 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/360 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/375 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "en/375 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 axe WCAG 2.2 AA/best practice",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/375 skip link keyboard focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 keyboard focus visibly styled",
+      "ok": true,
+      "detail": "{\"outline\": \"solid\", \"shadow\": \"rgb(255, 255, 255) 0px 0px 0px 3px inset\", \"y\": 6}"
+    },
+    {
+      "name": "en/375 visible targets at least 24px",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/375 skip link reaches main",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 HGI glyph stylesheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/430 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/430 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/430 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/430 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/430 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/430 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "en/430 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/430 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/768 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/768 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/768 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/768 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/768 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/768 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "en/768 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/768 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/861 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/861 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/861 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/861 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/861 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/861 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "en/861 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/861 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/900 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/900 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/900 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/900 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/900 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/900 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "en/900 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/900 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1024 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1024 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1024 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1024 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1024 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/1024 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "en/1024 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1024 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1100 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1100 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1100 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1100 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1100 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/1100 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "en/1100 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1100 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/1366 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "en/1366 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 axe WCAG 2.2 AA/best practice",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/1366 skip link keyboard focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 keyboard focus visibly styled",
+      "ok": true,
+      "detail": "{\"outline\": \"solid\", \"shadow\": \"rgb(255, 255, 255) 0px 0px 0px 3px inset\", \"y\": 6}"
+    },
+    {
+      "name": "en/1366 visible targets at least 24px",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/1366 skip link reaches main",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 HGI glyph stylesheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1440 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1440 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1440 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1440 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1440 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/1440 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "en/1440 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1440 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1920 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1920 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1920 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1920 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1920 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "en/1920 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "en/1920 eight stable TOC destinations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1920 all content groups retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "404/375 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "404/375 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "404/375 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "404/375 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "404/375 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "404/375 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "404/375 axe WCAG 2.2 AA/best practice",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "404/375 skip link keyboard focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "404/375 keyboard focus visibly styled",
+      "ok": true,
+      "detail": "{\"outline\": \"solid\", \"shadow\": \"rgb(255, 255, 255) 0px 0px 0px 3px inset\", \"y\": 6}"
+    },
+    {
+      "name": "404/375 visible targets at least 24px",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "404/375 skip link reaches main",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "404/1366 status",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "404/1366 viewport and overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "404/1366 visible main content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "404/1366 images loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "404/1366 no browser/CSP/network errors",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "404/1366 NDS audit",
+      "ok": true,
+      "detail": "{\"audit\": [], \"warnings\": []}"
+    },
+    {
+      "name": "404/1366 axe WCAG 2.2 AA/best practice",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "404/1366 skip link keyboard focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "404/1366 keyboard focus visibly styled",
+      "ok": true,
+      "detail": "{\"outline\": \"solid\", \"shadow\": \"rgb(255, 255, 255) 0px 0px 0px 3px inset\", \"y\": 6}"
+    },
+    {
+      "name": "404/1366 visible targets at least 24px",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "404/1366 skip link reaches main",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar mobile menu opens",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar Escape closes mobile menu",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 TOC about",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 TOC experience",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 TOC community",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 TOC skills",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 TOC publications",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 TOC education",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 TOC training",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 TOC contact",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 language keeps section",
+      "ok": true,
+      "detail": "http://localhost:8000/en/#contact"
+    },
+    {
+      "name": "ar/375 browser back",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 browser forward",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 share opens",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 X destination",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 copy delegates current URL",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 CV download",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/375 print content visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 TOC about",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 TOC experience",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 TOC community",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 TOC skills",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 TOC publications",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 TOC education",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 TOC training",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 TOC contact",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 language keeps section",
+      "ok": true,
+      "detail": "http://localhost:8000/en/#contact"
+    },
+    {
+      "name": "ar/1366 browser back",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 browser forward",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 share opens",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 X destination",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 copy delegates current URL",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 CV download",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ar/1366 print content visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en mobile menu opens",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en Escape closes mobile menu",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 TOC about",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 TOC experience",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 TOC community",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 TOC skills",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 TOC publications",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 TOC education",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 TOC training",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 TOC contact",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 language keeps section",
+      "ok": true,
+      "detail": "http://localhost:8000/#contact"
+    },
+    {
+      "name": "en/375 browser back",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 browser forward",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 share opens",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 X destination",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 copy delegates current URL",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 CV download",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/375 print content visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 TOC about",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 TOC experience",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 TOC community",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 TOC skills",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 TOC publications",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 TOC education",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 TOC training",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 TOC contact",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 language keeps section",
+      "ok": true,
+      "detail": "http://localhost:8000/#contact"
+    },
+    {
+      "name": "en/1366 browser back",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 browser forward",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 share opens",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 X destination",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 copy delegates current URL",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 CV download",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "en/1366 print content visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS //375 content and language visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS //375 sections visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS //375 card/fact text not skeleton-transparent",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS //375 no overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS //375 no inert share button",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS //1366 content and language visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS //1366 sections visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS //1366 card/fact text not skeleton-transparent",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS //1366 no overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS //1366 no inert share button",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /en//375 content and language visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /en//375 sections visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /en//375 card/fact text not skeleton-transparent",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /en//375 no overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /en//375 no inert share button",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /en//1366 content and language visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /en//1366 sections visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /en//1366 card/fact text not skeleton-transparent",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /en//1366 no overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /en//1366 no inert share button",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /missing/audit//375 content and language visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /missing/audit//375 sections visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /missing/audit//375 card/fact text not skeleton-transparent",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /missing/audit//375 no overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /missing/audit//375 no inert share button",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /missing/audit//1366 content and language visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /missing/audit//1366 sections visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /missing/audit//1366 card/fact text not skeleton-transparent",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /missing/audit//1366 no overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no-JS /missing/audit//1366 no inert share button",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "/ dark preference restored",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "/ dark axe AA",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "/ 200% text no horizontal overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "/en/ dark preference restored",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "/en/ dark axe AA",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "/en/ 200% text no horizontal overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "translation request failure preserves authored biography",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "existing CV A4 selectable text",
+      "ok": true,
+      "detail": "5 pages, 406791 bytes"
+    }
+  ],
+  "failures": 0,
+  "base": "http://localhost:8000",
+  "widths": [
+    360,
+    375,
+    430,
+    768,
+    861,
+    900,
+    1024,
+    1100,
+    1366,
+    1440,
+    1920
+  ],
+  "engine": "chromium",
+  "browser": "143.0.7499.0",
+  "axe_version": "4.14.0"
+}

@@ -4,7 +4,7 @@
 موقع شخصي ثابت بالعربية **RTL** والإنجليزية **LTR**. مصدر المحتوى واحد، ولا يحتاج إلى خادم تطبيقات أو قاعدة بيانات أو متغيرات سرية.
 A bilingual, self-hosted static biography, generated from JSON with Python's standard library and deployed as files on Cloudflare Pages.
 
-**الحالة:** أُصلحت عيوب مؤكدة واختُبرت حزمة الموقع محليًا؛ لم يُنشر للإنتاج من جولة التدقيق. مراجعة المحتوى وحقوق الأصول وإعدادات Cloudflare مطلوبة قبل الاعتماد. النتائج والقيود في [تقرير التدقيق](docs/AUDIT-2026-10-18.md) و[ملحق استكمال المتبقي](docs/CONTINUATION-2026-10-18.md).
+**الحالة:** أُصلحت عيوب مؤكدة واختُبرت حزمة الموقع محليًا وعلى GitHub Actions ومعاينة Cloudflare؛ لم أنفذ نشرًا للإنتاج؛ رُصد دمج خارجي للدفعة الأولى كما يوضح الملحق. مراجعة المحتوى وحقوق الأصول وإعدادات Cloudflare مطلوبة قبل الاعتماد. النتائج والقيود في [تقرير التدقيق](docs/AUDIT-2026-10-18.md) و[ملحق استكمال المتبقي](docs/CONTINUATION-2026-10-18.md).
 
 ## المزايا / Features
 
@@ -70,7 +70,7 @@ python tests/run_checks.py http://127.0.0.1:8000
 
 تشمل اختبارات المتصفح 11 عرضًا للغتين، menu/Escape وTOC واللغة وBack/Forward وshare/download و404 والطباعة وno-JS وdark و200% text وaxe-core. تُكتب النتائج الجديدة في `test-results/` المتجاهل. CI في `.github/workflows/validate.yml` يشغّل المجموعة على Chromium وFirefox وWebKit، ويتحقق من معاينة Cloudflare لنفس commit على الفروع غير الإنتاجية. لا ينشر CI ولا يغيّر إعدادات المزود؛ التكامل الموجود ينشئ المعاينة. النتائج البعيدة الفعلية في الملحق، لا تُستنتج من وجود workflow.
 
-لإعادة الاختبار محليًا: `BROWSER=firefox TEST_RESULTS_DIR=test-results/firefox python tests/run_checks.py http://127.0.0.1:8000`، أو `BROWSER=webkit` مع مجلد أدلة منفصل.
+لإعادة الاختبار محليًا: `BROWSER=firefox TEST_RESULTS_DIR=test-results/firefox python tests/run_checks.py http://localhost:8000`، أو `BROWSER=webkit` مع مجلد أدلة منفصل.
 
 ## بنية المشروع / Structure
 

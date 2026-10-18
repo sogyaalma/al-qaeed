@@ -84,14 +84,16 @@ for relative in public_files:
     if source.is_file() and output.is_file():
         check(f"dist copy matches {relative}", source.read_bytes() == output.read_bytes())
 
-asset_files = sorted(path for path in (ROOT / "assets").rglob("*") if path.is_file())
+manifest = json.loads((ROOT / 'docs/nds-assets.json').read_text())
+policy_exceptions = set(manifest['distribution_excluded_fonts']) | set(manifest['distribution_sha256'])
+asset_files = sorted(path for path in (ROOT / "assets").rglob("*") if path.is_file() and path.relative_to(ROOT).as_posix() not in policy_exceptions)
 missing_or_different = [
     path.relative_to(ROOT).as_posix()
     for path in asset_files
     if not (DIST / path.relative_to(ROOT)).is_file()
     or path.read_bytes() != (DIST / path.relative_to(ROOT)).read_bytes()
 ]
-check("all source assets are copied byte-for-byte into dist", not missing_or_different,
+check("assets outside explicit font-policy exceptions are copied byte-for-byte", not missing_or_different,
       ", ".join(missing_or_different[:5]) or f"{len(asset_files)} assets")
 
 pages = {
@@ -237,8 +239,17 @@ check("all authored HGI font icon classes have generated CSS rules", all('.hgi-s
 
 manifest = json.loads((ROOT / 'docs/nds-assets.json').read_text())
 changed_vendor = [name for name, digest in manifest['sha256'].items()
+                  if not (ROOT / name).is_file() or hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != digest]
+check("vendored NDS inputs match reviewed artifact hashes", not changed_vendor, str(changed_vendor))
+public_hashes = {name: digest for name, digest in manifest['sha256'].items()
+                 if name not in manifest['distribution_excluded_fonts']}
+public_hashes.update(manifest['distribution_sha256'])
+changed_public = [name for name, digest in public_hashes.items()
                   if not (DIST / name).is_file() or hashlib.sha256((DIST / name).read_bytes()).hexdigest() != digest]
-check("vendored NDS assets match reviewed artifact hashes", not changed_vendor, str(changed_vendor))
+check("public NDS assets match reviewed distribution hashes", not changed_public, str(changed_public))
+blocked = manifest['distribution_excluded_fonts']
+check("fonts without redistribution grants are not published", all(not (DIST / name).exists() for name in blocked))
+check("public CSS has no blocked font URLs", all(Path(name).name not in p.read_text() for name in blocked for p in (DIST / 'assets/css').glob('*.css')))
 
 print(f"\n{passed}/{passed + failed} static checks passed")
 sys.exit(1 if failed else 0)

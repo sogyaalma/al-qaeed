@@ -37,5 +37,13 @@
     "assets/js/nds-editor.min.js": "3aae034add97ff1aabbd1a12a57c7752ae9e17339bee35c3e6de6c2b010073f0",
     "assets/js/nds-extras.min.js": "27ef7ba1063ea9a46496dd7435a609e4107a91e279a0cbc19e244e742be51733",
     "assets/js/nds-main.min.js": "f431edd84b5f5dc84c5357a66c8d6252b8fbb7d7bc0d26faf66c14b6ca9e9b29"
+  },
+  "distribution_excluded_fonts": [
+    "assets/fonts/Maqroo-Regular.woff2",
+    "assets/fonts/SaudiWeb-Bold.woff2",
+    "assets/fonts/SaudiWeb-Regular.woff2"
+  ],
+  "distribution_sha256": {
+    "assets/css/nds.critical.min.css": "aa0fbde99b9e2457cd95f584fe49525cf95bcc14d116fcd076856f6e2dab7dde"
   }
 }

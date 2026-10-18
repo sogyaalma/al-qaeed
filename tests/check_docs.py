@@ -10,6 +10,7 @@ CURRENT = [
     'README.md', 'DEPLOY.md', 'CONTRIBUTING.md', 'SECURITY.md',
     'docs/NDS-INTEGRATION.md', 'docs/DESIGN-TOKENS.md',
     'docs/UPDATE-CHECKLIST.md', 'docs/AUDIT-2026-10-18.md',
+    'docs/CONTINUATION-2026-10-18.md', 'assets/licenses/README.md', 'tools/vendor/README.md',
 ]
 failed = []
 count = 0

@@ -85,6 +85,35 @@ class ToolsTests(unittest.TestCase):
         self.assertFalse((self.root / 'dist/assets/leak.txt').exists())
         self.assertEqual(before, (self.root / 'dist/index.html').read_bytes())
 
+    def test_blocked_fonts_are_never_published(self):
+        fonts = self.root / 'assets/fonts'
+        fonts.mkdir()
+        (fonts / 'Maqroo-Regular.woff2').write_bytes(b'blocked fixture')
+        self.run_tool('build.py')
+        self.run_tool('package.py')
+        self.assertFalse((self.root / 'dist/assets/fonts/Maqroo-Regular.woff2').exists())
+        self.assertTrue((fonts / 'Maqroo-Regular.woff2').exists())
+
+    def test_unreviewed_font_preserves_existing_package(self):
+        self.run_tool('build.py')
+        self.run_tool('package.py')
+        before = (self.root / 'dist/index.html').read_bytes()
+        fonts = self.root / 'assets/fonts'
+        fonts.mkdir()
+        (fonts / 'unreviewed.woff2').write_bytes(b'unlicensed fixture')
+        self.assertIn('license review required', self.run_tool('package.py', False).stderr)
+        self.assertEqual(before, (self.root / 'dist/index.html').read_bytes())
+
+    def test_unreviewed_css_preserves_existing_package(self):
+        self.run_tool('build.py')
+        self.run_tool('package.py')
+        before = (self.root / 'dist/index.html').read_bytes()
+        css = self.root / 'assets/css'
+        css.mkdir()
+        (css / 'nds.critical.min.css').write_bytes(b'unreviewed CSS')
+        self.run_tool('package.py', False)
+        self.assertEqual(before, (self.root / 'dist/index.html').read_bytes())
+
     def test_output_symlink_is_not_followed(self):
         self.run_tool('build.py')
         (self.root / 'dist').symlink_to(self.root / 'content')

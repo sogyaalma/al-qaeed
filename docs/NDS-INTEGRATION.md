@@ -54,3 +54,21 @@ python3 tools/repair_nds_css.py
 أي تحديث لاحق: ثبّت tag وcommit ومصدر الرخصة، اقرأ changelog وAPI، احتفظ بحقوق الصورة والمحتوى، حدّث manifest بمراجعة صريحة، ثم أعد build/package وHTML/CSS/JS وunit/static وChromium/axe وno-JS والطباعة وCloudflare Preview. لا تُولّد manifest آليًا في كل build لأن ذلك يخفي تعديل vendor غير المقصود.
 
 المصادر النصية متاحة للفحص، لكن **المقارنة البصرية بقالب `_site` مطابق للبناء الموروث غير متاحة**؛ لا ندعي conformance كاملة أو اكتمال بوابة NDS IQ. نتائج الموقع نفسه وحدود التحقق في [تقرير التدقيق](AUDIT-2026-10-18.md).
+
+## استكمال قابلية إعادة إنتاج الأصول وسياسة النشر
+
+`python3 tools/reproduce_nds.py` يعيد إنشاء **33 ملفًا** في مجلد مؤقت من
+commit الاستيراد المثبت وملفي SCSS حرفيين داخل `tools/vendor/`، ثم يطبق إصلاح
+BOM/URL ويولد HGI ويقارن كل SHA-256، بما فيها CSS العام بعد سياسة الخطوط.
+يعمل دون شبكة أو Ruby أو Sass، ولا يكتب إلى `assets/` ولا يجلب latest.
+
+هذا **artifact-level reproducibility**، وليس تجميع JS من commit upstream
+معلوم؛ ذلك المصدر الأصلي ما زال غير قابل للإثبات. لا ترقية NDS ضمنية.
+موافقة الانتقال إلى إصدار محدد وإعادة فحص migration لازمة إن طُلب source-level rebuild.
+
+يستبعد `tools/font_policy.py` ثلاثة خطوط بلا إذن مثبت من `dist/` ويزيل فقط
+وجهي Saudi `@font-face` من نسخة critical CSS ذات بصمة مدققة. لا URL لـMaqroo
+في CSS الحالي. لا تُعدل ملفات vendor الأصلية. يميز manifest بين `sha256`
+للمدخلات و`distribution_sha256` للمخرجات والاستثناءات الصريحة. أي خط جديد
+أو CSS غير مدقق يوقف التغليف قبل استبدال الحزمة السابقة. IBM Plex بقي دون تعديل.
+راجع [ملحق الاستكمال](CONTINUATION-2026-10-18.md).

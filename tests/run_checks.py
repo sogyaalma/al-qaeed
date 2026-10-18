@@ -2,9 +2,11 @@
 """Browser regression suite for the current NDS static pages.
 
 Build/package, start tools/serve.py, then run this script with its base URL.
-Requires requirements-test.txt and Chromium. Optional CHROMIUM_EXECUTABLE_PATH
-supports a preinstalled browser; AXE_JS_PATH must point to axe-core >= 4.10.
-Results/screenshots go to ignored test-results/, never into public dist/.
+Requires requirements-test.txt and a Playwright browser (BROWSER defaults to
+chromium; also firefox/webkit). Optional <ENGINE>_EXECUTABLE_PATH supports a
+preinstalled browser; AXE_JS_PATH must point to axe-core >= 4.10.
+Results/screenshots go to ignored test-results/ (or TEST_RESULTS_DIR), not dist/.
+Playwright WebKit is not a real Safari or manual VoiceOver test.
 """
 import io
 import json
@@ -19,8 +21,11 @@ from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parent.parent
 BASE = sys.argv[1].rstrip('/') if len(sys.argv) > 1 else 'http://127.0.0.1:8000'
-OUT = ROOT / 'test-results'
-OUT.mkdir(exist_ok=True)
+ENGINE = os.environ.get('BROWSER', 'chromium')
+if ENGINE not in ('chromium', 'firefox', 'webkit'):
+    raise SystemExit('BROWSER must be chromium, firefox or webkit')
+OUT = Path(os.environ.get('TEST_RESULTS_DIR', str(ROOT / 'test-results')))
+OUT.mkdir(parents=True, exist_ok=True)
 AXE = Path(os.environ.get('AXE_JS_PATH', str(ROOT / 'node_modules/axe-core/axe.min.js')))
 if not AXE.is_file():
     raise SystemExit('axe-core is required: npm ci (or set AXE_JS_PATH)')
@@ -31,6 +36,9 @@ def check(name, ok, detail=''):
     report['checks'].append({'name': name, 'ok': bool(ok), 'detail': detail})
     report['failures'] += int(not ok)
     print(('PASS ' if ok else 'FAIL ') + name + (f' [{detail}]' if detail else ''), flush=True)
+    if not ok and os.environ.get('GITHUB_ACTIONS') == 'true':
+        annotation = (name + ': ' + detail).replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+        print('::error title=Browser regression::' + annotation, flush=True)
 
 
 def ready(page, path):
@@ -42,8 +50,10 @@ def ready(page, path):
 
 try:
     with sync_playwright() as p:
-        options = {'executable_path': os.environ['CHROMIUM_EXECUTABLE_PATH']} if os.environ.get('CHROMIUM_EXECUTABLE_PATH') else {}
-        browser = p.chromium.launch(**options)
+        executable = os.environ.get(ENGINE.upper() + '_EXECUTABLE_PATH')
+        options = {'executable_path': executable} if executable else {}
+        browser = getattr(p, ENGINE).launch(**options)
+        report['engine'] = ENGINE
         report['browser'] = browser.version
         for lang, path in [('ar', '/'), ('en', '/en/'), ('404', '/missing/audit/')]:
             widths = report['widths'] if lang != '404' else [375, 1366]
@@ -180,5 +190,8 @@ except Exception as exc:
     check('suite completed without harness exception', False, f'{type(exc).__name__}: {exc}')
 finally:
     (OUT / 'browser-results.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    print(f"\n{len(report['checks'])-report['failures']}/{len(report['checks'])} passed")
+    summary = f"{ENGINE}: {len(report['checks'])-report['failures']}/{len(report['checks'])} passed; browser {report.get('browser', 'not launched')}"
+    print('\n' + summary)
+    if os.environ.get('GITHUB_ACTIONS') == 'true':
+        print('::notice title=Browser verification::' + summary)
 sys.exit(1 if report['failures'] else 0)

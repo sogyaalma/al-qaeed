@@ -4,7 +4,7 @@
 موقع شخصي ثابت بالعربية **RTL** والإنجليزية **LTR**. مصدر المحتوى واحد، ولا يحتاج إلى خادم تطبيقات أو قاعدة بيانات أو متغيرات سرية.
 A bilingual, self-hosted static biography, generated from JSON with Python's standard library and deployed as files on Cloudflare Pages.
 
-**الحالة:** أُصلحت عيوب مؤكدة واختُبرت حزمة الموقع محليًا؛ لم يُنشر للإنتاج من جولة التدقيق. مراجعة المحتوى وحقوق الأصول وإعدادات Cloudflare مطلوبة قبل الاعتماد. النتائج والقيود في [تقرير التدقيق](docs/AUDIT-2026-10-18.md).
+**الحالة:** أُصلحت عيوب مؤكدة واختُبرت حزمة الموقع محليًا؛ لم يُنشر للإنتاج من جولة التدقيق. مراجعة المحتوى وحقوق الأصول وإعدادات Cloudflare مطلوبة قبل الاعتماد. النتائج والقيود في [تقرير التدقيق](docs/AUDIT-2026-10-18.md) و[ملحق استكمال المتبقي](docs/CONTINUATION-2026-10-18.md).
 
 ## المزايا / Features
 
@@ -19,7 +19,7 @@ A bilingual, self-hosted static biography, generated from JSON with Python's sta
 ## المتطلبات / Requirements
 
 - **البناء والنشر:** Python **3.11+** فقط؛ لا npm install في Cloudflare.
-- **التحقق الموسع فقط:** Node **22+**, npm، Python venv، Chromium وأدوات `requirements-test.txt`.
+- **التحقق الموسع فقط:** Node **22+**, npm، Python venv، متصفحات Playwright وأدوات `requirements-test.txt`.
 - لا environment variables مطلوبة للموقع. `CHROMIUM_EXECUTABLE_PATH` و`AXE_JS_PATH` اختياريان لأدوات الاختبار فقط.
 
 ## البناء والمعاينة / Build & preview
@@ -42,6 +42,7 @@ python3 tools/serve.py --port 8000
 python3 tools/build.py && python3 tools/package.py
 python3 tests/run_static_checks.py
 python3 tests/check_docs.py
+python3 tools/reproduce_nds.py  # يتطلب سجل Git كاملًا؛ بلا شبكة أو ترقية
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 python3 tests/check_secrets.py --history
 python3 -m compileall -q tools tests
@@ -54,7 +55,7 @@ python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install -r requirements-test.txt
 npm ci --ignore-scripts
-python -m playwright install --with-deps chromium
+python -m playwright install --with-deps chromium firefox webkit
 npm run validate
 npm audit --audit-level=moderate
 python tools/check_fonts.py
@@ -67,7 +68,9 @@ python tools/check_fonts.py
 python tests/run_checks.py http://127.0.0.1:8000
 ```
 
-تشمل اختبارات المتصفح 11 عرضًا للغتين، menu/Escape وTOC واللغة وBack/Forward وshare/download و404 والطباعة وno-JS وdark و200% text وaxe-core. تُكتب النتائج الجديدة في `test-results/` المتجاهل. CI في `.github/workflows/validate.yml` يشغّل هذه الفحوص دون أسرار أو نشر؛ تشغيله البعيد لم يُفترض ناجحًا لمجرد إضافة الملف.
+تشمل اختبارات المتصفح 11 عرضًا للغتين، menu/Escape وTOC واللغة وBack/Forward وshare/download و404 والطباعة وno-JS وdark و200% text وaxe-core. تُكتب النتائج الجديدة في `test-results/` المتجاهل. CI في `.github/workflows/validate.yml` يشغّل المجموعة على Chromium وFirefox وWebKit، ويتحقق من معاينة Cloudflare لنفس commit على الفروع غير الإنتاجية. لا ينشر CI ولا يغيّر إعدادات المزود؛ التكامل الموجود ينشئ المعاينة. النتائج البعيدة الفعلية في الملحق، لا تُستنتج من وجود workflow.
+
+لإعادة الاختبار محليًا: `BROWSER=firefox TEST_RESULTS_DIR=test-results/firefox python tests/run_checks.py http://127.0.0.1:8000`، أو `BROWSER=webkit` مع مجلد أدلة منفصل.
 
 ## بنية المشروع / Structure
 
@@ -79,7 +82,7 @@ python tests/run_checks.py http://127.0.0.1:8000
 | `assets/css/`, `assets/js/` | NDS؛ التخصيص في `theme.css` و`site.js` فقط |
 | `assets/fonts/`, `assets/img/`, `assets/docs/` | الخطوط والصورة وPDF |
 | `assets/licenses/` | إشعارات الأطراف الثالثة، وليست رخصة للموقع كله |
-| `tools/package.py` | إنشاء `dist/` بقائمة عامة، مع رفض symlinks |
+| `tools/package.py` | إنشاء `dist/` بقائمة عامة، مع رفض symlinks وتطبيق بوابة حقوق الخطوط |
 | `tools/serve.py` | معاينة الحزمة محليًا مع CSP و404 |
 | `tests/` | static/unit/browser/HTML/CSS/secrets |
 | `docs/` | توثيق وتقارير داخلية لا تُنشر |
@@ -96,13 +99,13 @@ python tests/run_checks.py http://127.0.0.1:8000
 
 الحزم الموروثة موسومة **`1.12.x-dev`** وليست release `v1.12.0`. لا نعرف commit upstream الدقيق لجميع تلك الحزم؛ [سجل التكامل](docs/NDS-INTEGRATION.md) يوضح المصدر المعروف والإصلاحات والبصمات وحدود conformance. لم نُجرِ ترقية تلقائية.
 
-الفحص الحالي آلي وبصري على Chromium؛ ليس شهادة WCAG أو بديلًا عن قارئ الشاشة واختبار Safari/Firefox والأجهزة الحقيقية. لا ندعي دعم متصفحات قديمة. [مرجع الثيم](docs/DESIGN-TOKENS.md).
+اختبارات Playwright وaxe الآلية، حتى مع WebKit، ليست شهادة WCAG أو اختبار Safari الحقيقي أو بديلًا عن قارئ الشاشة والأجهزة الحقيقية. لا ندعي دعم متصفحات قديمة. [مرجع الثيم](docs/DESIGN-TOKENS.md).
 
 ## النشر والترخيص / Deployment & rights
 
 Cloudflare Pages: framework `None`، أمر البناء `python3 tools/build.py && python3 tools/package.py`، ومجلد الخرج **`dist`**. لا تنشر جذر المستودع. راجع [DEPLOY.md](DEPLOY.md).
 
-**لا توجد رخصة عامة مختارة للمشروع**؛ يلزم قرار المالك، ولا تعني MIT الخاصة بـNDS ترخيص الصورة والسيرة أو جميع الخطوط. ما زالت حقوق `SaudiWeb` و`Maqroo` الموروثة بحاجة إثبات قبل النشر العام. راجع تقرير التدقيق. لا تُضف رخصة مفترضة.
+**لا توجد رخصة عامة مختارة للمشروع**؛ يلزم قرار المالك، ولا تعني MIT الخاصة بـNDS ترخيص الصورة والسيرة أو جميع الخطوط. لذلك يستبعد `package.py` خطوط `SaudiWeb` و`Maqroo` الموروثة من الموقع المنشور ويزيل مراجعها من CSS المنسوخ؛ تبقى IBM Plex المرخصة. لم تُمنح حقوق جديدة للنسخ الموروثة المحفوظة في Git. راجع تقرير التدقيق. لا تُضف رخصة مفترضة.
 
 ## مشاكل شائعة / Troubleshooting
 

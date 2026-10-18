@@ -2,20 +2,31 @@
 
 ## طريقة تحديث الموقع / How to rebuild
 
-كل نص في الموقع يأتي من `content/content.json`؛ لا تُعدَّل ملفات HTML يدويًا. بعد أي تعديل:
+عدّل `content/content.json` ثم ولّد الصفحات والحزمة. لا تعدّل HTML المولد منفردًا:
 
 ```bash
-python3 tools/build.py            # يبني index.html و en/index.html و 404.html و sitemap.xml
-python3 tools/subset_fonts.py     # يعيد ضغط الخطوط لمحارف المحتوى الجديد (يتطلب: pip install fonttools brotli)
-python3 tools/make_cv_pdf.py      # يحدّث assets/docs/abdulaziz-al-qaeed-cv.pdf من محتوى الموقع (يتطلب Chromium/Playwright)
-python3 tools/package.py          # ينشئ مجلد dist/ الذي يُنشر على Cloudflare Pages
-python3 -m http.server 8000 --bind 0.0.0.0 --directory dist
-python3 tests/run_checks.py http://127.0.0.1:8000   # 200 فحصًا؛ يجب أن تكون النتيجة 200/200
+python3 tools/build.py
+python3 tools/package.py
+python3 tests/run_static_checks.py
+python3 tools/check_fonts.py  # أدوات requirements-test.txt؛ فحص تغطية للقراءة فقط
+python3 tools/serve.py --port 8000
+# من طرفية أخرى مع أدوات الاختبار:
+python3 tests/run_checks.py http://127.0.0.1:8000
 ```
 
-- **مهم:** إن أضفت نصًا جديدًا (حروفًا أو رموزًا لم تكن في الموقع) شغّل `subset_fonts.py` أولًا؛ ملفات الخطوط مضغوطة على المحارف المستخدمة، والفحص رقم 200 سيفشل ويخبرك بالحرف الناقص إن نسيت. الملفات الأصلية كاملة محفوظة في `tools/fonts-original/`.
-- **مهم:** أعد تشغيل `make_cv_pdf.py` قبل `package.py` في كل مرة يتغير فيها المحتوى، وإلا بقي ملف السيرة قديمًا داخل `dist/`.
-- ملف السيرة الحالي **مُولَّد من محتوى الصفحة** (PDF نصي A4 من قابل للبحث والنسخ). عند توفّر **النسخة الأصلية الموقّعة** من الشيخ: ضعها مكان `assets/docs/abdulaziz-al-qaeed-cv.pdf` ثم شغّل `tools/package.py` واختبر الملف الجديد. لا يشترط الفحص الحالي عدد صفحات ثابتًا؛ راجع اختبار النص وA4 إن كانت طبيعة المستند المعتمد مختلفة.
+- لا تُعد ضغط خطوط NDS؛ `subset_fonts.py` القديم لا يعيد كتابة الخطوط.
+- لا تستبدل PDF تلقائيًا بعد تعديل المحتوى. يولّد `python3 tools/make_cv_pdf.py --output test-results/cv-preview.pdf` نسخة مراجعة منفصلة، ثم يعتمد المالك أي استبدال.
+- `package.py` يستبعد خطوط SaudiWeb/Maqroo غير المثبتة الحقوق ويزيل مراجع URL الخاصة بها من نسخة CSS المنشورة؛ ملفات vendor المرجعية لم تتغير. انشر `dist/` فقط.
+- عدد الفحوص ونتائجها تؤخذ من التشغيل الفعلي، لا من أرقام قديمة ثابتة.
+
+## موافقات المالك — لا تُغلق آليًا
+
+- [ ] إذن نشر السيرة وترجمتها وتأكيد النقاط أدناه.
+- [ ] إذن استخدام صورة الشيخ الحالية على الويب.
+- [ ] اعتماد PDF الحالي وإذن إتاحته للتنزيل؛ لا ندعي أنه نسخة موقعة.
+- [ ] اختيار سياسة/رخصة ملفات المشروع التي يملكها، دون ترخيص حقوق الآخرين.
+- [ ] إذا أُريدت إعادة نشر SaudiWeb/Maqroo منفصلين، إرفاق إذن صريح أولًا. لا يُنشران الآن في `dist/`.
+- [ ] اختبار بشري NVDA/VoiceOver وSafari الحقيقي؛ اختبارات Playwright ليست بديلًا عنه.
 
 المعلومات التالية مستخرجة من السيرة الذاتية للشيخ عبدالعزيز القعيد، وتحتاج إلى اعتمادها قبل النشر النهائي.
 

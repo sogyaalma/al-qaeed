@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -20,6 +20,7 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
+          cache-dependency-path: requirements-test.txt
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '22'
@@ -28,11 +29,12 @@ jobs:
         run: |
           python -m pip install -r requirements-test.txt
           npm ci --ignore-scripts
-          python -m playwright install --with-deps chromium
+          python -m playwright install --with-deps chromium firefox webkit
       - name: Build, package and validate
         run: |
           python tools/build.py
           python tools/package.py
+          python tools/reproduce_nds.py
           python -m unittest discover -s tests -p 'test_*.py' -v
           python tests/run_static_checks.py
           python tests/check_docs.py
@@ -43,7 +45,7 @@ jobs:
           npm run validate
           npm audit --audit-level=moderate
           git diff --exit-code -- index.html en/index.html 404.html sitemap.xml _headers vercel.json
-      - name: Test actual package in Chromium with CSP
+      - name: Test actual package in Chromium, Firefox and WebKit with CSP
         run: |
           python tools/serve.py --port 8000 > "$RUNNER_TEMP/site-preview.log" 2>&1 &
           server_pid=$!
@@ -60,12 +62,68 @@ jobs:
           else:
               raise SystemExit('Preview did not start')
           PY
-          python tests/run_checks.py http://127.0.0.1:8000
+          result=0
+          for browser in chromium firefox webkit; do
+            BROWSER="$browser" TEST_RESULTS_DIR="test-results/$browser" python tests/run_checks.py http://127.0.0.1:8000 || result=1
+          done
+          exit "$result"
       - name: Save browser evidence (not deployment)
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: browser-validation
+          path: test-results/
+          if-no-files-found: warn
+          retention-days: 7
+  cloudflare-preview:
+    needs: validate
+    # Fork PRs do not have this project's Pages integration/preview.
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      checks: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-test.txt
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install preview verification tools
+        run: |
+          python -m pip install -r requirements-test.txt
+          npm ci --ignore-scripts
+          python -m playwright install --with-deps chromium
+          python tools/build.py
+          python tools/package.py
+      - name: Wait for this commit's Cloudflare preview (read-only)
+        id: preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIEW_COMMIT: ${{ github.sha }}
+        run: python tools/wait_for_preview.py
+      - name: Check actual Cloudflare routing, security and public files
+        env:
+          PREVIEW_URL: ${{ steps.preview.outputs.url }}
+        run: python tests/check_preview.py "$PREVIEW_URL"
+      - name: Exercise the deployed preview in Chromium
+        env:
+          PREVIEW_URL: ${{ steps.preview.outputs.url }}
+          TEST_RESULTS_DIR: test-results/cloudflare-chromium
+        run: python tests/run_checks.py "$PREVIEW_URL"
+      - name: Save real provider evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: cloudflare-preview-validation
           path: test-results/
           if-no-files-found: warn
           retention-days: 7

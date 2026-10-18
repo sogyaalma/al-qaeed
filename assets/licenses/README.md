@@ -13,10 +13,21 @@ These notices do not assign a license to this website or its biography/images.
 - `hgi-blank.woff2`: identical NDS fallback bytes externalized for CSP; covered
   by the NDS notice above.
 
-**Unresolved:** no redistribution license is recorded here for inherited
+**Distribution gate:** no redistribution grant is recorded for inherited
 `SaudiWeb-Regular.woff2`, `SaudiWeb-Bold.woff2` or `Maqroo-Regular.woff2`.
 SaudiWeb metadata says Ministry of Culture KSA, all rights reserved; Maqroo has
-no usable license/copyright name-table entry. Their presence in an MIT-licensed
-upstream repository is not sufficient proof of redistribution rights. Obtain
-owner/provider permission or approve a complete replacement before public
-publication. They were preserved, not silently deleted or relicensed.
+no usable license/copyright name-table entry. Upstream MIT is not sufficient.
+
+`tools/package.py` now excludes all three from **dist/** and removes exactly
+two Saudi `@font-face` declarations from a SHA-pinned copy of the critical CSS.
+Maqroo has no URL in the current shipped stylesheets. Source/vendor files are
+preserved unchanged for audit/reproduction; do not publish the repository root.
+The normal Arabic/English IBM Plex fonts remain unchanged. No Arabic specialist
+dyslexia replacement or clinical benefit is claimed. Fonts newly added to the
+source must pass the explicit publication allowlist before packaging.
+
+This removes these fonts from the website distribution, **not** an assertion of
+rights to the inherited files in Git history or this repository. Permission is
+still required before distributing them separately or enabling them later.
+The owner still decides rights to biography, translations, portrait, PDF, and
+the project's own license. No license has been invented or assigned.

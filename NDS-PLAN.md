@@ -1,26 +1,29 @@
 Managed by NDS IQ
 
-Runtime: inherited NDS Vanilla 1.12.x-dev artifacts; exact upstream build commit unverified. See docs/NDS-INTEGRATION.md and docs/nds-assets.json.
+Runtime: NDS Vanilla v1.12.0, commit 030d1c7ff4ab5a3092c17b93429b1ac55291ea4d, banner 1.12.0. Provenance in docs/nds-assets.json. Instruction version: NDS IQ 3.1 (matches main on 2026-11-01; tag IQv3.2 was not installed).
 Asset URL prefix: `/assets/`
-Porting strategy: in-place rebuild (explicit request to recreate the site with NDS-vanilla).
-Prior NDS: none in the served UI.
-CSP: present. Async stylesheet preloads with canonical bootstrap + blocking noscript fallback; no inline `style=` knobs (moved to `assets/css/theme.css`).
-Government chrome: not shipped. This is a personal biographical site; NDS disclaimer requires replacing DGA identity before going live.
+Porting strategy: in-place rebuild of the design-system layer. Content JSON, routes, and the Cloudflare packaging model were kept.
+Prior NDS: inherited 1.12.x-dev bundles, treated as non-conformant and replaced. Not used as a markup source.
+CSP: present. Head inline scripts are hashed. No authored `style=` attributes. `style-src-attr 'unsafe-inline'` remains because NDS components set style properties at runtime.
+Government chrome: not shipped on the biography. The showcase names the digital-stamp example and does not reproduce it.
 Pacing: whole plan.
+Built twin: absent. The release ZIP host is unreachable from this environment, so no `_site` visual comparison was possible.
 
 | Page | Route | Legacy libraries | NDS target | Status |
 |---|---|---|---|---|
-| Arabic biography | `/` | none (vanilla HTML/CSS/JS) | faculty-cv example + page-layout article/sideinfo + hero-profile | In Progress |
+| Arabic biography | `/` | none (vanilla HTML/CSS/JS) | faculty-cv + page-shell + hero-sub + toc + footer | In Progress |
 | English biography | `/en/` | none | same as `/` | In Progress |
 | 404 | `/404.html` | none | 404-template status section | In Progress |
+| Component showcase | `/nds-showcase/` | none | catalog of the pinned tag, live components, noindex | In Progress |
 
-Open:
+Rows stay In Progress. Agent-owned static checks passed, but browser verification of this rebuild has not been run here, the built twin is absent, and only the owner can set Built and Verified.
+
 - [x] Asset URL prefix `/assets/`
-- [x] In-place rebuild (user request)
-- [x] Replace DGA stamp / Vision 2030 / government logos
-- [x] Convert CSP knobs to `.alq-*` classes
-- [x] Site browser verification (2026-10-18): awaited `NDS.Init.audit()` zero findings, 328/328 Chromium checks, desktop/mobile screenshots inspected.
-- [ ] Matching built `_site` visual-twin comparison / full NDS IQ conformance: exact inherited upstream build unverified.
-- [ ] Owner confirmation of NDS plan and publication/asset rights.
-
-Rows remain In Progress because browser success alone does not complete the missing canonical-twin/owner gates. Current evidence: docs/AUDIT-2026-10-18.md.
+- [x] In-place rebuild of the design-system layer
+- [x] Pin v1.12.0 after checking it is the latest stable release
+- [x] Replace DGA stamp / government wording on the biography
+- [x] Move CSP knobs to project classes; brand seeds use the documented palette engine
+- [x] Showcase route covers the pinned catalog and labels gaps
+- [ ] Browser verification of this rebuild (Chromium, Firefox, WebKit, axe, no-JS, print, dark, 200% text). The workflow runs it; it was not run in the implementation environment.
+- [ ] `_site` visual-twin comparison, blocked on the release ZIP.
+- [ ] Owner confirmation of the plan, publication, and asset rights.

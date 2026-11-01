@@ -4,12 +4,14 @@
   "private": true,
   "description": "Development-only HTML, CSS and accessibility validation for the static site",
   "scripts": {
-    "validate": "html-validate dist/index.html dist/en/index.html dist/404.html && node tests/check_css.cjs"
+    "validate": "html-validate -c tests/htmlvalidate-strict.json dist/index.html dist/en/index.html dist/404.html dist/nds-showcase/index.html && node tests/check_css.cjs",
+    "validate:quoted": "html-validate -c tests/htmlvalidate-quoted.json \"dist/nds-showcase/**/*.html\""
   },
   "devDependencies": {
     "axe-core": "4.14.0",
     "html-validate": "11.16.4",
-    "postcss": "8.5.30"
+    "postcss": "8.5.30",
+    "sass": "1.83.4"
   },
   "engines": {
     "node": ">=22"

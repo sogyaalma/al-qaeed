@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-palette>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dropmenu · NDS 1.12.0 showcase</title>
+  <meta name="description" content="Toggle-activated overlay for actions and navigation">
+  <style>html :where(header){display:contents}html :where(.nds-topbar){height:40px}html :where(.nds-main-nav){height:var(--nds-nav-height, 72px)}html .nds-swiper.nds-hero:not([data-nds-swiper-initialized],[data-swiper-preset]) .nds-swiper-slide:not(:first-child){display:none}html[data-theme~=dark] :where(.nds-main-nav .nds-brand.nds-oncolor :is(img,svg)){filter:brightness(0) invert(1)}:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-user-feedback-section,.nds-footer){visibility:hidden}html:not([data-nds-loaded]) main{overflow-x:clip}:root{--nds-icons-opacity: 0}i.hgi-stroke{opacity:0}html{overflow-anchor:none}html{background-color:var(--background-body, #f9fafb)}html[data-theme~=dark]{background-color:var(--background-body, #111927)}:where(.nds-topbar){background-color:var(--background-topbar, #f3f4f6)}html[data-theme~=dark] :where(.nds-topbar){background-color:var(--background-topbar, #111927)}:where(.nds-main-nav){background-color:var(--background-nav, #fff)}html[data-theme~=dark] :where(.nds-main-nav){background-color:var(--background-nav, #1f2a37)}:where(.nds-hero-image-wrapper)::before{content:"";position:absolute;inset:0;background:color-mix(in srgb, var(--img-overlay-color, #092a1e) calc(var(--overlay, 0.7) * 100%), transparent);pointer-events:none}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}:is(.nds-hidden,[hidden],[data-state~=hidden],[data-filtered]){display:none !important}:where(.nds-hero-section){position:relative;height:550px}:where(.nds-hero-section.nds-sub){height:auto;min-height:220px}:where(.nds-hero-image-wrapper){position:absolute;inset:0}:where(.nds-hero-image){width:100%;height:100%;object-fit:cover;display:block}:where(.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:hidden}</style>
+  <link rel="preload" href="/assets/css/nds.critical.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="high" data-nds-defer>
+  <link id="nds-theme-stylesheet" rel="stylesheet" href="/assets/css/theme.css?ver=1.12.0.030d1c7">
+  <link rel="preload" href="/assets/css/nds-main.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="low" data-nds-defer="main">
+  <link rel="preload" href="/assets/css/nds-accessibility.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="low" data-nds-defer>
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" fetchpriority="low">
+  <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#0e5a49">
+  <script>
+      // Pre-paint FOUC guard: stamp saved data-theme before first paint, union-merged with markup/pack tokens so a stored value never clobbers them.
+      (function() {
+          var v = localStorage.getItem('nds-theme');
+          if (v) {
+              var d = document.documentElement;
+              var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\s+/)
+                  .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+              d.setAttribute('data-theme', t.join(' '));
+          }
+      })();
+      // Deferred styles: preload → injected stylesheet link (markers move with it). Rationale: ui-shell/head.md, CSP section.
+      (function () {
+          document.querySelectorAll('link[rel="preload"][data-nds-defer]').forEach(function (p) {
+              var l = document.createElement('link');
+              // Clone every attribute except rel/as — keeps href, fetchpriority, integrity, crossorigin, and the data-* markers.
+              for (var i = 0; i < p.attributes.length; i++) {
+                  var a = p.attributes[i];
+                  if (a.name !== 'rel' && a.name !== 'as') l.setAttribute(a.name, a.value);
+              }
+              l.rel = 'stylesheet';
+              p.removeAttribute('data-nds-defer');
+              document.head.appendChild(l);
+          });
+      })();
+  </script>
+      <script>
+      // Project addition (docs/CUSTOM-EXCEPTIONS.md #2): NDS.Theme persists a manual
+      // choice but has no OS-preference surface. Follow prefers-color-scheme only
+      // while the visitor has nothing stored, using the canonical union merge.
+      (function () {
+        var stored;
+        try { stored = localStorage.getItem('nds-theme'); } catch (e) { return; }
+        if (stored || !window.matchMedia) return;
+        if (!window.matchMedia('(prefers-color-scheme: dark)').matches) return;
+        var d = document.documentElement;
+        var t = ((d.getAttribute('data-theme') || '') + ' dark').split(/\s+/)
+          .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+        d.setAttribute('data-theme', t.join(' '));
+      })();
+  </script>
+    <noscript>
+          <style>.alq-site :is(.nds-sideinfo, .nds-toc, .nds-drawer),
+          .alq-site :is(.nds-sideinfo, .nds-toc, .nds-drawer) > *,
+          .alq-site .nds-main-nav > *,
+          .alq-site .nds-code .nds-expandable-content { visibility: visible; }</style>
+        </noscript>
+</head>
+<body class="alq-site">
+  <a class="alq-skip-link" href="#main-content">Skip to content</a>
+  <noscript>
+    <nav class="alq-fallback" aria-label="Navigation without JavaScript">
+      <a href="/nds-showcase/">Showcase index</a>
+      <a href="/">Arabic site</a>
+      <a href="/en/">English site</a>
+    </nav>
+  </noscript>
+  <header>
+    <nav class="nds-main-nav nds-content-wrapper" id="ndsMainNav" aria-label="Primary navigation">
+      <div class="nds-nav-container">
+        <a class="nds-brand" href="/nds-showcase/">
+          <img class="nds-brand-logo" src="/assets/img/favicon.svg" width="40" height="40" alt="">
+          <span class="nds-brand-name">NDS 1.12.0
+            <span class="nds-brand-slogan">Component showcase</span>
+          </span>
+        </a>
+        <ul class="nds-nav-minimal" hidden>
+          <li class="nds-mainNav-toggler nds-nav-item">
+            <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="ndsNavCollapse">
+              <i class="nds-icon nds-hgi-menu-01" aria-hidden="true"></i>
+            </button>
+          </li>
+        </ul>
+        <div class="nds-collapse" id="ndsNavCollapse" hidden>
+          <div class="nds-collapse-content">
+            <ul class="nds-nav-primary">
+            <li class="nds-nav-item">
+              <a href="/nds-showcase/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">Index</span>
+              </a>
+            </li>
+            <li class="nds-nav-item">
+              <a href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">Arabic site</span>
+              </a>
+            </li>
+            <li class="nds-nav-item">
+              <a href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">English site</span>
+              </a>
+            </li>
+            </ul>
+            <div class="nds-nav-item nds-show-more">
+              <a class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full">
+                <i class="nds-icon nds-hgi-arrow-down-01" aria-hidden="true"></i>
+              </a>
+            </div>
+            <ul class="nds-nav-actions">
+              <li class="nds-nav-item nds-icon-only nds-PAB">
+                <a href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="Back to the personal site" lang="ar" hreflang="ar">
+                  <i class="nds-icon nds-hgi-arrow-left-01" aria-hidden="true"></i>
+                  <span class="nds-label" data-hidden="sm md sr">Personal site</span>
+                </a>
+              </li>
+              <li class="nds-nav-item nds-icon-only nds-PAB">
+                <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-theme-toggle-wrap nds-tooltip" data-tooltip-hover="500" data-theme-toggle title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">
+                  <i class="nds-icon nds-hgi-moon-02" aria-hidden="true"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="nds-hero-section nds-sub nds-flat" id="top">
+      <nav class="nds-breadcrumb-nav" aria-label="Breadcrumb">
+        <ol class="nds-breadcrumb">
+            <li><a href="/nds-showcase/">Showcase</a></li>
+            <li class="nds-truncate" aria-current="page">UI</li>
+            <li class="nds-truncate" aria-current="page">Dropmenu</li>
+        </ol>
+      </nav>
+      <div class="nds-section-wrapper">
+        <div class="nds-section-head">
+          <h1 class="nds-section-title">Dropmenu</h1>
+          <p class="nds-section-description">Toggle-activated overlay for actions and navigation</p>
+        </div>
+      </div>
+    </section>
+    <div class="nds-content-layout nds-wSideInfo">
+      <div class="nds-main-content" id="main-content">
+        <section class="nds-content-section nds-sideinfo-section">
+          <div class="nds-section-body">
+        <aside class="nds-sideinfo nds-md nds-sticky nds-top" aria-label="On this page">
+          <nav class="nds-toc alq-toc" aria-label="Page section index">
+            <div class="nds-toc-head">
+              <span class="nds-label">On this page</span>
+              <h2 class="nds-toc-title nds-truncate">Sections</h2>
+            </div>
+            <div class="nds-drawer nds-lined">
+              <ul class="nds-drawer-list">
+                <li>
+                  <a href="#dropmenuStandard" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Standard Dropmenu</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#dropmenuNavigation" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Navigation Dropmenu</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#dropmenuNoAutoClose" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Scrollable Menu with No Auto-Close</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#dropmenuInTable" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Dropmenu Inside Table</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#dropmenuSelectMode" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Select Mode</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#dropmenuSearch" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Searchable</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#dropmenuDelayed" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Delayed-open (Lazy Load)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#dropmenuGuidelines" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Usage Guidelines</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </aside>
+            <div class="nds-info-content">
+          <div class="nds-flex nds-wrap alq-tags">
+            <span class="nds-tag nds-gray nds-sm"><span class="nds-label">JS</span></span>
+            <span class="nds-tag nds-gray nds-sm"><span class="nds-label">CSS</span></span>
+            <span class="nds-tag nds-gray nds-sm"><span class="nds-label">API</span></span>
+          </div>
+        <section id="dropmenuStandard" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Standard Dropmenu</h2>
+            <p class="nds-section-description">Action menu for tasks like edit, duplicate, share, or delete. Use buttons for items that trigger actions on the current page</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 1</span>
+                <div class="nds-card-text">
+                  <div class="nds-dropmenu">
+                    <button class="nds-btn nds-secondary-outline nds-dropmenu-trigger">
+                      <i class="nds-icon nds-hgi-menu-01" aria-hidden="true"></i>
+                      <span class="nds-label">Actions</span>
+                    </button>
+                    <div class="nds-dropmenu-menu" hidden>
+                      <div class="nds-dropmenu-scroll">
+                        <button class="nds-btn nds-subtle nds-dropmenu-item">
+                          <i class="hgi hgi-stroke hgi-edit-02"></i>
+                          <span class="nds-label">Edit</span>
+                        </button>
+                        <button class="nds-btn nds-subtle nds-dropmenu-item">
+                          <i class="nds-icon nds-hgi-copy-01"></i>
+                          <span class="nds-label">Duplicate</span>
+                        </button>
+                        <button class="nds-btn nds-subtle nds-dropmenu-item">
+                          <i class="nds-icon nds-hgi-share-01" aria-hidden="true"></i>
+                          <span class="nds-label">Share</span>
+                        </button>
+                        <hr class="nds-divider">
+                        <button class="nds-btn nds-subtle nds-dropmenu-item nds-destructive">
+                          <i class="hgi hgi-stroke hgi-delete-02"></i>
+                          <span class="nds-label">Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex1">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex1">&lt;div class=&quot;nds-dropmenu&quot;&gt;
+  &lt;button class=&quot;nds-btn nds-secondary-outline nds-dropmenu-trigger&quot;&gt;
+    &lt;i class=&quot;nds-icon nds-hgi-menu-01&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+    &lt;span class=&quot;nds-label&quot;&gt;Actions&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class=&quot;nds-dropmenu-menu&quot; hidden&gt;
+    &lt;div class=&quot;nds-dropmenu-scroll&quot;&gt;
+      &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot;&gt;
+        &lt;i class=&quot;hgi hgi-stroke hgi-edit-02&quot;&gt;&lt;/i&gt;
+        &lt;span class=&quot;nds-label&quot;&gt;Edit&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot;&gt;
+        &lt;i class=&quot;nds-icon nds-hgi-copy-01&quot;&gt;&lt;/i&gt;
+        &lt;span class=&quot;nds-label&quot;&gt;Duplicate&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot;&gt;
+        &lt;i class=&quot;nds-icon nds-hgi-share-01&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+        &lt;span class=&quot;nds-label&quot;&gt;Share&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;hr class=&quot;nds-divider&quot;&gt;
+      &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item nds-destructive&quot;&gt;
+        &lt;i class=&quot;hgi hgi-stroke hgi-delete-02&quot;&gt;&lt;/i&gt;
+        &lt;span class=&quot;nds-label&quot;&gt;Delete&lt;/span&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="dropmenuNavigation" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Navigation Dropmenu</h2>
+            <p class="nds-section-description">Menu items that navigate to other pages. Use anchor elements when each item is a link rather than an action</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 2</span>
+                <div class="nds-card-text">
+                  <div class="nds-dropmenu">
+                    <button class="nds-btn nds-secondary-outline nds-dropmenu-trigger">
+                      <span class="nds-label">Account</span>
+                      <i class="hgi hgi-stroke hgi-user-circle"></i>
+                    </button>
+                    <div class="nds-dropmenu-menu" hidden>
+                      <div class="nds-dropmenu-scroll">
+                        <a href="#" class="nds-btn nds-subtle nds-dropmenu-item">
+                          <i class="hgi hgi-stroke hgi-user-account"></i>
+                          <span class="nds-label">Profile</span>
+                        </a>
+                        <a href="#" class="nds-btn nds-subtle nds-dropmenu-item">
+                          <i class="hgi hgi-stroke hgi-settings-01"></i>
+                          <span class="nds-label">Settings</span>
+                        </a>
+                        <a href="#" class="nds-btn nds-subtle nds-dropmenu-item">
+                          <i class="hgi hgi-stroke hgi-help-circle"></i>
+                          <span class="nds-label">Help</span>
+                        </a>
+                        <hr class="nds-divider">
+                        <a href="#" class="nds-btn nds-subtle nds-dropmenu-item">
+                          <i class="hgi hgi-stroke hgi-logout-01"></i>
+                          <span class="nds-label">Sign out</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex2">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex2">&lt;div class=&quot;nds-dropmenu&quot;&gt;
+  &lt;button class=&quot;nds-btn nds-secondary-outline nds-dropmenu-trigger&quot;&gt;
+    &lt;span class=&quot;nds-label&quot;&gt;Account&lt;/span&gt;
+    &lt;i class=&quot;hgi hgi-stroke hgi-user-circle&quot;&gt;&lt;/i&gt;
+  &lt;/button&gt;
+  &lt;div class=&quot;nds-dropmenu-menu&quot; hidden&gt;
+    &lt;div class=&quot;nds-dropmenu-scroll&quot;&gt;
+      &lt;a href=&quot;#&quot; class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot;&gt;
+        &lt;i class=&quot;hgi hgi-stroke hgi-user-account&quot;&gt;&lt;/i&gt;
+        &lt;span class=&quot;nds-label&quot;&gt;Profile&lt;/span&gt;
+      &lt;/a&gt;
+      &lt;a href=&quot;#&quot; class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot;&gt;
+        &lt;i class=&quot;hgi hgi-stroke hgi-settings-01&quot;&gt;&lt;/i&gt;
+        &lt;span class=&quot;nds-label&quot;&gt;Settings&lt;/span&gt;
+      &lt;/a&gt;
+      &lt;a href=&quot;#&quot; class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot;&gt;
+        &lt;i class=&quot;hgi hgi-stroke hgi-help-circle&quot;&gt;&lt;/i&gt;
+        &lt;span class=&quot;nds-label&quot;&gt;Help&lt;/span&gt;
+      &lt;/a&gt;
+      &lt;hr class=&quot;nds-divider&quot;&gt;
+      &lt;a href=&quot;#&quot; class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot;&gt;
+        &lt;i class=&quot;hgi hgi-stroke hgi-logout-01&quot;&gt;&lt;/i&gt;
+        &lt;span class=&quot;nds-label&quot;&gt;Sign out&lt;/span&gt;
+      &lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="dropmenuNoAutoClose" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Scrollable Menu with No Auto-Close</h2>
+            <p class="nds-section-description">Use nds-dropmenu-scroll for scrollable content areas and data-no-auto-close to keep the menu open when interacting with form controls</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 3</span>
+                <div class="nds-card-text">
+                  <div class="nds-dropmenu">
+                    <button class="nds-btn nds-neutral nds-menu-btn nds-dropmenu-trigger">
+                      <i class="hgi hgi-stroke hgi-settings-02"></i>
+                      <span class="nds-label">Settings</span>
+                    </button>
+                    <div class="nds-dropmenu-menu" style="min-width: 220px;" hidden>
+                      <div class="nds-dropmenu-scroll">
+                        <!-- data-no-auto-close keeps menu open on interaction -->
+                        <fieldset class="nds-dropmenu-group nds-form-group nds-check-group"
+                          data-no-auto-close>
+                          <legend class="nds-label">Notifications</legend>
+                          <div class="nds-form-container nds-switch-container">
+                            <div class="nds-form-header">
+                              <label for="setting-email-ex3">
+                                <span class="nds-label">Email</span>
+                              </label>
+                            </div>
+                            <div class="nds-form-control">
+                              <div class="nds-switch">
+                                <input type="checkbox" id="setting-email-ex3"
+                                  class="nds-switch-input" checked>
+                                <div class="nds-switch-track">
+                                  <div class="nds-switch-thumb"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- more switches... -->
+                        </fieldset>
+                        <hr class="nds-divider">
+                        <fieldset class="nds-dropmenu-group nds-form-group nds-check-group"
+                          data-no-auto-close>
+                          <legend class="nds-label">Display</legend>
+                          <div class="nds-form-container nds-check-container">
+                            <div class="nds-form-header">
+                              <label for="setting-compact-ex3">
+                                <span class="nds-label">Compact view</span>
+                              </label>
+                            </div>
+                            <div class="nds-form-control">
+                              <input type="checkbox" id="setting-compact-ex3" class="nds-check">
+                            </div>
+                          </div>
+                          <!-- more checkboxes... -->
+                        </fieldset>
+                      </div>
+                      <div class="nds-dropmenu-footer">
+                        <hr class="nds-divider">
+                        <div class="nds-dropmenu-action">
+                          <button class="nds-btn nds-secondary nds-dropmenu-item"
+                            type="button" data-no-auto-close>
+                            <span class="nds-label">Reset</span>
+                          </button>
+                          <button class="nds-btn nds-primary nds-dropmenu-item"
+                            type="button">
+                            <span class="nds-label">Save</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex3">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex3">&lt;div class=&quot;nds-dropmenu&quot;&gt;
+  &lt;button class=&quot;nds-btn nds-neutral nds-menu-btn nds-dropmenu-trigger&quot;&gt;
+    &lt;i class=&quot;hgi hgi-stroke hgi-settings-02&quot;&gt;&lt;/i&gt;
+    &lt;span class=&quot;nds-label&quot;&gt;Settings&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class=&quot;nds-dropmenu-menu&quot; style=&quot;min-width: 220px;&quot; hidden&gt;
+    &lt;div class=&quot;nds-dropmenu-scroll&quot;&gt;
+      &lt;!-- data-no-auto-close keeps menu open on interaction --&gt;
+      &lt;fieldset class=&quot;nds-dropmenu-group nds-form-group nds-check-group&quot;
+        data-no-auto-close&gt;
+        &lt;legend class=&quot;nds-label&quot;&gt;Notifications&lt;/legend&gt;
+        &lt;div class=&quot;nds-form-container nds-switch-container&quot;&gt;
+          &lt;div class=&quot;nds-form-header&quot;&gt;
+            &lt;label for=&quot;setting-email&quot;&gt;
+              &lt;span class=&quot;nds-label&quot;&gt;Email&lt;/span&gt;
+            &lt;/label&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;nds-form-control&quot;&gt;
+            &lt;div class=&quot;nds-switch&quot;&gt;
+              &lt;input type=&quot;checkbox&quot; id=&quot;setting-email&quot;
+                class=&quot;nds-switch-input&quot; checked&gt;
+              &lt;div class=&quot;nds-switch-track&quot;&gt;
+                &lt;div class=&quot;nds-switch-thumb&quot;&gt;&lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;!-- more switches... --&gt;
+      &lt;/fieldset&gt;
+      &lt;hr class=&quot;nds-divider&quot;&gt;
+      &lt;fieldset class=&quot;nds-dropmenu-group nds-form-group nds-check-group&quot;
+        data-no-auto-close&gt;
+        &lt;legend class=&quot;nds-label&quot;&gt;Display&lt;/legend&gt;
+        &lt;div class=&quot;nds-form-container nds-check-container&quot;&gt;
+          &lt;div class=&quot;nds-form-header&quot;&gt;
+            &lt;label for=&quot;setting-compact&quot;&gt;
+              &lt;span class=&quot;nds-label&quot;&gt;Compact view&lt;/span&gt;
+            &lt;/label&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;nds-form-control&quot;&gt;
+            &lt;input type=&quot;checkbox&quot; id=&quot;setting-compact&quot; class=&quot;nds-check&quot;&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;!-- more checkboxes... --&gt;
+      &lt;/fieldset&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;nds-dropmenu-footer&quot;&gt;
+      &lt;hr class=&quot;nds-divider&quot;&gt;
+      &lt;div class=&quot;nds-dropmenu-action&quot;&gt;
+        &lt;button class=&quot;nds-btn nds-secondary nds-dropmenu-item&quot;
+          type=&quot;button&quot; data-no-auto-close&gt;
+          &lt;span class=&quot;nds-label&quot;&gt;Reset&lt;/span&gt;
+        &lt;/button&gt;
+        &lt;button class=&quot;nds-btn nds-primary nds-dropmenu-item&quot;
+          type=&quot;button&quot;&gt;
+          &lt;span class=&quot;nds-label&quot;&gt;Save&lt;/span&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="dropmenuInTable" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Dropmenu Inside Table</h2>
+            <p class="nds-section-description">Row-level action menus inside tables portal on their own. The table wrapper scrolls and clips, so the menu moves to &lt;body&gt; on open (viewport-anchored, position: fixed), escapes the cell&#x27;s clipping and stacking context, and follows the trigger as the page scrolls — no auto-close on scroll. The data-portal attribute in the example below is optional now. Keep it to force the move, or drop it and get the same result.</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 4</span>
+                <div class="nds-card-text">
+                  <table class="nds-table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Nora Al-Zahrani</td>
+                        <td>Administrator</td>
+                        <td>
+                          <span class="nds-tag nds-sm" data-status="success">
+                            <span class="nds-label">Active</span>
+                          </span>
+                        </td>
+                        <td>
+                          <!-- data-portal: escape the table cell's clipping/stacking context
+                               so the menu can extend beyond the row when opened. -->
+                          <div class="nds-dropmenu" data-portal>
+                            <button class="nds-btn nds-sm nds-subtle nds-dropmenu-trigger"
+                              aria-label="Row actions">
+                              <i class="hgi hgi-stroke hgi-more-horizontal-circle-01"></i>
+                            </button>
+                            <div class="nds-dropmenu-menu" hidden>
+                              <div class="nds-dropmenu-scroll">
+                                <button class="nds-btn nds-subtle nds-dropmenu-item">
+                                  <i class="hgi hgi-stroke hgi-edit-02"></i>
+                                  <span class="nds-label">Edit</span>
+                                </button>
+                                <button class="nds-btn nds-subtle nds-dropmenu-item">
+                                  <i class="nds-icon nds-hgi-copy-01"></i>
+                                  <span class="nds-label">Duplicate</span>
+                                </button>
+                                <hr class="nds-divider">
+                                <button class="nds-btn nds-subtle nds-dropmenu-item
+                                  nds-destructive">
+                                  <i class="hgi hgi-stroke hgi-delete-02"></i>
+                                  <span class="nds-label">Delete</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      <!-- more rows... -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex4">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex4">&lt;table class=&quot;nds-table&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Role&lt;/th&gt;
+      &lt;th&gt;Status&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Nora Al-Zahrani&lt;/td&gt;
+      &lt;td&gt;Administrator&lt;/td&gt;
+      &lt;td&gt;
+        &lt;span class=&quot;nds-tag nds-sm&quot; data-status=&quot;success&quot;&gt;
+          &lt;span class=&quot;nds-label&quot;&gt;Active&lt;/span&gt;
+        &lt;/span&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;!-- data-portal: escape the table cell&#x27;s clipping/stacking context
+             so the menu can extend beyond the row when opened. --&gt;
+        &lt;div class=&quot;nds-dropmenu&quot; data-portal&gt;
+          &lt;button class=&quot;nds-btn nds-sm nds-subtle nds-dropmenu-trigger&quot;
+            aria-label=&quot;Row actions&quot;&gt;
+            &lt;i class=&quot;hgi hgi-stroke hgi-more-horizontal-circle-01&quot;&gt;&lt;/i&gt;
+          &lt;/button&gt;
+          &lt;div class=&quot;nds-dropmenu-menu&quot; hidden&gt;
+            &lt;div class=&quot;nds-dropmenu-scroll&quot;&gt;
+              &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot;&gt;
+                &lt;i class=&quot;hgi hgi-stroke hgi-edit-02&quot;&gt;&lt;/i&gt;
+                &lt;span class=&quot;nds-label&quot;&gt;Edit&lt;/span&gt;
+              &lt;/button&gt;
+              &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot;&gt;
+                &lt;i class=&quot;nds-icon nds-hgi-copy-01&quot;&gt;&lt;/i&gt;
+                &lt;span class=&quot;nds-label&quot;&gt;Duplicate&lt;/span&gt;
+              &lt;/button&gt;
+              &lt;hr class=&quot;nds-divider&quot;&gt;
+              &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item
+                nds-destructive&quot;&gt;
+                &lt;i class=&quot;hgi hgi-stroke hgi-delete-02&quot;&gt;&lt;/i&gt;
+                &lt;span class=&quot;nds-label&quot;&gt;Delete&lt;/span&gt;
+              &lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;!-- more rows... --&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code>
+              </div>
+            </div>
+          </div>
+          <div class="nds-block nds-prose">
+            <table class="nds-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Role</th>
+                                                        <th>Status</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Nora Al-Zahrani</td>
+                                                        <td>Administrator</td>
+                                                        <td><span class="nds-tag nds-sm" data-status="success"><span class="nds-label">Active</span></span></td>
+                                                        <td>
+                                                            <div class="nds-dropmenu" data-portal>
+                                                                <button class="nds-btn nds-sm nds-subtle nds-dropmenu-trigger" aria-label="Row actions">
+                                                                    <i class="hgi hgi-stroke hgi-more-horizontal-circle-01"></i>
+                                                                </button>
+                                                                <div class="nds-dropmenu-menu" hidden>
+                                                                    <div class="nds-dropmenu-scroll">
+                                                                        <button class="nds-btn nds-subtle nds-dropmenu-item">
+                                                                            <i class="hgi hgi-stroke hgi-edit-02"></i>
+                                                                            <span class="nds-label">Edit</span>
+                                                                        </button>
+                                                                        <button class="nds-btn nds-subtle nds-dropmenu-item">
+                                                                            <i class="nds-icon nds-hgi-copy-01"></i>
+                                                                            <span class="nds-label">Duplicate</span>
+                                                                        </button>
+                                                                        <hr class="nds-divider">
+                                                                        <button class="nds-btn nds-subtle nds-dropmenu-item nds-destructive">
+                                                                            <i class="hgi hgi-stroke hgi-delete-02"></i>
+                                                                            <span class="nds-label">Delete</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Yousef Al-Harbi</td>
+                                                        <td>Editor</td>
+                                                        <td><span class="nds-tag nds-sm" data-status="warning"><span class="nds-label">Away</span></span></td>
+                                                        <td>
+                                                            <div class="nds-dropmenu" data-portal>
+                                                                <button class="nds-btn nds-sm nds-subtle nds-dropmenu-trigger" aria-label="Row actions">
+                                                                    <i class="hgi hgi-stroke hgi-more-horizontal-circle-01"></i>
+                                                                </button>
+                                                                <div class="nds-dropmenu-menu" hidden>
+                                                                    <div class="nds-dropmenu-scroll">
+                                                                        <button class="nds-btn nds-subtle nds-dropmenu-item">
+                                                                            <i class="hgi hgi-stroke hgi-edit-02"></i>
+                                                                            <span class="nds-label">Edit</span>
+                                                                        </button>
+                                                                        <button class="nds-btn nds-subtle nds-dropmenu-item">
+                                                                            <i class="nds-icon nds-hgi-copy-01"></i>
+                                                                            <span class="nds-label">Duplicate</span>
+                                                                        </button>
+                                                                        <hr class="nds-divider">
+                                                                        <button class="nds-btn nds-subtle nds-dropmenu-item nds-destructive">
+                                                                            <i class="hgi hgi-stroke hgi-delete-02"></i>
+                                                                            <span class="nds-label">Delete</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Layla Al-Qahtani</td>
+                                                        <td>Viewer</td>
+                                                        <td><span class="nds-tag nds-sm" data-status="error"><span class="nds-label">Offline</span></span></td>
+                                                        <td>
+                                                            <div class="nds-dropmenu" data-portal>
+                                                                <button class="nds-btn nds-sm nds-subtle nds-dropmenu-trigger" aria-label="Row actions">
+                                                                    <i class="hgi hgi-stroke hgi-more-horizontal-circle-01"></i>
+                                                                </button>
+                                                                <div class="nds-dropmenu-menu" hidden>
+                                                                    <div class="nds-dropmenu-scroll">
+                                                                        <button class="nds-btn nds-subtle nds-dropmenu-item">
+                                                                            <i class="hgi hgi-stroke hgi-edit-02"></i>
+                                                                            <span class="nds-label">Edit</span>
+                                                                        </button>
+                                                                        <button class="nds-btn nds-subtle nds-dropmenu-item">
+                                                                            <i class="nds-icon nds-hgi-copy-01"></i>
+                                                                            <span class="nds-label">Duplicate</span>
+                                                                        </button>
+                                                                        <hr class="nds-divider">
+                                                                        <button class="nds-btn nds-subtle nds-dropmenu-item nds-destructive">
+                                                                            <i class="hgi hgi-stroke hgi-delete-02"></i>
+                                                                            <span class="nds-label">Delete</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="dropmenuSelectMode" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Select Mode</h2>
+            <p class="nds-section-description">Add data-select-name to turn a dropmenu into a value picker. Each item needs data-value; the chosen value is written to a hidden input so the selection ships with a form, and the trigger label updates to reflect the current selection. Add nds-center to the .nds-dropmenu-menu to center-align every item&#x27;s label — handy for compact pickers whose labels are short (numbers, currencies, states). To re-slice a live list, point the picker at a Pagination container with data-per-page-target (see Pagination · Per-page Picker).</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 5</span>
+                <div class="nds-card-text">
+                  <!-- data-select-name: field name for the hidden input
+                       data-select-value: pre-select "10" on init
+                       nds-center on the menu: each item label sits centered
+                       nds-menu-btn: caret appears via the button's own ::after -->
+                  <div class="nds-dropmenu"
+                    data-select-name="perPage"
+                    data-select-value="10">
+                    <button class="nds-btn nds-secondary-outline nds-md nds-menu-btn nds-dropmenu-trigger" type="button">
+                      <span class="nds-label">10</span>
+                    </button>
+                    <div class="nds-dropmenu-menu nds-center" hidden>
+                      <div class="nds-dropmenu-scroll">
+                        <button class="nds-btn nds-subtle nds-dropmenu-item" data-value="5"><span class="nds-label">5</span></button>
+                        <button class="nds-btn nds-subtle nds-dropmenu-item" data-value="10"><span class="nds-label">10</span></button>
+                        <button class="nds-btn nds-subtle nds-dropmenu-item" data-value="25"><span class="nds-label">25</span></button>
+                        <button class="nds-btn nds-subtle nds-dropmenu-item" data-value="50"><span class="nds-label">50</span></button>
+                        <button class="nds-btn nds-subtle nds-dropmenu-item" data-value="100"><span class="nds-label">100</span></button>
+                        <button class="nds-btn nds-subtle nds-dropmenu-item" data-value="250"><span class="nds-label">250</span></button>
+                        <button class="nds-btn nds-subtle nds-dropmenu-item" data-value="500"><span class="nds-label">500</span></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex5">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex5">&lt;!-- data-select-name: field name for the hidden input
+     data-select-value: pre-select &quot;10&quot; on init
+     nds-center on the menu: each item label sits centered
+     nds-menu-btn: caret appears via the button&#x27;s own ::after --&gt;
+&lt;div class=&quot;nds-dropmenu&quot;
+  data-select-name=&quot;perPage&quot;
+  data-select-value=&quot;10&quot;&gt;
+  &lt;button class=&quot;nds-btn nds-secondary-outline nds-md nds-menu-btn nds-dropmenu-trigger&quot; type=&quot;button&quot;&gt;
+    &lt;span class=&quot;nds-label&quot;&gt;10&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class=&quot;nds-dropmenu-menu nds-center&quot; hidden&gt;
+    &lt;div class=&quot;nds-dropmenu-scroll&quot;&gt;
+      &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-value=&quot;5&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;5&lt;/span&gt;&lt;/button&gt;
+      &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-value=&quot;10&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;10&lt;/span&gt;&lt;/button&gt;
+      &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-value=&quot;25&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;25&lt;/span&gt;&lt;/button&gt;
+      &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-value=&quot;50&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;50&lt;/span&gt;&lt;/button&gt;
+      &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-value=&quot;100&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;100&lt;/span&gt;&lt;/button&gt;
+      &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-value=&quot;250&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;250&lt;/span&gt;&lt;/button&gt;
+      &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-value=&quot;500&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;500&lt;/span&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+              </div>
+            </div>
+          </div>
+          <div class="nds-block">
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="api-6">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-javascript" id="api-6">// nds:dropmenu:selected fires on the wrapper when an item is chosen.
+// detail: { dropmenu, item, value } — here we surface it as a toast.
+document.getElementById(&#x27;dropmenu-select-demo&#x27;)
+    .addEventListener(&#x27;nds:dropmenu:selected&#x27;, (e) =&gt; {
+        NDS.Alert.create({
+            variant: &#x27;success&#x27;,
+            title: &#x27;Per-page updated&#x27;,
+            description: `Now showing ${e.detail.value} items per page.`,
+            display: &#x27;toast&#x27;,
+            position: &#x27;top&#x27;,
+            duration: 3000
+        });
+    });
+
+// The hidden input also fires a native `change` event so the selection
+// integrates with standard form libraries and submit handlers.</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="dropmenuSearch" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Searchable</h2>
+            <p class="nds-section-description">Add data-search to inject a search box at the top of the menu. Match is case- and diacritic-insensitive, so &quot;cafe&quot; matches &quot;café&quot; and &quot;مطار&quot; matches &quot;المَطار&quot;. Set a threshold with data-search=&quot;50&quot; to skip injection when the menu holds fewer than N filterable items. Per-item data-search-value=&quot;…&quot; appends extra tokens (English aliases next to an Arabic label, IDs, keywords). Opt an item OUT with data-search-item=&quot;false&quot; to keep it always visible below the empty-state message. Override the &quot;No results&quot; text via data-search-empty=&quot;…&quot;</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 7</span>
+                <div class="nds-card-text">
+                  <!-- data-search: always-on. Use data-search="50" to only show the box
+                       when the menu holds ≥ 50 items. Combines with SELECT MODE — the
+                       chosen item ships as `country` in the form, its Arabic label mirrors
+                       to the trigger. data-search-value adds English aliases so "Saudi"
+                       matches the Arabic row. -->
+                  <div class="nds-dropmenu" data-search
+                       data-select-name="country" data-select-value="SA">
+                      <button class="nds-btn nds-secondary-outline nds-menu-btn nds-dropmenu-trigger" type="button">
+                          <span class="nds-label">Choose a country</span>
+                      </button>
+                      <div class="nds-dropmenu-menu" hidden>
+                          <div class="nds-dropmenu-scroll">
+                              <button class="nds-btn nds-subtle nds-dropmenu-item" data-value="SA" data-search-value="Saudi Arabia KSA">
+                                  <span class="nds-label">المَملَكة العَربيَّة السَعوديَّة</span>
+                              </button>
+                              <button class="nds-btn nds-subtle nds-dropmenu-item" data-value="AE" data-search-value="United Arab Emirates UAE">
+                                  <span class="nds-label">الإمارات العربية المتحدة</span>
+                              </button>
+                              <!-- … -->
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex7">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex7">&lt;!-- data-search: always-on. Use data-search=&quot;50&quot; to only show the box
+     when the menu holds ≥ 50 items. Combines with SELECT MODE — the
+     chosen item ships as `country` in the form, its Arabic label mirrors
+     to the trigger. data-search-value adds English aliases so &quot;Saudi&quot;
+     matches the Arabic row. --&gt;
+&lt;div class=&quot;nds-dropmenu&quot; data-search
+     data-select-name=&quot;country&quot; data-select-value=&quot;SA&quot;&gt;
+    &lt;button class=&quot;nds-btn nds-secondary-outline nds-menu-btn nds-dropmenu-trigger&quot; type=&quot;button&quot;&gt;
+        &lt;span class=&quot;nds-label&quot;&gt;Choose a country&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;div class=&quot;nds-dropmenu-menu&quot; hidden&gt;
+        &lt;div class=&quot;nds-dropmenu-scroll&quot;&gt;
+            &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-value=&quot;SA&quot; data-search-value=&quot;Saudi Arabia KSA&quot;&gt;
+                &lt;span class=&quot;nds-label&quot;&gt;المَملَكة العَربيَّة السَعوديَّة&lt;/span&gt;
+            &lt;/button&gt;
+            &lt;button class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-value=&quot;AE&quot; data-search-value=&quot;United Arab Emirates UAE&quot;&gt;
+                &lt;span class=&quot;nds-label&quot;&gt;الإمارات العربية المتحدة&lt;/span&gt;
+            &lt;/button&gt;
+            &lt;!-- … --&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="dropmenuDelayed" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Delayed-open (Lazy Load)</h2>
+            <p class="nds-section-description">Add data-delay=&quot;&lt;ms&gt;&quot; to defer menu content until first open. On the first trigger click the button shows a loading state for the specified delay, fires nds:dropmenu:prepare so you can populate the menu, then opens. Subsequent opens skip the delay.</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 8</span>
+                <div class="nds-card-text">
+                  <!-- data-delay="1200": show loading state for 1200ms on first open,
+                       fire nds:dropmenu:prepare, then open. One-shot; removed after first use. -->
+                  <div class="nds-dropmenu" id="my-lazy-dropmenu-ex8" data-delay="1200">
+                    <button class="nds-btn nds-secondary-outline nds-dropmenu-trigger">
+                      <i class="hgi hgi-stroke hgi-list-view" aria-hidden="true"></i>
+                      <span class="nds-label">Load items</span>
+                    </button>
+                    <div class="nds-dropmenu-menu" hidden>
+                      <div class="nds-dropmenu-scroll">
+                        <!-- Populated by nds:dropmenu:prepare handler -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex8">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex8">&lt;!-- data-delay=&quot;1200&quot;: show loading state for 1200ms on first open,
+     fire nds:dropmenu:prepare, then open. One-shot; removed after first use. --&gt;
+&lt;div class=&quot;nds-dropmenu&quot; id=&quot;my-lazy-dropmenu&quot; data-delay=&quot;1200&quot;&gt;
+  &lt;button class=&quot;nds-btn nds-secondary-outline nds-dropmenu-trigger&quot;&gt;
+    &lt;i class=&quot;hgi hgi-stroke hgi-list-view&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+    &lt;span class=&quot;nds-label&quot;&gt;Load items&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class=&quot;nds-dropmenu-menu&quot; hidden&gt;
+    &lt;div class=&quot;nds-dropmenu-scroll&quot;&gt;
+      &lt;!-- Populated by nds:dropmenu:prepare handler --&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+              </div>
+            </div>
+          </div>
+          <div class="nds-block">
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="api-9">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-javascript" id="api-9">// nds:dropmenu:prepare fires after the loading state, before the menu opens.
+// Build and insert items into the menu here.
+// detail: { dropmenu, trigger, menu, isOpen }
+document.getElementById(&#x27;my-lazy-dropmenu&#x27;).addEventListener(&#x27;nds:dropmenu:prepare&#x27;, (e) =&gt; {
+    const scroll = e.detail.menu.querySelector(&#x27;.nds-dropmenu-scroll&#x27;);
+    if (scroll.children.length) return; // already populated (fast double-click guard)
+
+    const items = [&#x27;Dashboard&#x27;, &#x27;Reports&#x27;, &#x27;Analytics&#x27;, &#x27;Settings&#x27;];
+    items.forEach(label =&gt; {
+        const btn = document.createElement(&#x27;button&#x27;);
+        btn.className = &#x27;nds-btn nds-subtle nds-dropmenu-item&#x27;;
+        btn.innerHTML = `&lt;span class=&quot;nds-label&quot;&gt;${label}&lt;/span&gt;`;
+        scroll.appendChild(btn);
+    });
+});</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="dropmenuGuidelines" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Usage Guidelines</h2>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="api-10">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-javascript" id="api-10">// ── Auto-initialization ────────────────────────────────────
+// Dropmenus initialize automatically on page load
+
+// ── Reinitialization ───────────────────────────────────────
+// Call after dynamically adding new dropmenus to the page
+NDS.Dropmenu.reinit();
+
+// ── Manual creation ────────────────────────────────────────
+const element = document.querySelector(&#x27;.nds-dropmenu&#x27;);
+const instance = NDS.Dropmenu.create(element);
+
+// ── Teardown ───────────────────────────────────────────────
+// Call before the wrapper leaves the DOM — replacing a table row, closing
+// a view. An instance holds a document-level click listener, so dropping
+// its wrapper without this leaks the listener and the detached subtree.
+NDS.Dropmenu.destroy(element);
+
+// ── Static helpers ─────────────────────────────────────────
+// Walk up from any descendant (including portaled menus) to the wrapper
+const wrapper = NDS.Dropmenu.from(someChildElement);
+
+// Get the menu element for a wrapper (portal-aware)
+const menu = NDS.Dropmenu.menuOf(wrapper);
+
+// ── Instance methods ───────────────────────────────────────
+// Access instance via element.ndsDropmenu
+const dropmenu = document.querySelector(&#x27;.nds-dropmenu&#x27;);
+const instance = dropmenu.ndsDropmenu;
+
+instance.open();    // Open the menu
+instance.close();   // Close the menu
+instance.toggle();  // Toggle open/closed state
+instance.destroy(); // Release listeners and undo init — the wrapper survives, so references stay valid
+
+// ── Events ─────────────────────────────────────────────────
+// Listen for state changes
+document.addEventListener(&#x27;nds:dropmenu:opened&#x27;, (e) =&gt; {
+    // e.detail: { dropmenu, trigger, menu, isOpen }
+    console.log(&#x27;Menu opened:&#x27;, e.detail.dropmenu);
+});
+
+document.addEventListener(&#x27;nds:dropmenu:closed&#x27;, (e) =&gt; {
+    // e.detail: { dropmenu, trigger, menu, isOpen }
+    console.log(&#x27;Menu closed:&#x27;, e.detail.dropmenu);
+});
+
+// Fired when a select-mode item is chosen (data-select-name dropmenu)
+document.addEventListener(&#x27;nds:dropmenu:selected&#x27;, (e) =&gt; {
+    // e.detail: { dropmenu, item, value }
+    console.log(&#x27;Selected value:&#x27;, e.detail.value, &#x27;Item:&#x27;, e.detail.item);
+});
+
+// Fired during delayed-first-open (data-delay) after the loading state,
+// before the menu opens. Populate menu content here.
+document.querySelector(&#x27;.nds-dropmenu&#x27;).addEventListener(&#x27;nds:dropmenu:prepare&#x27;, (e) =&gt; {
+    // e.detail: { dropmenu, trigger, menu, isOpen }
+    const menu = e.detail.menu;
+    // Build and insert items into menu now
+});
+
+// ── Keyboard navigation ────────────────────────────────────
+// Trigger button:
+//   Enter/Space: toggle menu
+//   ArrowDown: open and focus first item
+//   ArrowUp: open and focus last item
+//   All three prefer the item marked data-state=&quot;active&quot; (the menu&#x27;s
+//   current value, e.g. pagination&#x27;s current page) when one exists
+//
+// Inside menu:
+//   ArrowDown/Up: navigate items
+//   Home/End: jump to first/last item
+//   Tab/Shift+Tab: navigate focusable elements
+//   Escape: close menu and return focus to trigger
+//
+// Inside input fields:
+//   Alt+ArrowDown/Up: navigate menu items
+//   Ctrl+Home/End: jump to first/last item</code>
+              </div>
+            </div>
+          </div>
+          <div class="nds-block nds-prose">
+            <table class="nds-table nds-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Class</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">nds-destructive</code></td>
+                                        <td>Applies destructive (red) styling to a menu item. Place destructive actions last in the menu for visual separation.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">nds-dropmenu-footer</code></td>
+                                        <td>Sticky footer area that stays visible while the menu content scrolls. Place outside <code class="nds-inline-code lang-html">.nds-dropmenu-scroll</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">nds-dropmenu-action</code></td>
+                                        <td>Action bar inside the footer for buttons like Clear and Apply. Buttons lay out side-by-side and share the row equally.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">nds-dropmenu-group</code></td>
+                                        <td>Groups form controls or related items inside the menu with consistent spacing.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+          </div>
+          <div class="nds-block nds-prose">
+            <table class="nds-table nds-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Attribute</th>
+                                        <th>Element</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-no-auto-close</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu-item</code></td>
+                                        <td>Prevents the menu from closing when that item is clicked. Use for checkboxes, inputs, and filter controls that need multiple interactions.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-portal</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu</code></td>
+                                        <td>Forces the menu to <code class="nds-inline-code lang-html">&lt;body&gt;</code> on open. A menu that an ancestor would clip already moves there on its own, so set this only to force the move where no ancestor demands it. The portaled menu uses <code class="nds-inline-code lang-html">position: fixed</code> and tracks its trigger on scroll (rAF-throttled) so it stays anchored without closing.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-no-portal</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu</code></td>
+                                        <td>Keeps the menu in place, even when an ancestor clips it. Set it when your own CSS or JavaScript needs the menu to stay a descendant of the wrapper — a rule such as <code class="nds-inline-code">.my-panel .nds-dropmenu-menu</code> stops matching after the menu moves to <code class="nds-inline-code lang-html">&lt;body&gt;</code>. The menu is then clipped by that ancestor, so use it for styling ownership, not to fix placement. It wins over <code class="nds-inline-code lang-html">data-portal</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-anchor-cursor</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu</code></td>
+                                        <td>Anchors the menu horizontally to the click position, opening it under the cursor like a context menu. Useful for wide triggers where the default trigger-centered placement feels disconnected from the click. Applies to mouse clicks only; keyboard and programmatic opens fall back to trigger-center.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-select-name="&lt;name&gt;"</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu</code></td>
+                                        <td>Turns the dropmenu into a value picker. A hidden <code class="nds-inline-code lang-html">&lt;input name="..."&gt;</code> is appended so the selection ships with the enclosing form. Each selectable item must carry <code class="nds-inline-code lang-html">data-value</code>. Fires <code class="nds-inline-code lang-js">nds:dropmenu:selected</code> on selection.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-select-value="&lt;value&gt;"</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu</code></td>
+                                        <td>Pre-selects the item whose <code class="nds-inline-code lang-html">data-value</code> matches. Takes priority over any <code class="nds-inline-code lang-html">data-state~="selected"</code> pre-rendered on an item. Only meaningful when <code class="nds-inline-code lang-html">data-select-name</code> is also set.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-required</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu</code></td>
+                                        <td>Adds <code class="nds-inline-code lang-html">required</code> to the hidden input created by <code class="nds-inline-code lang-html">data-select-name</code>, making the field participate in native form validation.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-value="&lt;value&gt;"</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu-item</code></td>
+                                        <td>The submitted value for this item when the dropmenu is in select mode (<code class="nds-inline-code lang-html">data-select-name</code>). Items without <code class="nds-inline-code lang-html">data-value</code> do not trigger selection.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-trigger-label="&lt;text&gt;"</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu-item</code></td>
+                                        <td>Custom short label written to the trigger button when this item is selected. Falls back to the item's <code class="nds-inline-code lang-html">.nds-label</code> text. Useful when the menu row is descriptive ("Saudi Arabia (+966)") but the trigger slot needs something compact ("+966").</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-dropmenu-primary</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu-item</code></td>
+                                        <td>Marks a menu item as the primary action. When the user presses Enter on a non-actionable menu element (not a button or anchor), the first non-disabled item with this attribute is clicked. Use to provide a default action on Enter inside embedded form controls.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-dropmenu-no-click</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu</code></td>
+                                        <td>Disables the trigger click handler so the dropmenu can only be opened programmatically (via <code class="nds-inline-code lang-js">instance.open()</code> or <code class="nds-inline-code lang-js">instance.toggle()</code>). Used by components like the date-picker that control open timing themselves.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-dropmenu-no-keys</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu</code></td>
+                                        <td>Disables the built-in keyboard navigation (ArrowDown/Up, Home, End, Tab) on the trigger and menu. Escape-to-close remains active. Use when a parent component owns its own keyboard handling (for example, a 2D grid like the date-picker's day cells).</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-delay="&lt;ms&gt;"</code></td>
+                                        <td><code class="nds-inline-code lang-html">.nds-dropmenu</code></td>
+                                        <td>Enables delayed first-open (lazy-load) mode. On first trigger click the trigger shows a loading state for <code class="nds-inline-code lang-html">&lt;ms&gt;</code> milliseconds, fires <code class="nds-inline-code lang-js">nds:dropmenu:prepare</code> so a consumer can populate the menu, then opens. One-shot: the attribute is removed after the first open so subsequent opens are immediate.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+          </div>
+          <div class="nds-block nds-prose">
+            <table class="nds-table nds-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Property</th>
+                                        <th>Default</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">--menu-padding</code></td>
+                                        <td>8px</td>
+                                        <td>Inner padding of the menu container. Set on the <code class="nds-inline-code lang-html">.nds-dropmenu</code> wrapper; JS snapshots the value onto the menu before portaling so it survives a DOM move to <code class="nds-inline-code lang-html">&lt;body&gt;</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">--dropmenu-width</code></td>
+                                        <td><code class="nds-inline-code lang-html">min-content</code></td>
+                                        <td>Explicit width of the menu. By default the menu sizes to its content. Set to a fixed value (e.g. <code class="nds-inline-code lang-html">240px</code>) to lock the width regardless of content.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">--dropmenu-min-width</code></td>
+                                        <td><code class="nds-inline-code lang-html">max-content</code></td>
+                                        <td>Minimum width of the menu. Defaults to <code class="nds-inline-code lang-html">max-content</code> so the menu never wraps its widest item. Override inline or via CSS to enforce a fixed floor.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">--dropmenu-max-width</code></td>
+                                        <td><code class="nds-inline-code lang-html">calc(100vw - 16px)</code></td>
+                                        <td>Maximum width of the menu. Defaults to near-full-viewport to prevent overflow on narrow screens. Override to constrain wide menus.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">--dropmenu-slide</code></td>
+                                        <td>8px</td>
+                                        <td>Distance the menu slides during open/close animation. The direction reverses automatically when the menu flips above the trigger.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+          </div>
+            </div>
+          </div>
+        </section>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="nds-footer nds-content-wrapper nds-brand" role="contentinfo" aria-label="Site Footer">
+    <nav class="nds-footer-content" aria-label="Footer navigation">
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="nds-footer-col-1">Showcase</span>
+        <ul class="nds-footer-list" aria-labelledby="nds-footer-col-1">
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/">
+
+              <span class="nds-label">Component index</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/templates/">
+
+              <span class="nds-label">Page templates</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/examples/">
+
+              <span class="nds-label">Full examples</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="nds-footer-col-2">Personal site</span>
+        <ul class="nds-footer-list" aria-labelledby="nds-footer-col-2">
+          <li>
+            <a class="nds-link nds-footer-link" href="/">
+              <i class="nds-icon nds-hgi-arrow-left-01" aria-hidden="true"></i>
+              <span class="nds-label">Arabic (RTL)</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/en/">
+              <i class="nds-icon nds-hgi-arrow-right-01" aria-hidden="true"></i>
+              <span class="nds-label">English (LTR)</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <hr class="nds-divider nds-lg">
+    <div class="nds-footer-bottom">
+      <div class="nds-footer-meta">
+        <div class="nds-footer-legal">
+          <div class="nds-footer-copyright">
+            <span>Component examples are quoted from NDS v1.12.0 (commit 030d1c7ff4ab, MIT). This is a personal review route, not a government service.</span>
+          </div>
+        <div class="nds-footer-versions">
+          <span class="nds-tag nds-xs nds-oncolor"><span class="nds-label">NDS v1.12.0</span></span>
+          <span class="nds-tag nds-xs nds-oncolor"><span class="nds-label">NDS IQ v3.1</span></span>
+        </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script defer src="/assets/js/nds-main.min.js?ver=1.12.0.030d1c7"></script>
+  <script defer src="/assets/js/nds-accessibility.min.js?ver=1.12.0.030d1c7"></script>
+  <script type="module" src="/assets/js/site.js"></script>
+</body>
+</html>

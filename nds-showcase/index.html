@@ -1,0 +1,2337 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-palette>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component showcase · NDS 1.12.0 showcase</title>
+  <meta name="description" content="Review route for NDS v1.12.0: every catalog entry rendered from the pinned release&#x27;s own documentation markup, in light and dark mode, LTR.">
+  <style>html :where(header){display:contents}html :where(.nds-topbar){height:40px}html :where(.nds-main-nav){height:var(--nds-nav-height, 72px)}html .nds-swiper.nds-hero:not([data-nds-swiper-initialized],[data-swiper-preset]) .nds-swiper-slide:not(:first-child){display:none}html[data-theme~=dark] :where(.nds-main-nav .nds-brand.nds-oncolor :is(img,svg)){filter:brightness(0) invert(1)}:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-user-feedback-section,.nds-footer){visibility:hidden}html:not([data-nds-loaded]) main{overflow-x:clip}:root{--nds-icons-opacity: 0}i.hgi-stroke{opacity:0}html{overflow-anchor:none}html{background-color:var(--background-body, #f9fafb)}html[data-theme~=dark]{background-color:var(--background-body, #111927)}:where(.nds-topbar){background-color:var(--background-topbar, #f3f4f6)}html[data-theme~=dark] :where(.nds-topbar){background-color:var(--background-topbar, #111927)}:where(.nds-main-nav){background-color:var(--background-nav, #fff)}html[data-theme~=dark] :where(.nds-main-nav){background-color:var(--background-nav, #1f2a37)}:where(.nds-hero-image-wrapper)::before{content:"";position:absolute;inset:0;background:color-mix(in srgb, var(--img-overlay-color, #092a1e) calc(var(--overlay, 0.7) * 100%), transparent);pointer-events:none}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}:is(.nds-hidden,[hidden],[data-state~=hidden],[data-filtered]){display:none !important}:where(.nds-hero-section){position:relative;height:550px}:where(.nds-hero-section.nds-sub){height:auto;min-height:220px}:where(.nds-hero-image-wrapper){position:absolute;inset:0}:where(.nds-hero-image){width:100%;height:100%;object-fit:cover;display:block}:where(.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:hidden}</style>
+  <link rel="preload" href="/assets/css/nds.critical.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="high" data-nds-defer>
+  <link id="nds-theme-stylesheet" rel="stylesheet" href="/assets/css/theme.css?ver=1.12.0.030d1c7">
+  <link rel="preload" href="/assets/css/nds-main.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="low" data-nds-defer="main">
+  <link rel="preload" href="/assets/css/nds-accessibility.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="low" data-nds-defer>
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" fetchpriority="low">
+  <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#0e5a49">
+  <script>
+      // Pre-paint FOUC guard: stamp saved data-theme before first paint, union-merged with markup/pack tokens so a stored value never clobbers them.
+      (function() {
+          var v = localStorage.getItem('nds-theme');
+          if (v) {
+              var d = document.documentElement;
+              var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\s+/)
+                  .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+              d.setAttribute('data-theme', t.join(' '));
+          }
+      })();
+      // Deferred styles: preload → injected stylesheet link (markers move with it). Rationale: ui-shell/head.md, CSP section.
+      (function () {
+          document.querySelectorAll('link[rel="preload"][data-nds-defer]').forEach(function (p) {
+              var l = document.createElement('link');
+              // Clone every attribute except rel/as — keeps href, fetchpriority, integrity, crossorigin, and the data-* markers.
+              for (var i = 0; i < p.attributes.length; i++) {
+                  var a = p.attributes[i];
+                  if (a.name !== 'rel' && a.name !== 'as') l.setAttribute(a.name, a.value);
+              }
+              l.rel = 'stylesheet';
+              p.removeAttribute('data-nds-defer');
+              document.head.appendChild(l);
+          });
+      })();
+  </script>
+      <script>
+      // Project addition (docs/CUSTOM-EXCEPTIONS.md #2): NDS.Theme persists a manual
+      // choice but has no OS-preference surface. Follow prefers-color-scheme only
+      // while the visitor has nothing stored, using the canonical union merge.
+      (function () {
+        var stored;
+        try { stored = localStorage.getItem('nds-theme'); } catch (e) { return; }
+        if (stored || !window.matchMedia) return;
+        if (!window.matchMedia('(prefers-color-scheme: dark)').matches) return;
+        var d = document.documentElement;
+        var t = ((d.getAttribute('data-theme') || '') + ' dark').split(/\s+/)
+          .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+        d.setAttribute('data-theme', t.join(' '));
+      })();
+  </script>
+    <noscript>
+          <style>.alq-site :is(.nds-sideinfo, .nds-toc, .nds-drawer),
+          .alq-site :is(.nds-sideinfo, .nds-toc, .nds-drawer) > *,
+          .alq-site .nds-main-nav > *,
+          .alq-site .nds-code .nds-expandable-content { visibility: visible; }</style>
+        </noscript>
+</head>
+<body class="alq-site">
+  <a class="alq-skip-link" href="#main-content">Skip to content</a>
+  <noscript>
+    <nav class="alq-fallback" aria-label="Navigation without JavaScript">
+      <a href="/nds-showcase/">Showcase index</a>
+      <a href="/">Arabic site</a>
+      <a href="/en/">English site</a>
+    </nav>
+  </noscript>
+  <header>
+    <nav class="nds-main-nav nds-content-wrapper" id="ndsMainNav" aria-label="Primary navigation">
+      <div class="nds-nav-container">
+        <a class="nds-brand" href="/nds-showcase/">
+          <img class="nds-brand-logo" src="/assets/img/favicon.svg" width="40" height="40" alt="">
+          <span class="nds-brand-name">NDS 1.12.0
+            <span class="nds-brand-slogan">Component showcase</span>
+          </span>
+        </a>
+        <ul class="nds-nav-minimal" hidden>
+          <li class="nds-mainNav-toggler nds-nav-item">
+            <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="ndsNavCollapse">
+              <i class="nds-icon nds-hgi-menu-01" aria-hidden="true"></i>
+            </button>
+          </li>
+        </ul>
+        <div class="nds-collapse" id="ndsNavCollapse" hidden>
+          <div class="nds-collapse-content">
+            <ul class="nds-nav-primary">
+            <li class="nds-nav-item">
+              <a href="/nds-showcase/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">Index</span>
+              </a>
+            </li>
+            <li class="nds-nav-item">
+              <a href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">Arabic site</span>
+              </a>
+            </li>
+            <li class="nds-nav-item">
+              <a href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">English site</span>
+              </a>
+            </li>
+            </ul>
+            <div class="nds-nav-item nds-show-more">
+              <a class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full">
+                <i class="nds-icon nds-hgi-arrow-down-01" aria-hidden="true"></i>
+              </a>
+            </div>
+            <ul class="nds-nav-actions">
+              <li class="nds-nav-item nds-icon-only nds-PAB">
+                <a href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="Back to the personal site" lang="ar" hreflang="ar">
+                  <i class="nds-icon nds-hgi-arrow-left-01" aria-hidden="true"></i>
+                  <span class="nds-label" data-hidden="sm md sr">Personal site</span>
+                </a>
+              </li>
+              <li class="nds-nav-item nds-icon-only nds-PAB">
+                <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-theme-toggle-wrap nds-tooltip" data-tooltip-hover="500" data-theme-toggle title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">
+                  <i class="nds-icon nds-hgi-moon-02" aria-hidden="true"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="nds-hero-section nds-sub nds-flat" id="top">
+      <nav class="nds-breadcrumb-nav" aria-label="Breadcrumb">
+        <ol class="nds-breadcrumb">
+            <li class="nds-truncate" aria-current="page">Showcase</li>
+            <li class="nds-truncate" aria-current="page">Index</li>
+        </ol>
+      </nav>
+      <div class="nds-section-wrapper">
+        <div class="nds-section-head">
+          <h1 class="nds-section-title">NDS 1.12.0 component showcase</h1>
+          <p class="nds-section-description">Review route for NDS v1.12.0: every catalog entry rendered from the pinned release&#x27;s own documentation markup, in light and dark mode, LTR.</p>
+        </div>
+      </div>
+    </section>
+    <div class="nds-content-layout nds-wSideInfo">
+      <div class="nds-main-content" id="main-content">
+        <section class="nds-content-section nds-sideinfo-section">
+          <div class="nds-section-body">
+        <aside class="nds-sideinfo nds-md nds-sticky nds-top" aria-label="On this page">
+          <nav class="nds-toc alq-toc" aria-label="Page section index">
+            <div class="nds-toc-head">
+              <span class="nds-label">On this page</span>
+              <h2 class="nds-toc-title nds-truncate">Sections</h2>
+            </div>
+            <div class="nds-drawer nds-lined">
+              <ul class="nds-drawer-list">
+                <li>
+                  <a href="#coverage" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Coverage</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#cat-add-ons" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Add-ons</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#cat-core" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Core</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#cat-data" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Data</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#cat-forms" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Forms</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#cat-foundations" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Foundations</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#cat-layout" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Layout</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#cat-ui" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">UI</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#cat-ui-shell" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">UI Shell</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#cat-utilities" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Utilities</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </aside>
+            <div class="nds-info-content">
+        <section id="coverage" class="nds-content-section">
+          <div class="nds-section-wrapper">
+            <div class="nds-section-head">
+              <h2 class="nds-section-title">Coverage</h2>
+              <p class="nds-section-description">Generated from the pinned release's own catalog:
+              <code class="nds-inline-code">.nds/_source/_data/content/components.yml</code>
+              (98 entries / 9 categories). The full checklist is
+              <code class="nds-inline-code">docs/NDS-SHOWCASE.md</code>.</p>
+            </div>
+            <div class="nds-section-body">
+              <dl class="nds-definition-list nds-grid alq-facts">
+                <div class="nds-definition-item nds-card nds-stroke">
+                  <dt><span class="nds-label">Catalog entries</span></dt>
+                  <dd>98</dd>
+                </div>
+                <div class="nds-definition-item nds-card nds-stroke">
+                  <dt><span class="nds-label">Rendered with live examples</span></dt>
+                  <dd>108</dd>
+                </div>
+                <div class="nds-definition-item nds-card nds-stroke">
+                  <dt><span class="nds-label">Container / API entries (source-only)</span></dt>
+                  <dd>4</dd>
+                </div>
+                <div class="nds-definition-item nds-card nds-stroke">
+                  <dt><span class="nds-label">Page templates and examples (partial Liquid)</span></dt>
+                  <dd>6</dd>
+                </div>
+                <div class="nds-definition-item nds-card nds-stroke">
+                  <dt><span class="nds-label">Live examples on these pages</span></dt>
+                  <dd>422</dd>
+                </div>
+                <div class="nds-definition-item nds-card nds-stroke">
+                  <dt><span class="nds-label">NDS build</span></dt>
+                  <dd>v1.12.0 @ 030d1c7ff4ab</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </section>
+        <section id="cat-add-ons" class="nds-content-section">
+          <div class="nds-section-wrapper">
+            <div class="nds-section-head">
+              <h2 class="nds-section-title">Add-ons <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1</span></span></h2>
+            </div>
+            <div class="nds-section-body">
+              <div class="nds-flex nds-col alq-stack">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/accessibility.html">
+                    <span class="nds-card-title">Accessibility</span>
+                  </a>
+                  <p class="nds-card-description">Site-wide panel for accessibility presets, typography tuning, and visual filters</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="cat-core" class="nds-content-section">
+          <div class="nds-section-wrapper">
+            <div class="nds-section-head">
+              <h2 class="nds-section-title">Core <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2</span></span></h2>
+            </div>
+            <div class="nds-section-body">
+              <div class="nds-flex nds-col alq-stack">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/core/refresh.html">
+                    <span class="nds-card-title">Refresh</span>
+                  </a>
+                  <p class="nds-card-description">One call that tells every live component the contents of a container changed</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">source-only</span></span>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/core/request.html">
+                    <span class="nds-card-title">Request</span>
+                  </a>
+                  <p class="nds-card-description">Fetch wrapper with a timeout, a response size cap, and errors you can branch on</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">source-only</span></span>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="cat-data" class="nds-content-section">
+          <div class="nds-section-wrapper">
+            <div class="nds-section-head">
+              <h2 class="nds-section-title">Data <span class="nds-tag nds-gray nds-sm"><span class="nds-label">7</span></span></h2>
+            </div>
+            <div class="nds-section-body">
+              <div class="nds-flex nds-col alq-stack">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/chart.html">
+                    <span class="nds-card-title">Chart</span>
+                  </a>
+                  <p class="nds-card-description">Lightweight SVG charts: bar, line, pie, and donut</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">6 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/export.html">
+                    <span class="nds-card-title">Export</span>
+                  </a>
+                  <p class="nds-card-description">Declarative CSV, Excel, and PDF downloads from any table, card list, or marked-up container</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/filter.html">
+                    <span class="nds-card-title">Filter</span>
+                  </a>
+                  <p class="nds-card-description">Applied filters with search, URL sync, and remote data</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">11 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/metric.html">
+                    <span class="nds-card-title">Metric</span>
+                  </a>
+                  <p class="nds-card-description">Dashboard tile pairing a key statistic with an inline sparkline</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/selection.html">
+                    <span class="nds-card-title">Selection</span>
+                  </a>
+                  <p class="nds-card-description">Selected-items counter for tables, card grids, and checkbox lists, with a records-line swap while a selection is active</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/sort.html">
+                    <span class="nds-card-title">Sort</span>
+                  </a>
+                  <p class="nds-card-description">DOM-reorder engine for lists, grids, and tables with type auto-detect and URL sync</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/tables.html">
+                    <span class="nds-card-title">Tables</span>
+                  </a>
+                  <p class="nds-card-description">Data grids with sorting, pagination, and expandable rows</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">10 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="cat-forms" class="nds-content-section">
+          <div class="nds-section-wrapper">
+            <div class="nds-section-head">
+              <h2 class="nds-section-title">Forms <span class="nds-tag nds-gray nds-sm"><span class="nds-label">19</span></span></h2>
+            </div>
+            <div class="nds-section-body">
+              <div class="nds-flex nds-col alq-stack">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/autocomplete.html">
+                    <span class="nds-card-title">Autocomplete</span>
+                  </a>
+                  <p class="nds-card-description">Type-ahead search with filtered suggestions</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/checkbox.html">
+                    <span class="nds-card-title">Checkbox</span>
+                  </a>
+                  <p class="nds-card-description">Multi-select toggles for options and preferences</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/forms.html#customSelect">
+                    <span class="nds-card-title">Custom Select</span>
+                  </a>
+                  <p class="nds-card-description">Styled single-choice dropdown with custom option markup and a JS API, built on dropmenu</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">14 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/date-picker.html">
+                    <span class="nds-card-title">Date Picker</span>
+                  </a>
+                  <p class="nds-card-description">Hijri/Gregorian calendar with dual date conversion</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/editor.html">
+                    <span class="nds-card-title">Editor</span>
+                  </a>
+                  <p class="nds-card-description">Rich text field that submits clean NDS markup, converting Word, Google Docs, and web pastes and inserting NDS components as blocks</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">6 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/upload.html">
+                    <span class="nds-card-title">File Upload</span>
+                  </a>
+                  <p class="nds-card-description">Drag-and-drop file input with preview and validation</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/multiselect.html">
+                    <span class="nds-card-title">Multiselect</span>
+                  </a>
+                  <p class="nds-card-description">Multi-option select over a native checkbox group: removable chips, JSON-populated options, staged or instant commit</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/forms.html#numberInput">
+                    <span class="nds-card-title">Number Input</span>
+                  </a>
+                  <p class="nds-card-description">Numeric field with increment and decrement controls, min/max, and step</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">14 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/otp.html">
+                    <span class="nds-card-title">OTP Input</span>
+                  </a>
+                  <p class="nds-card-description">Segmented one-time password fields with auto-advance</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/password.html">
+                    <span class="nds-card-title">Password</span>
+                  </a>
+                  <p class="nds-card-description">Password field with live strength rules and confirm-match checking</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/radio.html">
+                    <span class="nds-card-title">Radio</span>
+                  </a>
+                  <p class="nds-card-description">Single-choice selection within a group</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/forms.html">
+                    <span class="nds-card-title">Selects</span>
+                  </a>
+                  <p class="nds-card-description">Native dropdown menus for choosing from a list</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">14 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/slider.html">
+                    <span class="nds-card-title">Slider</span>
+                  </a>
+                  <p class="nds-card-description">Numeric range input with single-thumb and dual-thumb modes for picking a value or a min–max span</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/switch.html">
+                    <span class="nds-card-title">Switch</span>
+                  </a>
+                  <p class="nds-card-description">Binary on/off toggles for settings and preferences</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/taginput.html">
+                    <span class="nds-card-title">Tag Input</span>
+                  </a>
+                  <p class="nds-card-description">Free-text tags committed as removable chips while typing, posted natively as an array</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">5 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/forms.html">
+                    <span class="nds-card-title">Text Inputs</span>
+                  </a>
+                  <p class="nds-card-description">Single-line fields with labels, icons, and validation</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">14 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/forms.html#textareaInput">
+                    <span class="nds-card-title">Textareas</span>
+                  </a>
+                  <p class="nds-card-description">Resizable multi-line text fields</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">14 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/user-feedback.html">
+                    <span class="nds-card-title">User Feedback</span>
+                  </a>
+                  <p class="nds-card-description">Satisfaction surveys and inline rating forms</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/voice-input.html">
+                    <span class="nds-card-title">Voice Input</span>
+                  </a>
+                  <p class="nds-card-description">Voice-to-text button that dictates into a text field, with Arabic/English auto-detection</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="cat-foundations" class="nds-content-section">
+          <div class="nds-section-wrapper">
+            <div class="nds-section-head">
+              <h2 class="nds-section-title">Foundations <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3</span></span></h2>
+            </div>
+            <div class="nds-section-body">
+              <div class="nds-flex nds-col alq-stack">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/icons.html">
+                    <span class="nds-card-title">Icons</span>
+                  </a>
+                  <p class="nds-card-description">The HugeIcons Stroke Rounded font for content plus a curated inline SVG set for components and chrome, with sizing, color, and license guidance</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/themes.html">
+                    <span class="nds-card-title">Themes</span>
+                  </a>
+                  <p class="nds-card-description">Light and dark mode, plus brand theming: generate a full palette from OKLCH seed colours, or override the design tokens with a stylesheet theme</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">5 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/tokens.html">
+                    <span class="nds-card-title">Tokens</span>
+                  </a>
+                  <p class="nds-card-description">Every CSS custom property in the system: palette, primitive scales, semantic meanings, and component dials to reference and override</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">source-only</span></span>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="cat-layout" class="nds-content-section">
+          <div class="nds-section-wrapper">
+            <div class="nds-section-head">
+              <h2 class="nds-section-title">Layout <span class="nds-tag nds-gray nds-sm"><span class="nds-label">7</span></span></h2>
+            </div>
+            <div class="nds-section-body">
+              <div class="nds-flex nds-col alq-stack">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/layout/block.html">
+                    <span class="nds-card-title">Block</span>
+                  </a>
+                  <p class="nds-card-description">Spacing unit for content and block components inside a section body, with an optional title</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/layout/flex.html">
+                    <span class="nds-card-title">Flex</span>
+                  </a>
+                  <p class="nds-card-description">Quick alignment, direction, and wrapping with custom-property overrides</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/layout/grid.html">
+                    <span class="nds-card-title">Grid</span>
+                  </a>
+                  <p class="nds-card-description">Responsive column system with flexible breakpoints</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">6 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/layout/page-shell.html">
+                    <span class="nds-card-title">Page Shell</span>
+                  </a>
+                  <p class="nds-card-description">The body structure every page shares, with the classes that switch chrome shape</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">4 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/layout/prose.html">
+                    <span class="nds-card-title">Prose</span>
+                  </a>
+                  <p class="nds-card-description">Default styling for classless flowing content from editors and CMSs</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/layout/section.html">
+                    <span class="nds-card-title">Section</span>
+                  </a>
+                  <p class="nds-card-description">Page content sections with head, body, and action areas</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">11 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/layout/status-section.html">
+                    <span class="nds-card-title">Status Section</span>
+                  </a>
+                  <p class="nds-card-description">Whole-page or inline outcome message with a status icon, a title, and one action</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="cat-ui" class="nds-content-section">
+          <div class="nds-section-wrapper">
+            <div class="nds-section-head">
+              <h2 class="nds-section-title">UI <span class="nds-tag nds-gray nds-sm"><span class="nds-label">35</span></span></h2>
+            </div>
+            <div class="nds-section-body">
+              <div class="nds-flex nds-col alq-stack">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/accordion.html">
+                    <span class="nds-card-title">Accordion</span>
+                  </a>
+                  <p class="nds-card-description">Expandable content panels with nested group support</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/alert.html">
+                    <span class="nds-card-title">Alert</span>
+                  </a>
+                  <p class="nds-card-description">Contextual messages for status, warnings, and notifications</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">6 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/avatar.html">
+                    <span class="nds-card-title">Avatar</span>
+                  </a>
+                  <p class="nds-card-description">Profile images, initials, and group stacks</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">6 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/breadcrumb.html">
+                    <span class="nds-card-title">Breadcrumb</span>
+                  </a>
+                  <p class="nds-card-description">Hierarchical path showing the current page location</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">4 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/button.html">
+                    <span class="nds-card-title">Buttons</span>
+                  </a>
+                  <p class="nds-card-description">Interactive actions with multiple variants, sizes, and states</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">12 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/cards.html">
+                    <span class="nds-card-title">Cards</span>
+                  </a>
+                  <p class="nds-card-description">Versatile content containers for articles, profiles, and actions</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">5 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/chips.html">
+                    <span class="nds-card-title">Chips</span>
+                  </a>
+                  <p class="nds-card-description">Compact labels for tags, filters, and selections</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/code.html">
+                    <span class="nds-card-title">Code</span>
+                  </a>
+                  <p class="nds-card-description">Formatted code blocks with syntax highlighting and copy</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">10 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/content-switcher.html">
+                    <span class="nds-card-title">Content Switcher</span>
+                  </a>
+                  <p class="nds-card-description">Toggle between content sections within the same space on the screen</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/cooldown-button.html">
+                    <span class="nds-card-title">Cooldown Button</span>
+                  </a>
+                  <p class="nds-card-description">Click-disabled countdown button for resend, retry, and rate-limited actions</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/definition-list.html">
+                    <span class="nds-card-title">Definition List</span>
+                  </a>
+                  <p class="nds-card-description">Structured key-value pairs in grid or list layouts</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/drawer.html">
+                    <span class="nds-card-title">Drawer</span>
+                  </a>
+                  <p class="nds-card-description">Collapsible navigation lists with accordion groups</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">5 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/dropmenu.html">
+                    <span class="nds-card-title">Dropmenu</span>
+                  </a>
+                  <p class="nds-card-description">Toggle-activated overlay for actions and navigation</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">7 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/empty.html">
+                    <span class="nds-card-title">Empty</span>
+                  </a>
+                  <p class="nds-card-description">Parent-adaptive placeholder for containers with no content</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">7 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/featured-icons.html">
+                    <span class="nds-card-title">Featured Icons</span>
+                  </a>
+                  <p class="nds-card-description">Decorative icon containers with shape and color options</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/feedback-icons.html">
+                    <span class="nds-card-title">Feedback Icons</span>
+                  </a>
+                  <p class="nds-card-description">Semantic status icons for success, error, and info</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/fab.html">
+                    <span class="nds-card-title">Floating Action Button</span>
+                  </a>
+                  <p class="nds-card-description">FAB that pins to a viewport corner and stacks with others</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/ipv.html">
+                    <span class="nds-card-title">Image Popup Viewer</span>
+                  </a>
+                  <p class="nds-card-description">IPV fullscreen image preview with zoom and navigation</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/link.html">
+                    <span class="nds-card-title">Link</span>
+                  </a>
+                  <p class="nds-card-description">Inline navigation with color variants and automatic external-link detection</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">5 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/loading.html">
+                    <span class="nds-card-title">Loading</span>
+                  </a>
+                  <p class="nds-card-description">Spinners and skeleton placeholders for loading states</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">4 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/modal.html">
+                    <span class="nds-card-title">Modal</span>
+                  </a>
+                  <p class="nds-card-description">Focused dialog overlays for confirmations and forms</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/pagination.html">
+                    <span class="nds-card-title">Pagination</span>
+                  </a>
+                  <p class="nds-card-description">Page-by-page navigation for large data sets</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">8 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/panels.html">
+                    <span class="nds-card-title">Panels</span>
+                  </a>
+                  <p class="nds-card-description">Content-agnostic surface that slides in from any edge of the viewport</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/persona.html">
+                    <span class="nds-card-title">Persona</span>
+                  </a>
+                  <p class="nds-card-description">Identity block with avatar, name, role, and optional action row</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/progress.html">
+                    <span class="nds-card-title">Progress</span>
+                  </a>
+                  <p class="nds-card-description">Visual indicators for task completion and loading</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/quote.html">
+                    <span class="nds-card-title">Quote</span>
+                  </a>
+                  <p class="nds-card-description">Semantic quotation block with optional title and author attribution</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/rating.html">
+                    <span class="nds-card-title">Rating</span>
+                  </a>
+                  <p class="nds-card-description">Star-based display and input for user ratings</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/scroll-more.html">
+                    <span class="nds-card-title">Scroll More</span>
+                  </a>
+                  <p class="nds-card-description">Overflow wrapper with edge mask-fade and sticky show-more button</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/stepper.html">
+                    <span class="nds-card-title">Stepper</span>
+                  </a>
+                  <p class="nds-card-description">Sequential step indicators for multi-stage workflows</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">6 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/swiper.html">
+                    <span class="nds-card-title">Swiper</span>
+                  </a>
+                  <p class="nds-card-description">Touch-enabled carousel for images and content slides</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">5 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/tabs.html">
+                    <span class="nds-card-title">Tabs</span>
+                  </a>
+                  <p class="nds-card-description">Switchable content panels with horizontal tab navigation</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/tags.html">
+                    <span class="nds-card-title">Tags</span>
+                  </a>
+                  <p class="nds-card-description">Small labels for categorization and metadata</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">5 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/toc.html">
+                    <span class="nds-card-title">TOC</span>
+                  </a>
+                  <p class="nds-card-description">Auto-populated in-page table of contents with active-section tracking</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/toolbar.html">
+                    <span class="nds-card-title">Toolbar</span>
+                  </a>
+                  <p class="nds-card-description">Controls bar above a table, list, or grid: result counts and applied filters lead, export and actions trail</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/tooltip.html">
+                    <span class="nds-card-title">Tooltip</span>
+                  </a>
+                  <p class="nds-card-description">Click-activated balloon for contextual help next to a term or field</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">5 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="cat-ui-shell" class="nds-content-section">
+          <div class="nds-section-wrapper">
+            <div class="nds-section-head">
+              <h2 class="nds-section-title">UI Shell <span class="nds-tag nds-gray nds-sm"><span class="nds-label">11</span></span></h2>
+            </div>
+            <div class="nds-section-body">
+              <div class="nds-flex nds-col alq-stack">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/ui-shell/topbar.html#topbarWidgets">
+                    <span class="nds-card-title">Clock</span>
+                  </a>
+                  <p class="nds-card-description">Real-time clock with Hijri/Gregorian date</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/ui-shell/topbar.html#dgaDigitalStamp">
+                    <span class="nds-card-title">DGA Digital Stamp</span>
+                  </a>
+                  <p class="nds-card-description">Government authority verification panel</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-red nds-sm"><span class="nds-label">excluded-identity</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/ui-shell/head.html">
+                    <span class="nds-card-title">Document Head</span>
+                  </a>
+                  <p class="nds-card-description">Critical CSS, deferred bundles, and the inline gate every page loads in its head</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">4 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/ui-shell/footer.html">
+                    <span class="nds-card-title">Footer</span>
+                  </a>
+                  <p class="nds-card-description">Multi-column footer with light and green variants</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">4 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/ui-shell/header.html">
+                    <span class="nds-card-title">Header</span>
+                  </a>
+                  <p class="nds-card-description">The region at the top of the page where the top bar, digital stamp panel, and main navigation compose</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">source-only</span></span>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/ui-shell/hero.html">
+                    <span class="nds-card-title">Hero</span>
+                  </a>
+                  <p class="nds-card-description">Full-width page banners with slider and call-to-action</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">5 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/ui-shell/mainnav.html">
+                    <span class="nds-card-title">Main Navigation</span>
+                  </a>
+                  <p class="nds-card-description">Primary navigation bar with branding, mega-menu dropdowns, utility actions, and a mobile drawer</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">5 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/ui-shell/sideinfo.html">
+                    <span class="nds-card-title">Side Info</span>
+                  </a>
+                  <p class="nds-card-description">Companion column for service details, progress, and in-page navigation</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">4 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/ui-shell/sidemenu.html">
+                    <span class="nds-card-title">Side Menu</span>
+                  </a>
+                  <p class="nds-card-description">Collapsible nested sidebar navigation</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">5 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/ui-shell/topbar.html">
+                    <span class="nds-card-title">Top Bar</span>
+                  </a>
+                  <p class="nds-card-description">Government branding bar with date, weather, and dark mode toggle</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/ui-shell/topbar.html#topbarWidgets">
+                    <span class="nds-card-title">Weather Widget</span>
+                  </a>
+                  <p class="nds-card-description">Live weather display from GPS coordinates</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="cat-utilities" class="nds-content-section">
+          <div class="nds-section-wrapper">
+            <div class="nds-section-head">
+              <h2 class="nds-section-title">Utilities <span class="nds-tag nds-gray nds-sm"><span class="nds-label">13</span></span></h2>
+            </div>
+            <div class="nds-section-body">
+              <div class="nds-flex nds-col alq-stack">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/utilities/content-placeholder.html">
+                    <span class="nds-card-title">Content Placeholder</span>
+                  </a>
+                  <p class="nds-card-description">Dashed stand-in marking a region a real component will replace</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/components/cookies.html">
+                    <span class="nds-card-title">Cookies</span>
+                  </a>
+                  <p class="nds-card-description">Privacy-compliant cookie management banner</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/utilities/copy.html">
+                    <span class="nds-card-title">Copy</span>
+                  </a>
+                  <p class="nds-card-description">One-click clipboard copy with checkmark feedback and screen reader announcement</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">4 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/utilities/numbers.html#counterAnimation">
+                    <span class="nds-card-title">Counter Animation</span>
+                  </a>
+                  <p class="nds-card-description">Scroll-triggered animated counters that count up to a target value</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">6 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/utilities/numbers.html#currencyFormat">
+                    <span class="nds-card-title">Currency</span>
+                  </a>
+                  <p class="nds-card-description">SAR and international currency symbols appended automatically via data attribute</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">6 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/utilities/divider.html">
+                    <span class="nds-card-title">Divider</span>
+                  </a>
+                  <p class="nds-card-description">Horizontal or vertical rule with optional centered label</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">6 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/utilities/expandable-content.html">
+                    <span class="nds-card-title">Expandable Content</span>
+                  </a>
+                  <p class="nds-card-description">Show more/less toggle for long content blocks</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/utilities/helpers.html">
+                    <span class="nds-card-title">Helper Classes</span>
+                  </a>
+                  <p class="nds-card-description">Single-purpose classes for your own markup: centering, spacing reset, direction isolation, brand text color, and notes</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">5 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/utilities/hidden.html">
+                    <span class="nds-card-title">Hidden</span>
+                  </a>
+                  <p class="nds-card-description">Visibility utilities: the hidden attribute honored everywhere and band-exact responsive hiding with data-hidden</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/utilities/numbers.html">
+                    <span class="nds-card-title">Numbers</span>
+                  </a>
+                  <p class="nds-card-description">Locale-aware thousand separators for any number on the page</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">6 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/utilities/saudi-cities.html">
+                    <span class="nds-card-title">Saudi Cities</span>
+                  </a>
+                  <p class="nds-card-description">Bundled JSON dataset of 132 Saudi Arabian cities with bilingual names, drop-in for autocomplete and address flows</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">1 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/utilities/share.html">
+                    <span class="nds-card-title">Share</span>
+                  </a>
+                  <p class="nds-card-description">Social share dropmenu for X, LinkedIn, WhatsApp, and copy link</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">3 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <div class="nds-card-text">
+                  <a class="nds-link nds-primary" href="/nds-showcase/utilities/truncate-text.html">
+                    <span class="nds-card-title">Truncate Text</span>
+                  </a>
+                  <p class="nds-card-description">Line-clamped overflow with expand/collapse toggle</p>
+                </div>
+                <div class="nds-card-meta">
+                  <div class="nds-card-tags">
+                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">rendered</span></span>
+                    <span class="nds-tag nds-gray nds-sm"><span class="nds-label">2 examples</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        </section>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="nds-footer nds-content-wrapper nds-brand" role="contentinfo" aria-label="Site Footer">
+    <nav class="nds-footer-content" aria-label="Footer navigation">
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="nds-footer-col-1">Showcase</span>
+        <ul class="nds-footer-list" aria-labelledby="nds-footer-col-1">
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/">
+
+              <span class="nds-label">Component index</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/templates/">
+
+              <span class="nds-label">Page templates</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/examples/">
+
+              <span class="nds-label">Full examples</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="nds-footer-col-2">Personal site</span>
+        <ul class="nds-footer-list" aria-labelledby="nds-footer-col-2">
+          <li>
+            <a class="nds-link nds-footer-link" href="/">
+              <i class="nds-icon nds-hgi-arrow-left-01" aria-hidden="true"></i>
+              <span class="nds-label">Arabic (RTL)</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/en/">
+              <i class="nds-icon nds-hgi-arrow-right-01" aria-hidden="true"></i>
+              <span class="nds-label">English (LTR)</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <hr class="nds-divider nds-lg">
+    <div class="nds-footer-bottom">
+      <div class="nds-footer-meta">
+        <div class="nds-footer-legal">
+          <div class="nds-footer-copyright">
+            <span>Component examples are quoted from NDS v1.12.0 (commit 030d1c7ff4ab, MIT). This is a personal review route, not a government service.</span>
+          </div>
+        <div class="nds-footer-versions">
+          <span class="nds-tag nds-xs nds-oncolor"><span class="nds-label">NDS v1.12.0</span></span>
+          <span class="nds-tag nds-xs nds-oncolor"><span class="nds-label">NDS IQ v3.1</span></span>
+        </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <button class="nds-btn nds-primary nds-circle nds-fab nds-accessibility-toggle"
+          type="button"
+          aria-label="Accessibility settings"
+          data-i18n-attr="aria-label:panel_label"
+          aria-controls="ndsAccessibilityPanel"
+          aria-expanded="false"
+          data-fab-pos="auto"
+          data-panel-toggle="ndsAccessibilityPanel"
+          data-accessibility-toggle
+          hidden>
+      <i class="nds-icon nds-hgi-accessibility" aria-hidden="true"></i>
+  </button>
+
+  <template class="nds-panel-template">
+  <aside id="ndsAccessibilityPanel"
+         class="nds-panel nds-accessibility-panel"
+         data-panel-side="end"
+         aria-label="Accessibility settings"
+         data-i18n-attr="aria-label:panel_label"
+         data-accessibility-panel
+         hidden>
+
+      <div class="nds-panel-header">
+          <span class="nds-featured-icon nds-circle">
+              <i class="nds-icon nds-hgi-accessibility" aria-hidden="true"></i>
+          </span>
+          <div class="nds-panel-text">
+              <h2 class="nds-panel-title" data-i18n="panel_title">Accessibility Tools</h2>
+          </div>
+          <button class="nds-btn nds-subtle nds-icon-only"
+                  data-panel-close
+                  type="button"
+                  aria-label="Close accessibility panel"
+                  data-i18n-attr="aria-label:close_panel">
+              <i class="nds-icon nds-hgi-cancel-01" aria-hidden="true"></i>
+          </button>
+      </div>
+
+      <div class="nds-panel-body">
+          <div class="nds-scroll-more nds-divided">
+              <div class="nds-scroll-more-content">
+
+                  <div class="nds-sr-only" data-a11y-status role="status" aria-live="polite" aria-atomic="true"></div>
+
+                  <!-- Display & Language — quick toggles -->
+                  <div class="nds-accessibility-quick">
+                      <button class="nds-btn nds-subtle nds-icon-only nds-theme-toggle-wrap"
+                              data-theme-toggle
+                              type="button"
+                              aria-label="Toggle theme"
+                              data-i18n-attr="aria-label:toggle_theme">
+                          <i class="nds-icon nds-hgi-moon-02" aria-hidden="true"></i>
+                      </button>
+
+                      <a class="nds-btn nds-subtle nds-icon-only"
+                         href="/"
+                         aria-label="التبديل إلى العربية"
+                         data-i18n-attr="aria-label:switch_lang">
+                          <i class="nds-icon nds-hgi-translation" aria-hidden="true"></i>
+                      </a>
+                  </div>
+
+          <!-- Accessibility settings — one accordion, three items:
+               Modes (switches), Readable Experience (tile grid), Visually
+               Pleasing (tile grid). First item open by default; the other
+               two collapsed to keep the panel compact on first open. -->
+          <div class="nds-accordion nds-lg nds-accessibility-modes" id="a11yAccordion">
+
+              <!-- Item 1: Accessibility Modes (bundle switches) -->
+              <div class="nds-accordion-item">
+                  <h3 class="nds-accordion-header">
+                      <button class="nds-btn nds-subtle nds-menu-btn nds-accordion-btn"
+                              type="button"
+                              aria-expanded="true"
+                              data-state="open"
+                              aria-controls="a11yModesCollapse">
+                          <span class="nds-accordion-title"><span data-i18n="section_modes">Accessibility Modes</span> <span class="nds-a11y-count nds-tag nds-green nds-rounded nds-sm" data-a11y-count="modes" aria-hidden="true"></span><span class="nds-sr-only" data-a11y-count-sr="modes"></span></span>
+                      </button>
+                  </h3>
+                  <div class="nds-accordion-collapse" id="a11yModesCollapse" data-state="open">
+                      <div class="nds-accordion-content">
+                          <div class="nds-accordion-body">
+                              <fieldset class="nds-form-group nds-switch-group">
+                                  <legend class="nds-sr-only" data-i18n="section_modes">Accessibility Modes</legend>
+
+                                  <div class="nds-form-container nds-switch-container" data-mode-id="epilepsy-safe">
+                                      <div class="nds-form-header">
+                                          <label for="a11y-mode-epilepsy-safe">
+                                              <span class="nds-label" data-i18n-name>Epilepsy Safe Mode</span>
+                                              <span class="nds-info"  data-i18n-desc>Stops motion and dampens color intensity</span>
+                                          </label>
+                                      </div>
+                                      <div class="nds-form-control">
+                                          <div class="nds-switch">
+                                              <input type="checkbox" id="a11y-mode-epilepsy-safe" class="nds-switch-input" data-a11y-mode="epilepsy-safe">
+                                              <div class="nds-switch-track"><div class="nds-switch-thumb"></div></div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="nds-form-container nds-switch-container" data-mode-id="visually-impaired">
+                                      <div class="nds-form-header">
+                                          <label for="a11y-mode-visually-impaired">
+                                              <span class="nds-label" data-i18n-name>Visually Impaired Mode</span>
+                                              <span class="nds-info"  data-i18n-desc>Enlarges text and boosts contrast for clearer reading</span>
+                                          </label>
+                                      </div>
+                                      <div class="nds-form-control">
+                                          <div class="nds-switch">
+                                              <input type="checkbox" id="a11y-mode-visually-impaired" class="nds-switch-input" data-a11y-mode="visually-impaired">
+                                              <div class="nds-switch-track"><div class="nds-switch-thumb"></div></div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="nds-form-container nds-switch-container" data-mode-id="cognitive-disability">
+                                      <div class="nds-form-header">
+                                          <label for="a11y-mode-cognitive-disability">
+                                              <span class="nds-label" data-i18n-name>Cognitive Disability Mode</span>
+                                              <span class="nds-info"  data-i18n-desc>Highlights titles and stops motion to reduce distraction</span>
+                                          </label>
+                                      </div>
+                                      <div class="nds-form-control">
+                                          <div class="nds-switch">
+                                              <input type="checkbox" id="a11y-mode-cognitive-disability" class="nds-switch-input" data-a11y-mode="cognitive-disability">
+                                              <div class="nds-switch-track"><div class="nds-switch-thumb"></div></div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="nds-form-container nds-switch-container" data-mode-id="motor-impaired">
+                                      <div class="nds-form-header">
+                                          <label for="a11y-mode-motor-impaired">
+                                              <span class="nds-label" data-i18n-name>Motor Impaired Mode</span>
+                                              <span class="nds-info"  data-i18n-desc>Enlarges click targets and emphasizes the focus indicator</span>
+                                          </label>
+                                      </div>
+                                      <div class="nds-form-control">
+                                          <div class="nds-switch">
+                                              <input type="checkbox" id="a11y-mode-motor-impaired" class="nds-switch-input" data-a11y-mode="motor-impaired">
+                                              <div class="nds-switch-track"><div class="nds-switch-thumb"></div></div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="nds-form-container nds-switch-container" data-mode-id="colorblind">
+                                      <div class="nds-form-header">
+                                          <label for="a11y-mode-colorblind">
+                                              <span class="nds-label" data-i18n-name>Colorblind Mode</span>
+                                              <span class="nds-info"  data-i18n-desc>Adjusts colors to distinguish red and green clearly</span>
+                                          </label>
+                                      </div>
+                                      <div class="nds-form-control">
+                                          <div class="nds-switch">
+                                              <input type="checkbox" id="a11y-mode-colorblind" class="nds-switch-input" data-a11y-mode="colorblind">
+                                              <div class="nds-switch-track"><div class="nds-switch-thumb"></div></div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="nds-form-container nds-switch-container" data-mode-id="dyslexia-friendly">
+                                      <div class="nds-form-header">
+                                          <label for="a11y-mode-dyslexia-friendly">
+                                              <span class="nds-label" data-i18n-name>Dyslexia Friendly Mode</span>
+                                              <span class="nds-info"  data-i18n-desc>Uses a clearer font and widens line and word spacing</span>
+                                          </label>
+                                      </div>
+                                      <div class="nds-form-control">
+                                          <div class="nds-switch">
+                                              <input type="checkbox" id="a11y-mode-dyslexia-friendly" class="nds-switch-input" data-a11y-mode="dyslexia-friendly">
+                                              <div class="nds-switch-track"><div class="nds-switch-thumb"></div></div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="nds-form-container nds-switch-container" data-mode-id="adhd-friendly">
+                                      <div class="nds-form-header">
+                                          <label for="a11y-mode-adhd-friendly">
+                                              <span class="nds-label" data-i18n-name>ADHD Friendly Mode</span>
+                                              <span class="nds-info"  data-i18n-desc>Stops motion, highlights titles, and enables the reading mask</span>
+                                          </label>
+                                      </div>
+                                      <div class="nds-form-control">
+                                          <div class="nds-switch">
+                                              <input type="checkbox" id="a11y-mode-adhd-friendly" class="nds-switch-input" data-a11y-mode="adhd-friendly">
+                                              <div class="nds-switch-track"><div class="nds-switch-thumb"></div></div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                              </fieldset>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Item 2: Readable Experience (tile grid) -->
+              <div class="nds-accordion-item">
+                  <h3 class="nds-accordion-header">
+                      <button class="nds-btn nds-subtle nds-menu-btn nds-accordion-btn"
+                              type="button"
+                              aria-expanded="false"
+                              aria-controls="a11yReadableCollapse">
+                          <span class="nds-accordion-title"><span data-i18n="section_readable">Readable Experience</span> <span class="nds-a11y-count nds-tag nds-green nds-rounded nds-sm" data-a11y-count="readable" aria-hidden="true"></span><span class="nds-sr-only" data-a11y-count-sr="readable"></span></span>
+                      </button>
+                  </h3>
+                  <div class="nds-accordion-collapse" id="a11yReadableCollapse">
+                      <div class="nds-accordion-content">
+                          <div class="nds-accordion-body">
+                              <div class="nds-grid" role="group" aria-label="Readable experience controls" data-i18n-attr="aria-label:aria_readable">
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-setting="font-step" data-a11y-cycle="0,1,2,3" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-text-smallcaps" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n="font_sizing">Font Sizing</span>
+                                      <span class="nds-accessibility-tile-bars" data-a11y-bars aria-hidden="true"></span>
+                                      <span class="nds-sr-only" data-a11y-value data-i18n="default">Default</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-mode="dyslexia" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-glasses" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n="dyslexia">Dyslexia Friendly</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-mode="highlight-titles" aria-pressed="false">
+                                      <i class="nds-icon nds-hgi-highlighter" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n="highlight_titles">Highlight Titles</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-mode="highlight-links" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-link-04" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n="highlight_links">Highlight Links</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-mode="reading-mask" aria-pressed="false">
+                                      <i class="nds-icon nds-hgi-search-01" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n="reading_mask">Reading Mask</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-mode="reduce-motion" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-pause" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n="pause_motion">Pause Motion</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-setting="text-align" data-a11y-cycle="default,end,start,justify" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-text-align-left" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n="text_align">Text Alignment</span>
+                                      <span class="nds-accessibility-tile-bars" data-a11y-bars aria-hidden="true"></span>
+                                      <span class="nds-sr-only" data-a11y-value data-i18n="default">Default</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-setting="line-height" data-a11y-cycle="normal,1.6,1.8,2.0" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-paragraph-spacing" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n="line_height">Line Height</span>
+                                      <span class="nds-accessibility-tile-bars" data-a11y-bars aria-hidden="true"></span>
+                                      <span class="nds-sr-only" data-a11y-value data-i18n="default">Default</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-setting="letter-spacing" data-a11y-cycle="0,0.04em,0.08em,0.12em" data-a11y-exclude-token="letter-spacing" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-letter-spacing" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n="letter_spacing">Letter Spacing</span>
+                                      <span class="nds-accessibility-tile-bars" data-a11y-bars aria-hidden="true"></span>
+                                      <span class="nds-sr-only" data-a11y-value data-i18n="default">Default</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-setting="word-spacing" data-a11y-cycle="0,0.16em,0.32em,0.48em" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-text-kerning" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n="word_spacing">Word Spacing</span>
+                                      <span class="nds-accessibility-tile-bars" data-a11y-bars aria-hidden="true"></span>
+                                      <span class="nds-sr-only" data-a11y-value data-i18n="default">Default</span>
+                                  </button>
+
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Item 3: Visually Pleasing Experience (single-pick filters + colorblind primitive) -->
+              <div class="nds-accordion-item">
+                  <h3 class="nds-accordion-header">
+                      <button class="nds-btn nds-subtle nds-menu-btn nds-accordion-btn"
+                              type="button"
+                              aria-expanded="false"
+                              aria-controls="a11yVisualCollapse">
+                          <span class="nds-accordion-title"><span data-i18n="section_visual">Visually Pleasing Experience</span> <span class="nds-a11y-count nds-tag nds-green nds-rounded nds-sm" data-a11y-count="visual" aria-hidden="true"></span><span class="nds-sr-only" data-a11y-count-sr="visual"></span></span>
+                      </button>
+                  </h3>
+                  <div class="nds-accordion-collapse" id="a11yVisualCollapse">
+                      <div class="nds-accordion-content">
+                          <div class="nds-accordion-body">
+                              <div class="nds-grid" role="group" aria-label="Visual adjustments" data-i18n-attr="aria-label:aria_visual">
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-visual="boost-contrast" data-visual-id="boost-contrast" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-flash" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n-label>Boost Contrast</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-visual="monochrome" data-visual-id="monochrome" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-color-picker" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n-label>Monochrome</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-visual="high-contrast" data-visual-id="high-contrast" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-blur" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n-label>High Contrast</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-visual="high-saturation" data-visual-id="high-saturation" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-sparkles" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n-label>High Saturation</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-visual="low-saturation" data-visual-id="low-saturation" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-droplet" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n-label>Low Saturation</span>
+                                  </button>
+
+                                  <button type="button" class="nds-btn nds-secondary-outline nds-indicator" data-a11y-visual="cvd-deutan" data-visual-id="cvd-deutan" aria-pressed="false">
+                                      <i class="hgi hgi-stroke hgi-colors" aria-hidden="true"></i>
+                                      <span class="nds-label" data-i18n-label>Deuteranopia</span>
+                                  </button>
+
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+
+              </div>
+              <button class="nds-btn nds-subtle nds-show-more" type="button" aria-label="Scroll panel" data-i18n-attr="aria-label:scroll_panel">
+                  <i class="nds-icon nds-hgi-arrow-down-01" aria-hidden="true"></i>
+              </button>
+          </div>
+      </div>
+
+      <div class="nds-panel-footer">
+          <button class="nds-btn nds-secondary-outline" type="button" data-accessibility-action="reset">
+              <span class="nds-label" data-i18n="reset">Reset Settings</span>
+              <span class="nds-progress-circle">
+                  <svg width="100%" height="100%" viewBox="0 0 24 24">
+                      <circle class="nds-progress-bg" cx="12" cy="12" r="10" fill="none" stroke-width="2"></circle>
+                      <circle class="nds-progress-track" cx="12" cy="12" r="10" fill="none" stroke-width="2" stroke-dasharray="62.83" stroke-dashoffset="62.83" stroke-linecap="round"></circle>
+                  </svg>
+              </span>
+          </button>
+      </div>
+  </aside>
+  </template>
+  <script defer src="/assets/js/nds-main.min.js?ver=1.12.0.030d1c7"></script>
+  <script defer src="/assets/js/nds-accessibility.min.js?ver=1.12.0.030d1c7"></script>
+  <script type="module" src="/assets/js/site.js"></script>
+</body>
+</html>

@@ -4,13 +4,14 @@
 موقع شخصي ثابت بالعربية **RTL** والإنجليزية **LTR**. مصدر المحتوى واحد، ولا يحتاج إلى خادم تطبيقات أو قاعدة بيانات أو متغيرات سرية.
 A bilingual, self-hosted static biography, generated from JSON with Python's standard library and deployed as files on Cloudflare Pages.
 
-**الحالة:** أُصلحت عيوب مؤكدة واختُبرت حزمة الموقع محليًا وعلى GitHub Actions ومعاينة Cloudflare؛ لم أنفذ نشرًا للإنتاج؛ رُصد دمج خارجي للدفعة الأولى كما يوضح الملحق. مراجعة المحتوى وحقوق الأصول وإعدادات Cloudflare مطلوبة قبل الاعتماد. النتائج والقيود في [تقرير التدقيق](docs/AUDIT-2026-10-18.md) و[ملحق استكمال المتبقي](docs/CONTINUATION-2026-10-18.md).
+**الحالة:** طبقة التصميم مثبتة على NDS Vanilla **v1.12.0** (`030d1c7ff4ab`). السيرة والمعرض يُبنيان محليًا والفحوص الساكنة تمر. لم يُنفَّذ نشر إنتاج ولا تغيير DNS. مراجعة المحتوى وحقوق الأصول وإعدادات Cloudflare ما زالت مطلوبة قبل الاعتماد. حدود التحقق في [سجل التكامل](docs/NDS-INTEGRATION.md). تقريرا 2026-10-18 تاريخيان ويصفان الحزم الموروثة لا هذا التثبيت.
 
 ## المزايا / Features
 
 - `/` بالعربية، `/en/` بالإنجليزية، وصفحة 404 مخصصة.
 - سيرة وخبرة وأعمال ومهارات وإصدارات وتعليم ودورات وتواصل.
 - تنقل NDS متجاوب، فهرس أقسام، تنزيل PDF، مشاركة ونسخ رابط، وانتقال اللغة مع إبقاء القسم.
+- ثيم عبر آلية NDS: فاتح، وداكن يدوي مع حفظ، وتفضيل النظام في أول زيارة.
 - قراءة وتنقل أساسيان بلا JavaScript؛ أصول وخطوط محلية دون CDN.
 - canonical/hreflang وsitemap، وCSP مبني على بصمات المحتوى.
 
@@ -42,7 +43,8 @@ python3 tools/serve.py --port 8000
 python3 tools/build.py && python3 tools/package.py
 python3 tests/run_static_checks.py
 python3 tests/check_docs.py
-python3 tools/reproduce_nds.py  # يتطلب سجل Git كاملًا؛ بلا شبكة أو ترقية
+python3 tools/vendor_nds.py verify   # بعد fetch؛ يرفض اختلاف الأصول عن الوسم المثبت
+python3 tools/check_nds_usage.py
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 python3 tests/check_secrets.py --history
 python3 -m compileall -q tools tests
@@ -77,9 +79,11 @@ python tests/run_checks.py http://127.0.0.1:8000
 | المسار | الغرض |
 |---|---|
 | `content/content.json` | المحتوى الثنائي اللغة ومعلومات SEO والنطاق |
-| `tools/build.py` | توليد HTML وsitemap وبصمات CSP |
+| `tools/build.py` | توليد HTML وsitemap وبصمات CSP، ثم المعرض إن وُجد `.nds/_source` |
+| `tools/vendor_nds.py` | جلب وسم v1.12.0 والتحقق من الأصول |
 | `index.html`, `en/index.html`, `404.html` | مخرجات مولدة ومتتبعة؛ لا تعدلها منفردة |
-| `assets/css/`, `assets/js/` | NDS؛ التخصيص في `theme.css` و`site.js` فقط |
+| `nds-showcase/` | معرض المكونات، `noindex`، خارج التنقل وsitemap |
+| `assets/css/`, `assets/js/` | NDS المثبت؛ التخصيص في `theme.css` و`site.js` فقط |
 | `assets/fonts/`, `assets/img/`, `assets/docs/` | الخطوط والصورة وPDF |
 | `assets/licenses/` | إشعارات الأطراف الثالثة، وليست رخصة للموقع كله |
 | `tools/package.py` | إنشاء `dist/` بقائمة عامة، مع رفض symlinks وتطبيق بوابة حقوق الخطوط |
@@ -97,9 +101,9 @@ python tests/run_checks.py http://127.0.0.1:8000
 
 ## NDS والإتاحة / NDS & accessibility
 
-الحزم الموروثة موسومة **`1.12.x-dev`** وليست release `v1.12.0`. لا نعرف commit upstream الدقيق لجميع تلك الحزم؛ [سجل التكامل](docs/NDS-INTEGRATION.md) يوضح المصدر المعروف والإصلاحات والبصمات وحدود conformance. لم نُجرِ ترقية تلقائية.
+الواجهة NDS Vanilla **v1.12.0** @ `030d1c7ff4ab5a3092c17b93429b1ac55291ea4d`، لا وسم `1.12.x-dev`. [سجل التكامل](docs/NDS-INTEGRATION.md) يثبت المصدر والبصمات وما يُحمَّل في كل صفحة. [الاستثناءات](docs/CUSTOM-EXCEPTIONS.md) تسرد ما لا يغطيه الإصدار. معرض كل مدخلات الكتالوج على `/nds-showcase/` وقائمته في [NDS-SHOWCASE.md](docs/NDS-SHOWCASE.md)، وهو خارج تنقل السيرة.
 
-اختبارات Playwright وaxe الآلية، حتى مع WebKit، ليست شهادة WCAG أو اختبار Safari الحقيقي أو بديلًا عن قارئ الشاشة والأجهزة الحقيقية. لا ندعي دعم متصفحات قديمة. [مرجع الثيم](docs/DESIGN-TOKENS.md).
+اختبارات Playwright وaxe الآلية، حتى مع WebKit، ليست شهادة WCAG أو اختبار Safari الحقيقي أو بديلًا عن قارئ الشاشة. لا ندعي دعم متصفحات قديمة، ولا ندعي مطابقة بصرية لقالب `_site` لأن أرشيف الـrelease لم يكن قابلًا للتنزيل هنا. [مرجع الثيم](docs/DESIGN-TOKENS.md).
 
 ## النشر والترخيص / Deployment & rights
 

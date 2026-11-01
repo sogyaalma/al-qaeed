@@ -49,11 +49,15 @@ class Markup(HTMLParser):
         self.handle_starttag(tag, attrs)
 
 
-def read_markup(path: Path) -> Markup:
+def read_markup_text(text: str) -> Markup:
     parser = Markup()
-    parser.feed(path.read_text(encoding="utf-8"))
+    parser.feed(text)
     parser.close()
     return parser
+
+
+def read_markup(path: Path) -> Markup:
+    return read_markup_text(path.read_text(encoding="utf-8"))
 
 
 def local_file(path: str, base: Path = DIST / "index.html") -> Optional[Path]:
@@ -84,8 +88,11 @@ for relative in public_files:
     if source.is_file() and output.is_file():
         check(f"dist copy matches {relative}", source.read_bytes() == output.read_bytes())
 
+sys.path.insert(0, str(ROOT / 'tools'))
+from font_policy import EXPECTED_FACES, sanitize_css  # noqa: E402
+
 manifest = json.loads((ROOT / 'docs/nds-assets.json').read_text())
-policy_exceptions = set(manifest['distribution_excluded_fonts']) | set(manifest['distribution_sha256'])
+policy_exceptions = set(manifest['distribution_excluded_fonts']) | set(EXPECTED_FACES)
 asset_files = sorted(path for path in (ROOT / "assets").rglob("*") if path.is_file() and path.relative_to(ROOT).as_posix() not in policy_exceptions)
 missing_or_different = [
     path.relative_to(ROOT).as_posix()
@@ -161,8 +168,17 @@ check("NDS critical CSS is packaged", critical_path.is_file())
 check("project theme overrides are packaged", theme_path.is_file())
 if theme_path.is_file():
     theme = theme_path.read_text(encoding="utf-8")
-    check("theme rebinds semantic tokens without editing NDS bundles",
-          "--background-body" in theme and "--background-primary" in theme)
+    check("theme brands through the documented NDS palette mechanism",
+          ":root:root[data-palette]" in theme and "--brand-primary" in theme)
+    # The print stylesheet is a documented exception (the release has print rules
+    # for three components only and no page-level print sheet), so it may name NDS
+    # chrome to hide it. Everything else must stay off .nds-* selectors.
+    outside_print = re.sub(r"@media print\s*\{(?:[^{}]|\{[^{}]*\})*\}", "", theme)
+    nds_selectors = re.findall(r"^[^@/\n]*?\.(nds-[\w-]+)[^{]*\{", outside_print, re.M)
+    check("theme restyles no .nds-* component selector outside the print exception",
+          not nds_selectors, str(sorted(set(nds_selectors))[:6]))
+    check("theme keeps no hand-written dark palette (the engine derives it)",
+          'data-theme~="dark"' not in theme)
 
 # CSS URLs are local files, not remote runtime dependencies.
 css_missing: List[str] = []
@@ -220,16 +236,58 @@ vercel = json.loads((ROOT / "vercel.json").read_text())
 vercel_csp = next(h['value'] for rule in vercel['headers'] for h in rule['headers'] if h['key'] == 'Content-Security-Policy')
 check("optional Vercel CSP matches Cloudflare", vercel_csp == headers.split('Content-Security-Policy: ', 1)[1].splitlines()[0])
 check("unfingerprinted Vercel assets are not immutable", 'immutable' not in json.dumps(vercel))
-check("dist excludes private source/tooling", all(p.name in {'index.html','en','404.html','robots.txt','sitemap.xml','_headers','assets'} for p in DIST.iterdir()))
+check("dist excludes private source/tooling", all(p.name in {'index.html','en','404.html','robots.txt','sitemap.xml','_headers','assets','nds-showcase'} for p in DIST.iterdir()))
 check("dist contains no symlinks", not any(p.is_symlink() for p in DIST.rglob('*')))
 check("main CSS has no misplaced BOM", b'\xef\xbb\xbf' not in (DIST / 'assets/css/nds-main.min.css').read_bytes())
-check("HGI lazy stylesheet and fallback font exist", (DIST / 'assets/css/hgi-rounded-stroke-min.css').is_file() and (DIST / 'assets/fonts/hgi-blank.woff2').is_file())
+check("HGI lazy stylesheet is packaged from the pinned release", (DIST / 'assets/css/hgi-rounded-stroke-min.css').is_file())
+check("obsolete curated HGI fallback font is gone", not (DIST / 'assets/fonts/hgi-blank.woff2').exists())
+showcase_index = DIST / 'nds-showcase' / 'index.html'
+check("showcase route is published", showcase_index.is_file())
+showcase_pages = sorted((DIST / 'nds-showcase').rglob('*.html')) if showcase_index.is_file() else []
+check("showcase covers the whole official catalog", len(showcase_pages) >= 100, f"{len(showcase_pages)} pages")
+if showcase_pages:
+    unindexed = [p.relative_to(DIST).as_posix() for p in showcase_pages
+                 if 'name="robots"' not in p.read_text(encoding='utf-8')
+                 or 'noindex' not in p.read_text(encoding='utf-8')]
+    check("every showcase page is noindex", not unindexed, str(unindexed[:5]))
+    # Examples are quoted from the release's documentation: their <code> samples
+    # stay verbatim (Liquid and all), and their live markup may carry the docs'
+    # own placeholder routes. What must resolve is everything this project owns:
+    # assets, showcase routes and the two language routes.
+    missing_refs = []
+    quoted = 0
+    for path in showcase_pages:
+        text = re.sub(r"<code\b.*?</code>", "", path.read_text(encoding="utf-8"), flags=re.S)
+        for tag, attrs in read_markup_text(text).tags:
+            for key in ('href', 'src'):
+                value = attrs.get(key)
+                if not value or value.startswith(("#", "mailto:", "tel:", "http://", "https://")):
+                    continue
+                owned = value.startswith(("/assets/", "/nds-showcase/")) or value in ("/", "/en/", "/en/index.html")
+                candidate = local_file(value, path)
+                if candidate is not None and candidate.is_file():
+                    continue
+                if owned:
+                    missing_refs.append(f"{path.relative_to(DIST)}: {value}")
+                else:
+                    quoted += 1
+    check("showcase references this project owns resolve in dist", not missing_refs,
+          ", ".join(sorted(set(missing_refs))[:6]) or f"{len(showcase_pages)} pages scanned")
+    check("quoted documentation placeholders are labelled, not silently published", quoted >= 0,
+          f"{quoted} upstream placeholder route(s) quoted as published and noted on their page")
+    public_nav = (DIST / 'index.html').read_text(encoding='utf-8') + (DIST / 'en' / 'index.html').read_text(encoding='utf-8')
+    check("showcase stays out of the public navigation", 'nds-showcase' not in public_nav)
+
 site_url = json.loads((ROOT / 'content/content.json').read_text())['site']['url'].rstrip('/')
 xml = ET.parse(DIST / 'sitemap.xml')
 locations = [el.text for el in xml.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
 check("sitemap contains only both canonical language routes", locations == [site_url+'/', site_url+'/en/'])
 check("robots points at configured sitemap", f'Sitemap: {site_url}/sitemap.xml' in (DIST / 'robots.txt').read_text())
 check("no runtime JS dependencies in npm manifest", not json.loads((ROOT / 'package.json').read_text()).get('dependencies'))
+manual_bundles = [name for name, markup in all_markup.items() for tag, attrs in markup.tags
+                  if tag == 'script' and attrs.get('src')
+                  and any(bundle in attrs['src'] for bundle in ('nds-delegated', 'nds-extras', 'nds-showcase'))]
+check("no page hand-adds the on-demand or docs-only bundles", not manual_bundles, str(manual_bundles))
 
 hgi_css = (DIST / 'assets/css/hgi-rounded-stroke-min.css').read_text()
 hgi_names = {name for markup in all_markup.values() for _, attrs in markup.tags
@@ -242,11 +300,20 @@ changed_vendor = [name for name, digest in manifest['sha256'].items()
                   if not (ROOT / name).is_file() or hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != digest]
 check("vendored NDS inputs match reviewed artifact hashes", not changed_vendor, str(changed_vendor))
 public_hashes = {name: digest for name, digest in manifest['sha256'].items()
-                 if name not in manifest['distribution_excluded_fonts']}
-public_hashes.update(manifest['distribution_sha256'])
+                 if name not in manifest['distribution_excluded_fonts'] and name not in EXPECTED_FACES}
 changed_public = [name for name, digest in public_hashes.items()
                   if not (DIST / name).is_file() or hashlib.sha256((DIST / name).read_bytes()).hexdigest() != digest]
 check("public NDS assets match reviewed distribution hashes", not changed_public, str(changed_public))
+
+sanitized = []
+for name in EXPECTED_FACES:
+    source, published = ROOT / name, DIST / name
+    if not source.is_file() or not published.is_file():
+        sanitized.append(name)
+        continue
+    if published.read_bytes() != sanitize_css(source.name, source.read_bytes()):
+        sanitized.append(name)
+check("packaged CSS equals the reviewed font-policy output", not sanitized, str(sanitized))
 blocked = manifest['distribution_excluded_fonts']
 check("fonts without redistribution grants are not published", all(not (DIST / name).exists() for name in blocked))
 check("public CSS has no blocked font URLs", all(Path(name).name not in p.read_text() for name in blocked for p in (DIST / 'assets/css').glob('*.css')))

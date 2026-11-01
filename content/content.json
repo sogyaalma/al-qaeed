@@ -1,5 +1,5 @@
 {
-  "_comment": "Single source of bilingual content. Every fact is taken from the CV (السيرة الذاتية). To add a third language, add a key next to 'ar' and 'en' and a matching entry in tools/build.py LANGS.",
+  "_comment": "Single source of bilingual content. Every fact is taken from the CV (السيرة الذاتية). To add a third language, add a key next to 'ar' and 'en' and a matching entry in tools/build.py LANGS. To add a future section, add the bilingual object, a nav entry whose id matches the section wrapper, and a renderer in tools/build.py PROFILE_SECTIONS. Do not add an empty placeholder section.",
   "site": {
     "url": "https://al-qaeed.pages.dev",
     "email": "aq5164@hotmail.com",

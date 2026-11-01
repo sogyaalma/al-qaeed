@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="270" viewBox="0 0 480 270" role="img" aria-label="Documentation image not shipped with this project">
+  <title>Documentation image not shipped with this project</title>
+  <rect width="480" height="270" fill="#eef1f0"/>
+  <rect x="0.5" y="0.5" width="479" height="269" fill="none" stroke="#b9c4c0" stroke-dasharray="8 6"/>
+  <g fill="none" stroke="#7d8f89" stroke-width="3" stroke-linecap="round">
+    <rect x="196" y="96" width="88" height="66" rx="8"/>
+    <circle cx="222" cy="120" r="8"/>
+    <path d="M200 156l26-24 18 16 14-12 22 20"/>
+  </g>
+  <text x="240" y="196" text-anchor="middle" font-family="'IBM Plex Sans Arabic', system-ui, sans-serif" font-size="17" fill="#4d5f59">
+    image not shipped — see docs/NDS-SHOWCASE.md
+  </text>
+</svg>

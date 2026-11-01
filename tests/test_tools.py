@@ -19,9 +19,20 @@ class ToolsTests(unittest.TestCase):
             shutil.copytree(ROOT / name, self.root / name, ignore=shutil.ignore_patterns('__pycache__', 'fonts-original'))
         for name in ['_headers', 'vercel.json', 'robots.txt']:
             shutil.copy2(ROOT / name, self.root / name)
+        # The font policy reads the reviewed digests for the pinned release, so the
+        # fixture carries the committed vendor manifest.
+        (self.root / 'docs').mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ROOT / 'docs/nds-assets.json', self.root / 'docs/nds-assets.json')
         # Tiny fixture; packaging must not depend on undocumented repository files.
         (self.root / 'assets/docs').mkdir(parents=True)
         (self.root / 'assets/docs/cv.pdf').write_bytes(b'%PDF-fixture')
+        # The showcase route is generated from the pinned NDS source, which the
+        # fixture deliberately does not carry; packaging still has to publish the
+        # committed route, so the fixture provides a minimal stand-in.
+        (self.root / 'nds-showcase').mkdir(parents=True)
+        (self.root / 'nds-showcase' / 'index.html').write_text(
+            '<!DOCTYPE html><html lang="en" dir="ltr"><head><title>fixture</title></head>'
+            '<body><main><h1>fixture</h1></main></body></html>\n', encoding='utf-8')
 
     def run_tool(self, name, success=True):
         result = subprocess.run([sys.executable, str(self.root / 'tools' / name)], capture_output=True, text=True)

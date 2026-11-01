@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-palette>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal &amp; Services KPIs · NDS 1.12.0 showcase</title>
+  <meta name="description" content="A data dashboard layout combining KPI counter tiles, pie, donut, line, and bar charts, and responsive tables to report portal traffic and service performance.">
+  <style>html :where(header){display:contents}html :where(.nds-topbar){height:40px}html :where(.nds-main-nav){height:var(--nds-nav-height, 72px)}html .nds-swiper.nds-hero:not([data-nds-swiper-initialized],[data-swiper-preset]) .nds-swiper-slide:not(:first-child){display:none}html[data-theme~=dark] :where(.nds-main-nav .nds-brand.nds-oncolor :is(img,svg)){filter:brightness(0) invert(1)}:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-user-feedback-section,.nds-footer){visibility:hidden}html:not([data-nds-loaded]) main{overflow-x:clip}:root{--nds-icons-opacity: 0}i.hgi-stroke{opacity:0}html{overflow-anchor:none}html{background-color:var(--background-body, #f9fafb)}html[data-theme~=dark]{background-color:var(--background-body, #111927)}:where(.nds-topbar){background-color:var(--background-topbar, #f3f4f6)}html[data-theme~=dark] :where(.nds-topbar){background-color:var(--background-topbar, #111927)}:where(.nds-main-nav){background-color:var(--background-nav, #fff)}html[data-theme~=dark] :where(.nds-main-nav){background-color:var(--background-nav, #1f2a37)}:where(.nds-hero-image-wrapper)::before{content:"";position:absolute;inset:0;background:color-mix(in srgb, var(--img-overlay-color, #092a1e) calc(var(--overlay, 0.7) * 100%), transparent);pointer-events:none}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}:is(.nds-hidden,[hidden],[data-state~=hidden],[data-filtered]){display:none !important}:where(.nds-hero-section){position:relative;height:550px}:where(.nds-hero-section.nds-sub){height:auto;min-height:220px}:where(.nds-hero-image-wrapper){position:absolute;inset:0}:where(.nds-hero-image){width:100%;height:100%;object-fit:cover;display:block}:where(.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:hidden}</style>
+  <link rel="preload" href="/assets/css/nds.critical.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="high" data-nds-defer>
+  <link id="nds-theme-stylesheet" rel="stylesheet" href="/assets/css/theme.css?ver=1.12.0.030d1c7">
+  <link rel="preload" href="/assets/css/nds-main.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="low" data-nds-defer="main">
+  <link rel="preload" href="/assets/css/nds-accessibility.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="low" data-nds-defer>
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" fetchpriority="low">
+  <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#0e5a49">
+  <script>
+      // Pre-paint FOUC guard: stamp saved data-theme before first paint, union-merged with markup/pack tokens so a stored value never clobbers them.
+      (function() {
+          var v = localStorage.getItem('nds-theme');
+          if (v) {
+              var d = document.documentElement;
+              var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\s+/)
+                  .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+              d.setAttribute('data-theme', t.join(' '));
+          }
+      })();
+      // Deferred styles: preload → injected stylesheet link (markers move with it). Rationale: ui-shell/head.md, CSP section.
+      (function () {
+          document.querySelectorAll('link[rel="preload"][data-nds-defer]').forEach(function (p) {
+              var l = document.createElement('link');
+              // Clone every attribute except rel/as — keeps href, fetchpriority, integrity, crossorigin, and the data-* markers.
+              for (var i = 0; i < p.attributes.length; i++) {
+                  var a = p.attributes[i];
+                  if (a.name !== 'rel' && a.name !== 'as') l.setAttribute(a.name, a.value);
+              }
+              l.rel = 'stylesheet';
+              p.removeAttribute('data-nds-defer');
+              document.head.appendChild(l);
+          });
+      })();
+  </script>
+      <script>
+      // Project addition (docs/CUSTOM-EXCEPTIONS.md #2): NDS.Theme persists a manual
+      // choice but has no OS-preference surface. Follow prefers-color-scheme only
+      // while the visitor has nothing stored, using the canonical union merge.
+      (function () {
+        var stored;
+        try { stored = localStorage.getItem('nds-theme'); } catch (e) { return; }
+        if (stored || !window.matchMedia) return;
+        if (!window.matchMedia('(prefers-color-scheme: dark)').matches) return;
+        var d = document.documentElement;
+        var t = ((d.getAttribute('data-theme') || '') + ' dark').split(/\s+/)
+          .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+        d.setAttribute('data-theme', t.join(' '));
+      })();
+  </script>
+    <noscript>
+          <style>.alq-site :is(.nds-sideinfo, .nds-toc, .nds-drawer),
+          .alq-site :is(.nds-sideinfo, .nds-toc, .nds-drawer) > *,
+          .alq-site .nds-main-nav > *,
+          .alq-site .nds-code .nds-expandable-content { visibility: visible; }</style>
+        </noscript>
+</head>
+<body class="alq-site">
+  <a class="alq-skip-link" href="#main-content">Skip to content</a>
+  <noscript>
+    <nav class="alq-fallback" aria-label="Navigation without JavaScript">
+      <a href="/nds-showcase/">Showcase index</a>
+      <a href="/">Arabic site</a>
+      <a href="/en/">English site</a>
+    </nav>
+  </noscript>
+  <header>
+    <nav class="nds-main-nav nds-content-wrapper" id="ndsMainNav" aria-label="Primary navigation">
+      <div class="nds-nav-container">
+        <a class="nds-brand" href="/nds-showcase/">
+          <img class="nds-brand-logo" src="/assets/img/favicon.svg" width="40" height="40" alt="">
+          <span class="nds-brand-name">NDS 1.12.0
+            <span class="nds-brand-slogan">Component showcase</span>
+          </span>
+        </a>
+        <ul class="nds-nav-minimal" hidden>
+          <li class="nds-mainNav-toggler nds-nav-item">
+            <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="ndsNavCollapse">
+              <i class="nds-icon nds-hgi-menu-01" aria-hidden="true"></i>
+            </button>
+          </li>
+        </ul>
+        <div class="nds-collapse" id="ndsNavCollapse" hidden>
+          <div class="nds-collapse-content">
+            <ul class="nds-nav-primary">
+            <li class="nds-nav-item">
+              <a href="/nds-showcase/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">Index</span>
+              </a>
+            </li>
+            <li class="nds-nav-item">
+              <a href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">Arabic site</span>
+              </a>
+            </li>
+            <li class="nds-nav-item">
+              <a href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">English site</span>
+              </a>
+            </li>
+            </ul>
+            <div class="nds-nav-item nds-show-more">
+              <a class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full">
+                <i class="nds-icon nds-hgi-arrow-down-01" aria-hidden="true"></i>
+              </a>
+            </div>
+            <ul class="nds-nav-actions">
+              <li class="nds-nav-item nds-icon-only nds-PAB">
+                <a href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="Back to the personal site" lang="ar" hreflang="ar">
+                  <i class="nds-icon nds-hgi-arrow-left-01" aria-hidden="true"></i>
+                  <span class="nds-label" data-hidden="sm md sr">Personal site</span>
+                </a>
+              </li>
+              <li class="nds-nav-item nds-icon-only nds-PAB">
+                <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-theme-toggle-wrap nds-tooltip" data-tooltip-hover="500" data-theme-toggle title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">
+                  <i class="nds-icon nds-hgi-moon-02" aria-hidden="true"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="nds-hero-section nds-sub nds-flat" id="top">
+      <nav class="nds-breadcrumb-nav" aria-label="Breadcrumb">
+        <ol class="nds-breadcrumb">
+            <li><a href="/nds-showcase/">Showcase</a></li>
+            <li><a href="/nds-showcase/templates/">Templates</a></li>
+            <li class="nds-truncate" aria-current="page">Portal &amp; Services KPIs</li>
+        </ol>
+      </nav>
+      <div class="nds-section-wrapper">
+        <div class="nds-section-head">
+          <h1 class="nds-section-title">Portal &amp; Services KPIs</h1>
+          <p class="nds-section-description">A data dashboard layout combining KPI counter tiles, pie, donut, line, and bar charts, and responsive tables to report portal traffic and service performance.</p>
+        </div>
+      </div>
+    </section>
+    <div class="nds-content-layout">
+      <div class="nds-main-content" id="main-content">
+        <!-- Section 1: Portal Performance Statistics -->
+        <section id="portalStats" class="nds-content-section">
+            <div class="nds-section-wrapper">
+                <div class="nds-section-head">
+                    <h2 class="nds-section-title">
+                        Portal Performance Statistics
+                        <span> (100% | 100,000)</span>
+                    </h2>
+                </div>
+
+                <div class="nds-section-body">
+                    <!-- KPI tiles -->
+                    <div class="nds-block">
+                    <div class="nds-grid" style="--max-col:4; --min-col:2;">
+                        <div class="nds-card nds-shadow nds-statistic">
+                            <div class="nds-card-header">
+                                <div class="nds-card-featured-icon">
+                                    <span class="nds-featured-icon nds-circle nds-xl">
+                                        <i class="hgi hgi-stroke hgi-user-multiple-02" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-number nds-counter-value nds-number-format nds-md" data-target="543210">0</span>
+                                    <p class="nds-card-description">Users</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-shadow nds-statistic">
+                            <div class="nds-card-header">
+                                <div class="nds-card-featured-icon">
+                                    <span class="nds-featured-icon nds-circle nds-xl">
+                                        <i class="hgi hgi-stroke hgi-eye" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-number nds-counter-value nds-number-format nds-md" data-target="876543">0</span>
+                                    <p class="nds-card-description">Visits</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-shadow nds-statistic">
+                            <div class="nds-card-header">
+                                <div class="nds-card-featured-icon">
+                                    <span class="nds-featured-icon nds-circle nds-xl">
+                                        <i class="hgi hgi-stroke hgi-file-01" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-number nds-counter-value nds-number-format nds-md" data-target="1234567">0</span>
+                                    <p class="nds-card-description">Page Views Count</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-shadow nds-statistic">
+                            <div class="nds-card-header">
+                                <div class="nds-card-featured-icon">
+                                    <span class="nds-featured-icon nds-circle nds-xl">
+                                        <i class="hgi hgi-stroke hgi-arrow-turn-backward" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-number nds-md">42%</span>
+                                    <p class="nds-card-description">Bounce Rate</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- 2x2 grid of pie charts -->
+                    <div class="nds-block">
+                    <div class="nds-grid" style="--max-col:2; --min-col:1;">
+                        <div class="nds-card nds-stroke" style="--card-width:100%;">
+                            <div class="nds-card-header">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-title">Operating Systems</span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-chart"
+                                    data-chart-type="pie"
+                                    data-chart-series='[55,25,12,8]'
+                                    data-chart-labels='["Windows","macOS","Linux","Other"]'
+                                    data-chart-config='{"height":280,"legend":{"position":"bottom"}}'></div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-stroke" style="--card-width:100%;">
+                            <div class="nds-card-header">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-title">Device Types</span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-chart"
+                                    data-chart-type="pie"
+                                    data-chart-series='[42,38,15,5]'
+                                    data-chart-labels='["Desktop","Mobile","Tablet","Other"]'
+                                    data-chart-config='{"height":280,"legend":{"position":"bottom"}}'></div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-stroke" style="--card-width:100%;">
+                            <div class="nds-card-header">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-title">Mobile Devices</span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-chart"
+                                    data-chart-type="pie"
+                                    data-chart-series='[48,44,6,2]'
+                                    data-chart-labels='["iOS","Android","Huawei","Other"]'
+                                    data-chart-config='{"height":280,"legend":{"position":"bottom"}}'></div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-stroke" style="--card-width:100%;">
+                            <div class="nds-card-header">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-title">Browser Type</span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-chart"
+                                    data-chart-type="pie"
+                                    data-chart-series='[58,22,12,8]'
+                                    data-chart-labels='["Chrome","Safari","Edge","Firefox"]'
+                                    data-chart-config='{"height":280,"legend":{"position":"bottom"}}'></div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Search terms (full width pie) -->
+                    <div class="nds-block">
+                    <div class="nds-card nds-stroke" style="--card-width:100%;">
+                        <div class="nds-card-header">
+                            <div class="nds-card-text">
+                                <span class="nds-card-title">Most Used Search Terms</span>
+                                <p class="nds-card-description">(up to 10 search terms)</p>
+                            </div>
+                        </div>
+                        <div class="nds-card-content">
+                            <div class="nds-chart"
+                                data-chart-type="pie"
+                                data-chart-series='[240,198,165,130,110,95,80,65,45,30]'
+                                data-chart-labels='["Admissions","Programs","Scholarships","Calendar","Library","Contact","Faculty","Research","Tuition","Events"]'
+                                data-chart-config='{"height":280,"legend":{"position":"bottom"}}'></div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Visits by Country table -->
+                    <div class="nds-block">
+                        <h3 class="nds-block-title">Visits by Country</h3>
+                        <table class="nds-table nds-responsive" style="--min-width:350px;">
+                            <thead>
+                                <tr>
+                                    <th>Country</th>
+                                    <th>Visits</th>
+                                    <th>Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Saudi Arabia</td><td>412,300</td><td>70.1%</td></tr>
+                                <tr><td>Egypt</td><td>58,200</td><td>9.9%</td></tr>
+                                <tr><td>UAE</td><td>31,400</td><td>5.3%</td></tr>
+                                <tr><td>Pakistan</td><td>22,100</td><td>3.8%</td></tr>
+                                <tr><td>Indonesia</td><td>18,900</td><td>3.2%</td></tr>
+                                <tr><td>Other</td><td>45,100</td><td>7.7%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Visits by City table -->
+                    <div class="nds-block">
+                        <h3 class="nds-block-title">Visits by City</h3>
+                        <table class="nds-table nds-responsive" style="--min-width:350px;">
+                            <thead>
+                                <tr>
+                                    <th>City</th>
+                                    <th>Visits</th>
+                                    <th>Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Madinah</td><td>215,400</td><td>36.6%</td></tr>
+                                <tr><td>Riyadh</td><td>142,800</td><td>24.3%</td></tr>
+                                <tr><td>Jeddah</td><td>88,600</td><td>15.0%</td></tr>
+                                <tr><td>Makkah</td><td>54,300</td><td>9.2%</td></tr>
+                                <tr><td>Dammam</td><td>41,200</td><td>7.0%</td></tr>
+                                <tr><td>Other</td><td>45,700</td><td>7.9%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Most visited pages (line chart) -->
+                    <div class="nds-block">
+                    <div class="nds-card nds-stroke" style="--card-width:100%;">
+                        <div class="nds-card-header">
+                            <div class="nds-card-text">
+                                <span class="nds-card-title">Most Visited Pages</span>
+                                <p class="nds-card-description">(up to 10 pages)</p>
+                            </div>
+                        </div>
+                        <div class="nds-card-content">
+                            <div class="nds-chart"
+                                data-chart-type="line"
+                                data-chart-series='[{"name":"Home","data":[620,650,700,720,760,780,800,790,770,760,740,730]},{"name":"Admissions","data":[430,460,480,520,540,560,580,590,600,580,560,540]},{"name":"Programs","data":[310,330,360,380,400,420,440,450,440,430,410,390]}]'
+                                data-chart-labels='["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]'
+                                data-chart-config='{"height":320,"line":{"smooth":true,"dots":false}}'></div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Visitor Feedback -->
+        <section id="feedback" class="nds-content-section">
+            <div class="nds-section-wrapper">
+                <div class="nds-section-head">
+                    <h2 class="nds-section-title">Visitor Feedback for Platform User Satisfaction</h2>
+                    <p class="nds-section-description">12,450 total responses from visitors during the past year (starting from January 1st).</p>
+                </div>
+
+                <div class="nds-section-body">
+                    <div class="nds-block">
+                    <div class="nds-grid" style="--max-col:2; --min-col:1;">
+                        <div class="nds-card nds-stroke" style="--card-width:100%;">
+                            <div class="nds-card-header">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-title">Was the page useful (59.26% | 24,313)</span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-chart"
+                                    data-chart-type="donut"
+                                    data-chart-series='[44.65,25,14,17]'
+                                    data-chart-labels='["Content is relevant","It was well written","The layout made it easy to read","Something else"]'
+                                    data-chart-config='{"height":260,"legend":{"position":"bottom"}}'></div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-stroke" style="--card-width:100%;">
+                            <div class="nds-card-header">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-title">Was the page useful (59.26% | 24,313)</span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-chart"
+                                    data-chart-type="donut"
+                                    data-chart-series='[44.65,25,14,17]'
+                                    data-chart-labels='["Content is not relevant","Content is not accurate","Content is too long","Something else"]'
+                                    data-chart-config='{"height":260,"legend":{"position":"bottom"}}'></div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-stroke" style="--card-width:100%;">
+                            <div class="nds-card-header">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-title">Highest Rated Content</span>
+                                    <p class="nds-card-description">(up to 5 pages)</p>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-chart"
+                                    data-chart-type="donut"
+                                    data-chart-series='[35,25,18,12,10]'
+                                    data-chart-labels='["Admissions","Scholarships","Programs","Library","Calendar"]'
+                                    data-chart-config='{"height":260,"legend":{"position":"bottom"}}'></div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-stroke" style="--card-width:100%;">
+                            <div class="nds-card-header">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-title">Lowest Rated Content</span>
+                                    <p class="nds-card-description">(up to 5 pages)</p>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-chart"
+                                    data-chart-type="donut"
+                                    data-chart-series='[32,24,20,14,10]'
+                                    data-chart-labels='["Forms","Fees","Contact","Events","FAQ"]'
+                                    data-chart-config='{"height":260,"legend":{"position":"bottom"}}'></div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Service Performance Statistics -->
+        <section id="serviceStats" class="nds-content-section">
+            <div class="nds-section-wrapper">
+                <div class="nds-section-head">
+                    <h2 class="nds-section-title">
+                        Service Performance Statistics
+                        <span> (100% | 100,000)</span>
+                    </h2>
+                </div>
+
+                <div class="nds-section-body">
+                    <!-- KPI tiles -->
+                    <div class="nds-block">
+                    <div class="nds-grid" style="--max-col:4; --min-col:2;">
+                        <div class="nds-card nds-shadow nds-statistic">
+                            <div class="nds-card-header">
+                                <div class="nds-card-featured-icon">
+                                    <span class="nds-featured-icon nds-circle nds-xl">
+                                        <i class="hgi hgi-stroke hgi-user-account" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-number nds-md">87%</span>
+                                    <p class="nds-card-description">User Satisfaction</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-shadow nds-statistic">
+                            <div class="nds-card-header">
+                                <div class="nds-card-featured-icon">
+                                    <span class="nds-featured-icon nds-circle nds-xl">
+                                        <i class="hgi hgi-stroke hgi-star" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-number nds-md">92%</span>
+                                    <p class="nds-card-description">Completion Rate</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-shadow nds-statistic">
+                            <div class="nds-card-header">
+                                <div class="nds-card-featured-icon">
+                                    <span class="nds-featured-icon nds-circle nds-xl">
+                                        <i class="hgi hgi-stroke hgi-percent-square" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-number nds-md">78%</span>
+                                    <p class="nds-card-description">Digital Percentage</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-shadow nds-statistic">
+                            <div class="nds-card-header">
+                                <div class="nds-card-featured-icon">
+                                    <span class="nds-featured-icon nds-circle nds-xl">
+                                        <i class="hgi hgi-stroke hgi-file-edit" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-number nds-counter-value nds-number-format nds-md" data-target="458200">0</span>
+                                    <p class="nds-card-description">Total Transactions</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Government entity table -->
+                    <div class="nds-block">
+                        <h3 class="nds-block-title">Government Entity Name</h3>
+                        <table class="nds-table nds-responsive" style="--min-width:350px;">
+                            <tbody>
+                                <tr>
+                                    <th>Service Channel</th>
+                                    <th>Number of Services</th>
+                                    <th>Percentage</th>
+                                </tr>
+                                <tr><td>Total Number of Government Services</td><td>184</td><td>100%</td></tr>
+                                <tr><td>Number of E-Government Services</td><td>142</td><td>77.2%</td></tr>
+                                <tr>
+                                    <th>E-Government Services Maturity</th>
+                                    <th>Number of Services</th>
+                                    <th>Percentage</th>
+                                </tr>
+                                <tr><td>Integrative Services</td><td>38</td><td>26.8%</td></tr>
+                                <tr><td>Procedural Services</td><td>44</td><td>31.0%</td></tr>
+                                <tr><td>Interactive Services</td><td>35</td><td>24.6%</td></tr>
+                                <tr><td>Informational Services</td><td>25</td><td>17.6%</td></tr>
+                                <tr><td>Total</td><td>142</td><td>100%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Completion rate (bar) + Transactions (line) -->
+                    <div class="nds-block">
+                    <div class="nds-grid" style="--max-col:2; --min-col:1;">
+                        <div class="nds-card nds-stroke" style="--card-width:100%;">
+                            <div class="nds-card-header">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-title">Completion Rate (59.26% | 24,313)</span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-chart"
+                                    data-chart-type="bar"
+                                    data-chart-series='[{"name":"Completed","data":[240,380,320,410,520,600]},{"name":"In Progress","data":[180,220,260,240,300,320]},{"name":"Pending","data":[80,120,100,110,140,150]}]'
+                                    data-chart-labels='["Jan","Feb","Mar","Apr","May","Jun"]'
+                                    data-chart-config='{"height":320,"bar":{"stacked":true,"borderRadius":4}}'></div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-stroke" style="--card-width:100%;">
+                            <div class="nds-card-header">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-title">Transactions (59.26% | 24,313)</span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-chart"
+                                    data-chart-type="line"
+                                    data-chart-series='[{"name":"Channel A","data":[520,540,580,600,620,640,660,670,680,685,690,700]},{"name":"Channel B","data":[320,340,360,380,400,420,430,440,450,460,470,480]},{"name":"Channel C","data":[180,200,220,240,250,260,270,280,290,300,310,320]}]'
+                                    data-chart-labels='["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]'
+                                    data-chart-config='{"height":320,"line":{"smooth":true,"dots":false}}'></div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- User satisfaction (donut) + Digital acquisition (line) -->
+                    <div class="nds-block">
+                    <div class="nds-grid" style="--max-col:2; --min-col:1;">
+                        <div class="nds-card nds-stroke" style="--card-width:100%;">
+                            <div class="nds-card-header">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-title">User Satisfaction (59.26% | 24,313)</span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-chart"
+                                    data-chart-type="donut"
+                                    data-chart-series='[38,32,18,8,4]'
+                                    data-chart-labels='["Excellent","Good","Average","Poor","Very Poor"]'
+                                    data-chart-config='{"height":260,"legend":{"position":"bottom"}}'></div>
+                            </div>
+                        </div>
+                        <div class="nds-card nds-stroke" style="--card-width:100%;">
+                            <div class="nds-card-header">
+                                <div class="nds-card-text">
+                                    <span class="nds-card-title">Digital Acquisition (59.26% | 24,313)</span>
+                                </div>
+                            </div>
+                            <div class="nds-card-content">
+                                <div class="nds-chart"
+                                    data-chart-type="line"
+                                    data-chart-series='[{"name":"Organic","data":[320,340,360,380,400,420,440,450,460,470,480,490]},{"name":"Referral","data":[180,200,220,240,260,280,300,310,320,330,340,350]},{"name":"Direct","data":[120,140,160,180,200,220,240,250,260,270,280,290]}]'
+                                    data-chart-labels='["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]'
+                                    data-chart-config='{"height":320,"line":{"smooth":true,"dots":false}}'></div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Service breakdown table -->
+                    <div class="nds-block">
+                        <h3 class="nds-block-title">Service Breakdown</h3>
+                        <table class="nds-table nds-responsive" style="--min-width:350px;">
+                            <thead>
+                                <tr>
+                                    <th>Service Name</th>
+                                    <th>Total Transactions</th>
+                                    <th>Digital Acquisition</th>
+                                    <th>Completion Rate</th>
+                                    <th>User Satisfaction</th>
+                                    <th>Cost per Transaction (if available)</th>
+                                    <th>Carbon Footprint (if available)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Application Submission</td><td>124,300</td><td>82%</td><td>94%</td><td>88%</td><td>12 SAR</td><td>0.4 kg</td></tr>
+                                <tr><td>Document Verification</td><td>98,200</td><td>76%</td><td>91%</td><td>85%</td><td>8 SAR</td><td>0.2 kg</td></tr>
+                                <tr><td>Fee Payment</td><td>87,500</td><td>95%</td><td>98%</td><td>90%</td><td>5 SAR</td><td>0.1 kg</td></tr>
+                                <tr><td>Certificate Issuance</td><td>54,300</td><td>88%</td><td>92%</td><td>86%</td><td>10 SAR</td><td>0.3 kg</td></tr>
+                                <tr><td>Status Tracking</td><td>72,100</td><td>92%</td><td>97%</td><td>89%</td><td>3 SAR</td><td>0.1 kg</td></tr>
+                                <tr><td>Support Request</td><td>21,800</td><td>70%</td><td>85%</td><td>78%</td><td>15 SAR</td><td>0.5 kg</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="nds-footer nds-content-wrapper nds-brand" role="contentinfo" aria-label="Site Footer">
+    <nav class="nds-footer-content" aria-label="Footer navigation">
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="nds-footer-col-1">Showcase</span>
+        <ul class="nds-footer-list" aria-labelledby="nds-footer-col-1">
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/">
+
+              <span class="nds-label">Component index</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/templates/">
+
+              <span class="nds-label">Page templates</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/examples/">
+
+              <span class="nds-label">Full examples</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="nds-footer-col-2">Personal site</span>
+        <ul class="nds-footer-list" aria-labelledby="nds-footer-col-2">
+          <li>
+            <a class="nds-link nds-footer-link" href="/">
+              <i class="nds-icon nds-hgi-arrow-left-01" aria-hidden="true"></i>
+              <span class="nds-label">Arabic (RTL)</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/en/">
+              <i class="nds-icon nds-hgi-arrow-right-01" aria-hidden="true"></i>
+              <span class="nds-label">English (LTR)</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <hr class="nds-divider nds-lg">
+    <div class="nds-footer-bottom">
+      <div class="nds-footer-meta">
+        <div class="nds-footer-legal">
+          <div class="nds-footer-copyright">
+            <span>Component examples are quoted from NDS v1.12.0 (commit 030d1c7ff4ab, MIT). This is a personal review route, not a government service.</span>
+          </div>
+        <div class="nds-footer-versions">
+          <span class="nds-tag nds-xs nds-oncolor"><span class="nds-label">NDS v1.12.0</span></span>
+          <span class="nds-tag nds-xs nds-oncolor"><span class="nds-label">NDS IQ v3.1</span></span>
+        </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script defer src="/assets/js/nds-main.min.js?ver=1.12.0.030d1c7"></script>
+  <script defer src="/assets/js/nds-accessibility.min.js?ver=1.12.0.030d1c7"></script>
+  <script type="module" src="/assets/js/site.js"></script>
+</body>
+</html>

@@ -1,13 +1,39 @@
 {
-  "runtime_banner": "1.12.x-dev",
-  "upstream_commit_of_inherited_build": null,
-  "inherited_from_project_commit": "564c53b9307dd64b56874985f5111e5f3cbd9028",
-  "note": "Artifact hashes freeze inherited development bundles; not proof of an upstream release. HGI stylesheet/blank font sourced separately at 0da6366911e039d5f1afd749a9b116e67dade15d; main CSS encoding/URL repair documented. HGI CSS copies only complete rules used by this site and optional accessibility controls; font file unchanged.",
+  "pinned_release": "v1.12.0",
+  "pinned_commit": "030d1c7ff4ab5a3092c17b93429b1ac55291ea4d",
+  "released": "2026-09-05",
+  "runtime_banner": "1.12.0",
+  "repository": "https://github.com/mazin-musleh/NDS-vanilla",
+  "license": "MIT",
+  "source": {
+    "installed_from": "https://codeload.github.com/mazin-musleh/NDS-vanilla/tar.gz/refs/tags/v1.12.0",
+    "tarball_sha256": "700bbf9a899dd57a4414cdda647a974ec14cce4be3999e0de54086e6246475c7",
+    "nds_root": ".nds/ (gitignored; reinstall with `python3 tools/vendor_nds.py fetch`)",
+    "release_zip": "https://github.com/mazin-musleh/NDS-vanilla/releases/download/v1.12.0/nds-vanilla-template-v1.12.0.zip",
+    "release_zip_status": "unreachable from this build environment: release assets redirect to objects.githubusercontent.com, which is not on the allowed host list. The tag source tarball (codeload.github.com) is used instead, and the CSS bundles are compiled locally from the tag's own SCSS.",
+    "built_site_twin": "absent — release ZIP host (objects.githubusercontent.com) is not reachable here"
+  },
+  "build": {
+    "javascript": "byte-identical copies of the tag's committed assets/js/*.min.js",
+    "css": "compiled from the tag's SCSS with 1.83.4 compiled with dart2js 3.6.1 (style=compressed, sass_dir=_sass), BOM stripped, banner newline fix from _plugins/css_banner_format.rb",
+    "inline_head_gate": "compiled from _sass/_fold.scss with $inline:true, as _includes/critical-inline.html does",
+    "tool": "tools/vendor_nds.py sync"
+  },
+  "bundles_without_version_banner": [
+    "assets/css/hgi-rounded-stroke-min.css"
+  ],
+  "removed_inherited_files": [],
+  "not_copied_from_upstream": [
+    "assets/img/",
+    "assets/icon/",
+    "docs-assets/"
+  ],
   "sha256": {
-    "assets/css/hgi-rounded-stroke-min.css": "ee1f227efe8ee890729922714a8ecccf4003b0037dc1e0c6304113e438b9aff3",
-    "assets/css/nds-icons.min.css": "51ca956966ad6cbf2c2fe22309ad27ecd2d50d6ef6ff124695cfa3d724e3c857",
-    "assets/css/nds-main.min.css": "3a60a169f1d32ff313851849ad6d76dc641860f7d0e4b4a045cb00738f9d8670",
-    "assets/css/nds.critical.min.css": "56c556638b25ce84b6102ede9b6a1c1bd0fab9516cbfa979a4ad52fac3c19a87",
+    "assets/css/hgi-rounded-stroke-min.css": "8295cd411ecae070a93560615b25ec9c19d75da824af0fb8c5f31b2e464bc5e9",
+    "assets/css/nds-accessibility.min.css": "f563d4f80980ee32493992a5366abc5b95830356a609850baa9839ee6b926232",
+    "assets/css/nds-icons.min.css": "aa44d275d16d6e255400ca7fe640c13470773577cc5e871d2db16ccf6787956d",
+    "assets/css/nds-main.min.css": "821c13819cdfafd66b1c04aae84f4a2a7691a0dc6d18d4dc4e8f23b7296cf993",
+    "assets/css/nds.critical.min.css": "799d1fcefca5bcf891040600d4a3fc54b6e001618c56c520f8ec89830757ebd9",
     "assets/fonts/Cairo-Arabic.woff2": "748022f50c427456ad66031e855349be3448ee1f05a5f1eb59574ebe0c686749",
     "assets/fonts/Cairo-Latin.woff2": "82c13cbd1352d76e97c3d335caa912ae68fecdc3949a43cf8d149eb892384c1b",
     "assets/fonts/IBMPlexSans-Bold-Latin1.woff2": "914f1400f363e636b6f9cc7965aa807ff01e93586e1437617525cba0a62aa78d",
@@ -25,25 +51,31 @@
     "assets/fonts/ReadexPro-Latin.woff2": "7074eeb987a25349069ed5c784e204904b928f4c878e9c3c88d636c01081ae52",
     "assets/fonts/SaudiWeb-Bold.woff2": "fa2898cdab73cf28ee0726ef3fbf4b6880660afbd5e574a58c6ad82f8c29c97e",
     "assets/fonts/SaudiWeb-Regular.woff2": "45e5469471dc24c32713a8717d12adcd7298499d35034bf59c6f9d536112774b",
-    "assets/fonts/hgi-blank.woff2": "d59cfa85276b71619e3c52dee6222cd27e24ecf9723fa2a574427dca6918b49a",
-    "assets/fonts/hgi-stroke-rounded.woff2": "6d4b0f95dc957971114ae325e3696e58d86ac693d7a1e30a02179576d8a8c76d",
-    "assets/i18n/ar.json": "5406ea5954785af900920a20e251f9fa6044c4d5351394f027deec9434f3c712",
-    "assets/js/nds-accessibility.min.js": "a440ffd25d2c32c48400e41337689e65681cdb5ef00dfc25817d135ff5ecfb27",
-    "assets/js/nds-audit.min.js": "76c1b9526eb6a1330d9b0c030f7a0bfaea8d468a7417dbc8d58fba6199b8493d",
-    "assets/js/nds-chart.min.js": "c972707f271af376818ca78eb32fd53d28632aa554b46c95277240dbb3255608",
-    "assets/js/nds-code.min.js": "ca0f4987649b35e20ada1dcc742e6507c36ffd9094a624e820285350c6d1e519",
-    "assets/js/nds-cookie-consent.min.js": "0978566ded5f504b9b89359e1d7863b860a720292900f1c84f3d2328dc967210",
-    "assets/js/nds-delegated.min.js": "12bf22efc259e2b378cc864fda9cdbecb3c633bf4793c06d9db4ff0545a28b7a",
-    "assets/js/nds-editor.min.js": "3aae034add97ff1aabbd1a12a57c7752ae9e17339bee35c3e6de6c2b010073f0",
-    "assets/js/nds-extras.min.js": "27ef7ba1063ea9a46496dd7435a609e4107a91e279a0cbc19e244e742be51733",
-    "assets/js/nds-main.min.js": "f431edd84b5f5dc84c5357a66c8d6252b8fbb7d7bc0d26faf66c14b6ca9e9b29"
+    "assets/fonts/hgi-stroke-rounded.woff2": "3376bc7e509a72c006124be9bc601d7b6de7927defd1db28885b337967e54b04",
+    "assets/i18n/accessibility/ar.json": "19e4ad1b422ca86871cc2fabbc305e1941bb03fdbf72daca1415b818ff4dae09",
+    "assets/i18n/accessibility/en.json": "4ba7ca64234aa0d5a35a9bc75bbc9b19c253bae154dbf4215beef3355ed470f7",
+    "assets/i18n/ipv/ar.json": "2255ba7a33dcc1fcd325d67fed186e0697c7474694626add05bd532197da7584",
+    "assets/i18n/ipv/en.json": "b10d9e0a730c918259fc32747d603c07a4b87d4e3d1431f05ea4c8f44d0c89bb",
+    "assets/js/nds-accessibility.min.js": "a4f13bd7c4166fed79dc1b8bacd04738d51e7552a4487d6b9e5178e599268c57",
+    "assets/js/nds-audit.min.js": "398cf156dc677d8bdca542daf27703d5f47f3405208980e0f8604802215ebd24",
+    "assets/js/nds-delegated.min.js": "4742051487772a67be2cd5d89984812d2b888cd6c74b5e3c78827a0f9921c74f",
+    "assets/js/nds-extras.min.js": "dcd5f66bc1fcbb99a449b0fc7dd38646c51fde44ddd959dc3c043e0f2fc9ced0",
+    "assets/js/nds-main.min.js": "4c3bc228738608a5e2d29367ddf706384a36b3869341a48347c742e4e135ffd6",
+    "assets/licenses/NDS-vanilla-MIT.txt": "0d74cd7d61fa4b2948b33ca8d8aabec86d4dbad81afbf82b22dcc6ec486388cc",
+    "assets/licenses/OpenDyslexic-OFL.txt": "797cb441b593b3326a69fcf83d84264301d89e8871a75b38bae1d101e922e10c",
+    "assets/licenses/cairo-OFL.txt": "aa2b13bf0770c59a7fb7a3b793a7df5162c9cb5ad540ec81b0c0c1385946845d",
+    "assets/licenses/ibmplexsans-OFL.txt": "d741e57d5f865e294df801f96b7b5161a88b211df65887e4358d271c9fc5fb4f",
+    "assets/licenses/ibmplexsansarabic-OFL.txt": "d741e57d5f865e294df801f96b7b5161a88b211df65887e4358d271c9fc5fb4f",
+    "assets/licenses/readexpro-OFL.txt": "2a07fb9a9c171c89bd6f52c8d06d182f76bb4c9b7870a738459fea51a5f1e459"
+  },
+  "generated_sha256": {
+    "tools/generated/nds-fold-inline.css": "2d17e0a8d4e14365adead9e4b0b783f553388fc4baf566c2d48c3437a00ee210",
+    "tools/generated/nds-accessibility-panel.html": "14e51f2f819219b9c9680156d81f4213aa7ae97c70369551ba2f209719312d73"
   },
   "distribution_excluded_fonts": [
     "assets/fonts/Maqroo-Regular.woff2",
     "assets/fonts/SaudiWeb-Bold.woff2",
     "assets/fonts/SaudiWeb-Regular.woff2"
   ],
-  "distribution_sha256": {
-    "assets/css/nds.critical.min.css": "aa0fbde99b9e2457cd95f584fe49525cf95bcc14d116fcd076856f6e2dab7dde"
-  }
+  "distribution_note": "tools/package.py drops the excluded fonts and their @font-face rules (font licensing review). See tools/font_policy.py."
 }

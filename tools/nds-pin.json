@@ -1,0 +1,24 @@
+{
+  "repo": "mazin-musleh/NDS-vanilla",
+  "tag": "v1.12.0",
+  "commit": "030d1c7ff4ab5a3092c17b93429b1ac55291ea4d",
+  "released": "2026-09-05",
+  "release_name": "NDS Vanilla v1.12.0 — Performance, Swiper Loop & Safari fixes",
+  "license": "MIT",
+  "runtime_version_banner": "1.12.0",
+  "nds_iq": {
+    "installed_version": "3.1",
+    "installed_sha256": "75977d315b29193d58c60fa1d8897f264ccfb526f2c0c1cc179fa09200792817",
+    "upstream_main_version": "3.1",
+    "upstream_main_blob_sha": "3dc754fcaf590f7ef84e41e0eb0f818927a1fede",
+    "verified_on": "2026-11-01",
+    "source": "https://api.github.com/repos/mazin-musleh/NDS-vanilla/contents/_includes/NDS-IQ.md?ref=main",
+    "note": "Verified 2026-11-01: NDS-IQ.md on main is instructions v3.1 and byte-identical to the installed file. Tag IQv3.2 exists upstream, but the installed rulebook forbids replacing itself without an explicit owner decision, so v3.1 stays. Do not treat the tag name as the contents of main."
+  },
+  "source_of_truth": {
+    "tarball": "https://codeload.github.com/mazin-musleh/NDS-vanilla/tar.gz/refs/tags/v1.12.0",
+    "tag_api": "https://api.github.com/repos/mazin-musleh/NDS-vanilla/git/ref/tags/v1.12.0",
+    "release_asset": "https://github.com/mazin-musleh/NDS-vanilla/releases/download/v1.12.0/nds-vanilla-template-v1.12.0.zip",
+    "release_asset_status": "unreachable from this build environment: release assets redirect to objects.githubusercontent.com, which is not on the allowed host list. The tag source tarball (codeload.github.com) is used instead, and the CSS bundles are compiled locally from the tag's own SCSS."
+  }
+}

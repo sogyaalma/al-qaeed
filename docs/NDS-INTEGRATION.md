@@ -1,74 +1,78 @@
-# NDS — التكامل الفعلي / Current integration
+# NDS — التكامل الحالي / Current integration
 
-آخر مراجعة: **2026-10-18**. هذا المرجع يحل محل وصف «primitives فقط» الذي لم يعد يطابق الموقع بعد commit `564c53b` ودمجه في `502f0e7`.
+آخر مراجعة: **2026-11-01**. هذه الوثيقة تصف التشغيل الحالي. تقرير [AUDIT-2026-10-18.md](AUDIT-2026-10-18.md) و[CONTINUATION-2026-10-18.md](CONTINUATION-2026-10-18.md) يصفان الحزم الموروثة `1.12.x-dev` قبل هذا التثبيت، ولا يصفان الأصول المنشورة الآن.
 
-## ما يستخدمه الموقع فعلًا
+## الإصدار المثبت
 
-- HTML مولد في Python، به shell وhero وcards وstepper وTOC وshare من NDS.
-- CSS: `nds.critical.min.css`, `nds-main.min.css`؛ يحمل loader ورقتي الأيقونات عند الحاجة.
-- JS: `nds-main.min.js` مع حزم NDS المؤجلة؛ لا framework ولا backend.
-- الخطوط مستضافة محليًا، والهوية في `assets/css/theme.css`. لا شعارات حكومية.
-- السكربت المحلي `assets/js/site.js` يحافظ فقط على القسم عند الانتقال بين المسارين الثابتين؛ لا يكرر scrollspy أو menu أو share الخاصة بـNDS.
+| البند | القيمة المتحققة |
+|---|---|
+| المستودع | [mazin-musleh/NDS-vanilla](https://github.com/mazin-musleh/NDS-vanilla) |
+| الوسم | `v1.12.0` (أحدث release مستقر بتاريخ 2026-11-01؛ نُشر 2026-09-05؛ ليس prerelease) |
+| الالتزام | `030d1c7ff4ab5a3092c17b93429b1ac55291ea4d` |
+| شريط وقت التشغيل | `1.12.0` داخل حزم JS المنسوخة |
+| الرخصة | MIT — [LICENSE-NDS-vanilla.txt](LICENSE-NDS-vanilla.txt). لا ترخّص السيرة ولا الصورة ولا خطوط SaudiWeb/Maqroo |
+| التعليمات | NDS IQ **3.1** في `NDS-IQ.md`. بتاريخ 2026-11-01 كان الملف على `main` مطابقًا بايتًا للملف المثبّت (blob `3dc754fcaf590f7ef84e41e0eb0f818927a1fede`). وسم `IQv3.2` موجود ولم يُستبدل الملف لأن القواعد تطلب قرار المالك قبل الاستبدال |
+| الدبوس | [tools/nds-pin.json](../tools/nds-pin.json) |
 
-## الإصدار: لا نخلط بين «12» والإصدار المنشور
+لم يُستعمل فرع تطوير غير منشور. لم تُرفع الخط الأساسي إلى إصدار أحدث لأن `v1.12.0` كان أحدث release مستقر عند المراجعة.
 
-رأسا CSS وJS الموروثين يعلنان **`1.12.x-dev`**، لا `v1.12.0` ولا `12.0.0`.
-تحقق GitHub API بتاريخ المراجعة أظهر أن أحدث release منشور هو `v1.12.0` بتاريخ 2026-09-05.
-الموقع الحالي يستخدم أصول تطوير من بناء سابق، وليس release مثبتًا. الالتزام upstream الذي جُمّعت منه **جميع** الحزم الأصلية غير مسجل ولا يمكن إثباته من الوسم العائم.
+## مصدر الأصول
 
-- إدخال الأصول للمشروع: `564c53b9307dd64b56874985f5111e5f3cbd9028`.
-- [بصمات SHA-256 للأصول الحالية](nds-assets.json): تثبيت **للأصول** الفعلية، وليس ادعاءً بمعرفة commit upstream.
-- فُحص مصدر upstream عند `0da6366911e039d5f1afd749a9b116e67dade15d` (المتاح قبل بناء الموقع)، ومصدر المراجعة الحالي `c3218d5262cf7cdf8f1dd0bcf77d62329799d069`. لا يعد أي منهما إثباتًا لمصدر الحزم الموروثة.
-- لم يُحدَّث NDS تلقائيًا، ولم يُنشأ مرجع `.nds/` مزيف أو يُدَّعَ تطابق مع قالب release.
+`python3 tools/vendor_nds.py fetch` ينزّل tarball الوسم من `codeload.github.com` (sha256 `700bbf9a899dd57a4414cdda647a974ec14cce4be3999e0de54086e6246475c7`) إلى `.nds/` (متجاهل في Git). ملف ZIP الخاص بصفحة الـrelease (`nds-vanilla-template-v1.12.0.zip`) يحوّل إلى `objects.githubusercontent.com` وهذا المضيف غير متاح من بيئة البناء هذه، لذلك:
 
-## إصلاحات محدودة للأصول — بلا إعادة تصميم أو ترقية
+- JavaScript: نسخ بايتية من `assets/js/*.min.js` داخل الوسم. لا تُضاف يدويًا `nds-delegated` ولا `nds-extras`؛ `nds-main` يحمّلهما.
+- CSS: يُجمَّع من SCSS الوسم بأداة Dart Sass **1.83.4** (`--style=compressed`)، مع إزالة BOM وإصلاح سطر شريط الإصدار من `_plugins/css_banner_format.rb`.
+- بوابة الرسم الأول: `_sass/_fold.scss` مع `$inline:true`، كما يفعل `_includes/critical-inline.html`.
+- `built_site_twin`: **غائب**. لا مقارنة بصرية بقالب `_site` المبني من ZIP الـrelease، لأن ذلك الأرشيف غير قابل للتنزيل هنا. لا تُدّعى مطابقة بصرية كاملة.
 
-1. **خلل encoding مؤكد في main CSS:** BOM داخلي بعد تعليق الترخيص، قبل `:root`، عند byte offset 146. المتصفح قرأ المحدد `U+FEFF:root`، وأعاد `--avatar-background` فارغًا رغم وجود stylesheet. أداة `tools/repair_nds_css.py` تزيل العلامة فقط وتقبل بصمات معلومة، لا تعيد كتابة قواعد المكونات.
-2. **ملف HGI ناقص:** loader طلب `/assets/css/hgi-rounded-stroke-min.css` وأعاد 404. استُعيد الملف أولًا كاملًا ثم قيس هدره (6228 أيقونة مقابل 7 مستخدمة بالصفحات). النسخة النهائية تنسخ 22 قاعدة كاملة حرفيًا، تشمل أيقونات لوحة الإتاحة الاختيارية، بأداة `tools/build_hgi.py` من `_sass/_hgiRoundedStroke.scss` عند `0da6366911e039d5f1afd749a9b116e67dade15d` بلا تعديل خط الأيقونات. الاستعادة الكاملة التجريبية جُمّعت بـDart Sass `1.105.2`؛ النسخة المنتقاة لا تحتاج Sass أو npm وتحتفظ بكل قاعدة مصدر منقولة كاملة. SHA-256 لخط HGI الأصلي تطابق تمامًا مع خط المشروع: `6d4b0f95dc957971114ae325e3696e58d86ac693d7a1e30a02179576d8a8c76d`.
-3. **خط fallback المضمن يخالف CSP:** استُخرجت بايتات `hgi-blank` دون تعديل من `_fonts-hgi-blank.scss` بالمصدر نفسه إلى `assets/fonts/hgi-blank.woff2`. تعيد أداة الإصلاح كتابة URL لهذه النسخة المطابقة فقط؛ بقي `font-src 'self'` دون إضافة `data:`. البصمات قبل/بعد محصورة داخل الأداة.
+`sync` يكتب الأصول و`docs/nds-assets.json` (38 بصمة vendor). `verify` يرفض أي اختلاف. `assets/css/theme.css` و`assets/js/site.js` مملوكان للمشروع وليسا في بصمات الـvendor.
 
-إعادة توليد HGI (صيانة اختيارية بعد إضافة `hgi-*` جديدة، وليست جزءًا من بناء Cloudflare):
+أُزيلت أدوات الإصلاح الموروثة (`tools/repair_nds_css.py` و`tools/build_hgi.py` و`tools/reproduce_nds.py` و`tools/vendor/`). إصدار v1.12.0 لا يحتوي `data:` في خطوط CSS، ويشحن ورقة HGI الرسمية كاملة، فلا حاجة لإصلاح BOM ولا لاقتطاع 22 قاعدة.
 
-```bash
-# المصدر يجب أن يطابق بصمة SCSS المثبتة داخل الأداة:
-python3 tools/build_hgi.py --source /path/to/0da6366/_sass/_hgiRoundedStroke.scss
-python3 tools/repair_nds_css.py
-```
+## ماذا يُحمَّل في كل نوع صفحة
 
-راجع التغيير وحدّث بصمة الملف في `docs/nds-assets.json` صراحةً، ثم أعد الحزمة والفحوص. يفشل الفحص الساكن عند إضافة اسم HGI دون قاعدته. أي إضافة editor أو مكون ينشئ أسماء ديناميكية جديدة تتطلب مراجعة مصدره وتحديث مجموعة القواعد، لا افتراض كفاية المجموعة الحالية.
+ترتيب الرأس يتبع `_includes/head.html`: charset، viewport، title، description، preload للصورة (صفحات السيرة فقط)، بوابة الـfold مضمّنة، preload للحزمة الحرجة، ثم `<link id="nds-theme-stylesheet">`، ثم preload لـ`nds-main.min.css` و`nds-accessibility.min.css`، ثم الأيقونة والـcanonical. سكربت الرأس الكنسي يحوّل الـpreload إلى stylesheet، وتحته عنصر التفضيل النظامي (الاستثناء 2).
 
-## markup وCSP وno-JS
+| الصفحة | CSS في الرأس | JS في نهاية الجسم | ما يحمّله وقت التشغيل عند الحاجة |
+|---|---|---|---|
+| `/` و`/en/` و`404.html` | fold + critical + theme.css + main + accessibility | `nds-main.min.js` و`nds-accessibility.min.js` و`site.js` (نوع module) | `nds-delegated.min.js` و`nds-extras.min.js` و`nds-audit.min.js` و`nds-icons.min.css` و`hgi-rounded-stroke-min.css` |
+| `/nds-showcase/` | نفسه، بلا preload للصورة، ومع `noindex,nofollow` | `nds-main.min.js` و`nds-accessibility.min.js`. لوحة الإتاحة تُضمَّن في الفهرس وصفحة accessibility فقط. `site.js` لا يُحمَّل | الحزم نفسها. لا يُشحن `nds-showcase.min.js` (سكربت موقع التوثيق فقط) |
 
-- المصدر المرجعي: `examples/faculty-cv.md`, `layout/page-layout.md`, `ui-shell/{head,mainnav,hero,footer}.md`, `components/{toc,stepper}.md`, `templates/404-template.md`.
-- الفهرس يستخدم **Manual List** الموثقة في `components/toc.md`؛ روابطه الثمانية مولدة مسبقًا، بمعرّفات واحدة للغتين. يدير NDS تفاعله عند وجود JS.
-- تاريخ الخبرة يحافظ على ترتيب DOM نفسه بصريًا، بدل عكس DOM ثم عكسه بـCSS؛ لم تتغير معلومات السيرة.
-- قوالب الصفحة مولدة كسلاسل HTML في `build.py` وفق البنية الموروثة؛ لم يُجرَ نقل معماري إلى template engine خلال التدقيق.
-- `build.py` يولد بصمات inline script/style من البايتات النهائية ويحدث CSP في `_headers` و`vercel.json`. لا `unsafe-inline` للسكربتات أو كتل style، ولا `unsafe-eval`. سُمِح فقط بخصائص style التي تكتبها مكونات NDS (`style-src-attr 'unsafe-inline'`)، مع بقاء HTML المؤلف دون style attributes.
-- تحميل الرأس القياسي يعتمد JS لتحويل preloads. عند تعطيله تعمل أوراق CSS في `noscript` وتنقل HTML بديل واضح وتحرير نصوص cards/facts من skeleton قبل-init؛ تُخفى أدوات المشاركة غير القابلة للعمل وchrome المعتمد على JS.
-- لا يوجد زر تبديل dark في الواجهة؛ اختُبر احترام تفضيل `nds-theme` المخزن مسبقًا. الثيم المحلي يعرّف قيم light/dark متناظرة.
+`site.js` لا يعيد بناء القائمة ولا scrollspy ولا المشاركة ولا الثيم. يحدّث رابط تبديل اللغة ليبقي شظية القسم بين الصفحتين الثابتتين.
 
-## قرار الصيانة
+لا تُحمَّل حزم chart/code/cookie-consent/editor المنفصلة: وسم v1.12.0 لا يشحنها كملفات. الإشارة الداخلية إلى chart/editor داخل `nds-main` ليست ملفات ناقصة.
 
-**نحافظ على واجهة NDS الحالية** ونصلح العيوب المؤكدة، بدل الرجوع إلى واجهة قديمة أو تثبيت release مختلف تلقائيًا. الحجم الكبير للحزم وغياب إثبات commit للبناء الأصلي مخاطرتان معلنتان. اختيار release ثابت وإعادة تجميع مجموعة متجانسة يتطلب مراجعة migration/compatibility وموافقة، لا تبديلًا ضمنيًا.
+## الثيم
 
-أي تحديث لاحق: ثبّت tag وcommit ومصدر الرخصة، اقرأ changelog وAPI، احتفظ بحقوق الصورة والمحتوى، حدّث manifest بمراجعة صريحة، ثم أعد build/package وHTML/CSS/JS وunit/static وChromium/axe وno-JS والطباعة وCloudflare Preview. لا تُولّد manifest آليًا في كل build لأن ذلك يخفي تعديل vendor غير المقصود.
+العلامة عبر الآلية الموثقة لا عبر محرك خاص:
 
-المصادر النصية متاحة للفحص، لكن **المقارنة البصرية بقالب `_site` مطابق للبناء الموروث غير متاحة**؛ لا ندعي conformance كاملة أو اكتمال بوابة NDS IQ. نتائج الموقع نفسه وحدود التحقق في [تقرير التدقيق](AUDIT-2026-10-18.md).
+1. `<html data-palette>` يشغّل منحدر OKLCH في `_sass/themes/_register.scss`.
+2. `theme.css` يبذر `--brand-primary: #0e5a49` و`--brand-secondary: #b08a4f` و`--neutral-tint: 0.8`، ويضبط `--background-primary-strong` و`--img-overlay-color`.
+3. الوضع الداكن رمز `dark` في `data-theme`، يكتبه زر `data-theme-toggle` ويحفظه NDS في `localStorage` بالمفتاح `nds-theme`. أول زيارة بلا قيمة محفوظة تتبع `prefers-color-scheme` بالعنصر المنفصل (الاستثناء 2).
+4. لا لوحة داكنة مكتوبة يدويًا. المتصفحات بلا CSS relative colour تبقى على لوحة DGA المجمدة، وهذا سلوك الإصدار الموثق.
 
-## استكمال قابلية إعادة إنتاج الأصول وسياسة النشر
+التفاصيل والاستثناءات: [CUSTOM-EXCEPTIONS.md](CUSTOM-EXCEPTIONS.md) و[DESIGN-TOKENS.md](DESIGN-TOKENS.md).
 
-`python3 tools/reproduce_nds.py` يعيد إنشاء **33 ملفًا** في مجلد مؤقت من
-commit الاستيراد المثبت وملفي SCSS حرفيين داخل `tools/vendor/`، ثم يطبق إصلاح
-BOM/URL ويولد HGI ويقارن كل SHA-256، بما فيها CSS العام بعد سياسة الخطوط.
-يعمل دون شبكة أو Ruby أو Sass، ولا يكتب إلى `assets/` ولا يجلب latest.
+## المكونات في السيرة
 
-هذا **artifact-level reproducibility**، وليس تجميع JS من commit upstream
-معلوم؛ ذلك المصدر الأصلي ما زال غير قابل للإثبات. لا ترقية NDS ضمنية.
-موافقة الانتقال إلى إصدار محدد وإعادة فحص migration لازمة إن طُلب source-level rebuild.
+الـmarkup يُولَّد من `tools/nds_shell.py` و`tools/build.py` وفق أمثلة الوسم، لا من ذاكرة أسماء الأصناف. الشكل المطابق: `examples/faculty-cv.md` مع `layout/page-shell.md` و`ui-shell/{mainnav,hero,footer}.md` و`components/{toc,stepper,cards,definition-list,tags,alert}.md`.
 
-يستبعد `tools/font_policy.py` ثلاثة خطوط بلا إذن مثبت من `dist/` ويزيل فقط
-وجهي Saudi `@font-face` من نسخة critical CSS ذات بصمة مدققة. لا URL لـMaqroo
-في CSS الحالي. لا تُعدل ملفات vendor الأصلية. يميز manifest بين `sha256`
-للمدخلات و`distribution_sha256` للمخرجات والاستثناءات الصريحة. أي خط جديد
-أو CSS غير مدقق يوقف التغليف قبل استبدال الحزمة السابقة. IBM Plex بقي دون تعديل.
-راجع [ملحق الاستكمال](CONTINUATION-2026-10-18.md).
+لا قائمة تنقل عامة إلى المعرض. المعرض مسار مراجعة منفصل: `/nds-showcase/`، و`noindex`، وخارج `sitemap.xml`. تغطيته في [NDS-SHOWCASE.md](NDS-SHOWCASE.md).
+
+أقسام السيرة تُبنى من `PROFILE_SECTIONS` في `tools/build.py`. قسم لاحق = كائن في `content/content.json` + مدخل `nav` بمعرّف الغلاف + دالة عرض. لا تُخترع أقسام فارغة.
+
+## التهيئة ودورة الحياة
+
+1. سكربت الرأس يختم `data-theme` قبل الرسم الأول ثم يحوّل روابط preload.
+2. `nds-main.min.js` (defer) يهيئ المكونات الحاضرة في الصفحة ويحمّل الحزم الكسولة.
+3. `nds-accessibility.min.js` يهيئ زر اللوحة ويحمّل `assets/i18n/accessibility/{lang}.json`.
+4. لا إطار عمل ولا mount/unmount لتطبيق. الصفحات ثابتة، لذلك لا مستمعات مكررة من إعادة تركيب.
+5. CSP: `build.py` يحسب بصمات عناصر `<script>` و`<style>` النهائية ويكتبها في `_headers` و`vercel.json`. لا `unsafe-inline` للسكربتات ولا `unsafe-eval`. `style-src-attr 'unsafe-inline'` لأن مكونات NDS تكتب خصائص style في وقت التشغيل؛ HTML المؤلف بلا خصائص style.
+
+## ما لا يُدّعى
+
+- ليست مطابقة WCAG كاملة لأن NDS مستخدم. فحص html-validate الصارم على صفحات السيرة نجح محليًا؛ فحوص المتصفح وaxe وقارئ الشاشة لم تُعد تشغيلها في بيئة هذا التغيير (لا متصفح مثبّت). CI يشغّلها على Chromium وFirefox وWebKit.
+- ليست مطابقة بصرية لقالب `_site`، لأن أرشيف الـrelease غير متاح هنا.
+- نماذج المعرض واجهة فقط. لا إرسال ناجح إلى خادم.
+
+إجراء التحديث: [UPDATE-CHECKLIST.md](UPDATE-CHECKLIST.md).

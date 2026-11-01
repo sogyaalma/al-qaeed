@@ -8,16 +8,35 @@
 python3 tools/build.py
 python3 tools/package.py
 python3 tests/run_static_checks.py
+python3 tools/check_nds_usage.py
 python3 tools/check_fonts.py  # أدوات requirements-test.txt؛ فحص تغطية للقراءة فقط
 python3 tools/serve.py --port 8000
 # من طرفية أخرى مع أدوات الاختبار:
 python3 tests/run_checks.py http://127.0.0.1:8000
 ```
 
-- لا تُعد ضغط خطوط NDS؛ `subset_fonts.py` القديم لا يعيد كتابة الخطوط.
+- لا تُعد ضغط خطوط NDS. `subset_fonts.py` لا يعيد كتابة الخطوط.
 - لا تستبدل PDF تلقائيًا بعد تعديل المحتوى. يولّد `python3 tools/make_cv_pdf.py --output test-results/cv-preview.pdf` نسخة مراجعة منفصلة، ثم يعتمد المالك أي استبدال.
-- `package.py` يستبعد خطوط SaudiWeb/Maqroo غير المثبتة الحقوق ويزيل مراجع URL الخاصة بها من نسخة CSS المنشورة؛ ملفات vendor المرجعية لم تتغير. انشر `dist/` فقط.
+- `package.py` يستبعد خطوط SaudiWeb/Maqroo غير المثبتة الحقوق ويزيل وجوه `@font-face` الخاصة بها من نسخة CSS المنشورة. ملفات الخط المرجعية في المستودع لا تُنشر. انشر `dist/` فقط.
 - عدد الفحوص ونتائجها تؤخذ من التشغيل الفعلي، لا من أرقام قديمة ثابتة.
+- المعرض `/nds-showcase/` يُعاد توليده مع البناء عندما يكون `.nds/_source` موجودًا. لا تضفه إلى تنقل السيرة ولا إلى sitemap.
+
+## تحديث NDS / Updating the pinned release
+
+لا تُحدَّث NDS ضمن عملية بناء عادية، ولا يُجلب `latest` تلقائيًا.
+
+1. تحقق من [releases](https://github.com/mazin-musleh/NDS-vanilla/releases) أن الوسم الجديد مستقر وليس prerelease. اقرأ `CHANGELOG.md` بين الشريطين، بما فيها أقسام `Migrating from`.
+2. لا تنتقل إلى فرع تطوير. لا تستبدل `NDS-IQ.md` بوسم `IQv3.2` أو أي وسم تعليمات إلا بقرار مالك صريح.
+3. حدّث `tools/nds-pin.json` عمدًا (الوسم والالتزام)، ثم:
+   ```bash
+   python3 tools/vendor_nds.py fetch
+   python3 tools/vendor_nds.py sync
+   python3 tools/vendor_nds.py verify
+   ```
+4. راجع اختلافات SCSS وJS قبل قبولها. `sync` يعيد كتابة الأصول المورَّدة و`docs/nds-assets.json` ولا يلمس `theme.css` ولا `site.js`.
+5. إن تغيّر شكل لوحة الإتاحة أو سكربت الرأس، سيوقف `tools/nds_shell.py` البناء عند الاستثناءات 2 و6 و7. راجع [CUSTOM-EXCEPTIONS.md](CUSTOM-EXCEPTIONS.md) قبل تعديل الإصلاح.
+6. أعد `python3 tools/build.py` حتى يُعاد توليد السيرة والمعرض وبصمات CSP و`docs/NDS-SHOWCASE.md`.
+7. شغّل `check_nds_usage.py` و`run_static_checks.py` و`check_docs.py` و`npm run validate` و`npm run validate:quoted`، ثم فحوص المتصفح. لا تُغلق صفوف `NDS-PLAN.md` على `Built and Verified` إلا بعد تأكيد المالك.
 
 ## موافقات المالك — لا تُغلق آليًا
 
@@ -56,10 +75,10 @@ python3 tests/run_checks.py http://127.0.0.1:8000
 - [ ] مراجعة تواريخ الهجري والميلادي إن أُضيف تحويل.
 - [ ] تحديث `seo` في content.json عند تغيّر المسمى.
 
-## إضافات تدقيق 2026-10-18
-- [ ] إثبات حق إعادة توزيع خطي SaudiWeb وMaqroo الموروثين، أو اعتماد بديل متكامل واختباره دون كسر مراجع CSS.
-- [ ] اختيار رخصة المشروع بقرار المالك؛ تراخيص vendor لا ترخص السيرة والصورة تلقائيًا.
-- [ ] اختيار إصدار NDS ثابت وإثبات مصدر جميع الأصول عند التحديث المقبل، بدل الاعتماد على وسم 1.12.x-dev وحده.
-- [ ] اختبار قارئ شاشة وSafari/Firefox ومعاينة Cloudflare الفعلية قبل اعتماد الإنتاج.
+## إضافات تدقيق 2026-10-18 وما بعده
+- [x] اختيار إصدار NDS ثابت وإثبات مصدر الأصول: v1.12.0 @ `030d1c7ff4ab5a3092c17b93429b1ac55291ea4d`، والبصمات في `docs/nds-assets.json`. أُنجز 2026-11-01.
+- [ ] إثبات حق إعادة توزيع خطي SaudiWeb وMaqroo الموروثين، أو اعتماد بديل. لا يُنشران في `dist/` الآن.
+- [ ] اختيار رخصة المشروع بقرار المالك؛ MIT الخاصة بـNDS لا ترخّص السيرة والصورة تلقائيًا.
+- [ ] اختبار قارئ شاشة وSafari الحقيقي ومعاينة Cloudflare قبل اعتماد الإنتاج. فحوص Playwright ليست بديلًا.
 
 لا تشغّل مولّد PDF فوق ملف معتمد: الأداة تتطلب `--output` جديدًا وترفض الكتابة فوق ملف موجود. ملف CV الحالي في هذه الجولة لم يتغير.

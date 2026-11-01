@@ -1,0 +1,41 @@
+{
+  "$schema": "https://html-validate.org/schemas/config.json",
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "no-dup-id": "error",
+    "no-missing-references": "error",
+    "element-name": "error",
+    "attribute-boolean-style": "error",
+
+    "heading-level": "off",
+    "no-multiple-main": "off",
+    "prefer-native-element": "off",
+
+    "no-redundant-role": "off",
+    "no-implicit-button-type": "off",
+    "no-raw-characters": "off",
+    "unique-landmark": "off",
+    "wcag/h63": "off",
+    "wcag/h71": "off",
+    "wcag/h30": "off",
+    "wcag/h32": "off",
+    "no-inline-style": "off",
+    "attribute-empty-style": "off",
+    "close-order": "off",
+    "no-implicit-close": "off",
+    "element-permitted-content": "off",
+    "element-permitted-parent": "off",
+    "element-required-content": "off",
+    "element-required-attributes": "off",
+    "attribute-allowed-values": "off",
+    "form-dup-name": "off",
+    "attr-quotes": "off",
+    "attr-spacing": "off",
+    "tel-non-breaking": "off",
+    "valid-autocomplete": "off",
+    "input-attributes": "off",
+    "no-dup-class": "off",
+    "valid-id": "off",
+    "void-style": "off"
+  }
+}

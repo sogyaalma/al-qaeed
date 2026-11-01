@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-palette>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Numbers · NDS 1.12.0 showcase</title>
+  <meta name="description" content="Scroll-triggered animated counters that count up to a target value">
+  <style>html :where(header){display:contents}html :where(.nds-topbar){height:40px}html :where(.nds-main-nav){height:var(--nds-nav-height, 72px)}html .nds-swiper.nds-hero:not([data-nds-swiper-initialized],[data-swiper-preset]) .nds-swiper-slide:not(:first-child){display:none}html[data-theme~=dark] :where(.nds-main-nav .nds-brand.nds-oncolor :is(img,svg)){filter:brightness(0) invert(1)}:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-user-feedback-section,.nds-footer){visibility:hidden}html:not([data-nds-loaded]) main{overflow-x:clip}:root{--nds-icons-opacity: 0}i.hgi-stroke{opacity:0}html{overflow-anchor:none}html{background-color:var(--background-body, #f9fafb)}html[data-theme~=dark]{background-color:var(--background-body, #111927)}:where(.nds-topbar){background-color:var(--background-topbar, #f3f4f6)}html[data-theme~=dark] :where(.nds-topbar){background-color:var(--background-topbar, #111927)}:where(.nds-main-nav){background-color:var(--background-nav, #fff)}html[data-theme~=dark] :where(.nds-main-nav){background-color:var(--background-nav, #1f2a37)}:where(.nds-hero-image-wrapper)::before{content:"";position:absolute;inset:0;background:color-mix(in srgb, var(--img-overlay-color, #092a1e) calc(var(--overlay, 0.7) * 100%), transparent);pointer-events:none}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}:is(.nds-hidden,[hidden],[data-state~=hidden],[data-filtered]){display:none !important}:where(.nds-hero-section){position:relative;height:550px}:where(.nds-hero-section.nds-sub){height:auto;min-height:220px}:where(.nds-hero-image-wrapper){position:absolute;inset:0}:where(.nds-hero-image){width:100%;height:100%;object-fit:cover;display:block}:where(.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:hidden}</style>
+  <link rel="preload" href="/assets/css/nds.critical.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="high" data-nds-defer>
+  <link id="nds-theme-stylesheet" rel="stylesheet" href="/assets/css/theme.css?ver=1.12.0.030d1c7">
+  <link rel="preload" href="/assets/css/nds-main.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="low" data-nds-defer="main">
+  <link rel="preload" href="/assets/css/nds-accessibility.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="low" data-nds-defer>
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" fetchpriority="low">
+  <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#0e5a49">
+  <script>
+      // Pre-paint FOUC guard: stamp saved data-theme before first paint, union-merged with markup/pack tokens so a stored value never clobbers them.
+      (function() {
+          var v = localStorage.getItem('nds-theme');
+          if (v) {
+              var d = document.documentElement;
+              var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\s+/)
+                  .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+              d.setAttribute('data-theme', t.join(' '));
+          }
+      })();
+      // Deferred styles: preload → injected stylesheet link (markers move with it). Rationale: ui-shell/head.md, CSP section.
+      (function () {
+          document.querySelectorAll('link[rel="preload"][data-nds-defer]').forEach(function (p) {
+              var l = document.createElement('link');
+              // Clone every attribute except rel/as — keeps href, fetchpriority, integrity, crossorigin, and the data-* markers.
+              for (var i = 0; i < p.attributes.length; i++) {
+                  var a = p.attributes[i];
+                  if (a.name !== 'rel' && a.name !== 'as') l.setAttribute(a.name, a.value);
+              }
+              l.rel = 'stylesheet';
+              p.removeAttribute('data-nds-defer');
+              document.head.appendChild(l);
+          });
+      })();
+  </script>
+      <script>
+      // Project addition (docs/CUSTOM-EXCEPTIONS.md #2): NDS.Theme persists a manual
+      // choice but has no OS-preference surface. Follow prefers-color-scheme only
+      // while the visitor has nothing stored, using the canonical union merge.
+      (function () {
+        var stored;
+        try { stored = localStorage.getItem('nds-theme'); } catch (e) { return; }
+        if (stored || !window.matchMedia) return;
+        if (!window.matchMedia('(prefers-color-scheme: dark)').matches) return;
+        var d = document.documentElement;
+        var t = ((d.getAttribute('data-theme') || '') + ' dark').split(/\s+/)
+          .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+        d.setAttribute('data-theme', t.join(' '));
+      })();
+  </script>
+    <noscript>
+          <style>.alq-site :is(.nds-sideinfo, .nds-toc, .nds-drawer),
+          .alq-site :is(.nds-sideinfo, .nds-toc, .nds-drawer) > *,
+          .alq-site .nds-main-nav > *,
+          .alq-site .nds-code .nds-expandable-content { visibility: visible; }</style>
+        </noscript>
+</head>
+<body class="alq-site">
+  <a class="alq-skip-link" href="#main-content">Skip to content</a>
+  <noscript>
+    <nav class="alq-fallback" aria-label="Navigation without JavaScript">
+      <a href="/nds-showcase/">Showcase index</a>
+      <a href="/">Arabic site</a>
+      <a href="/en/">English site</a>
+    </nav>
+  </noscript>
+  <header>
+    <nav class="nds-main-nav nds-content-wrapper" id="ndsMainNav" aria-label="Primary navigation">
+      <div class="nds-nav-container">
+        <a class="nds-brand" href="/nds-showcase/">
+          <img class="nds-brand-logo" src="/assets/img/favicon.svg" width="40" height="40" alt="">
+          <span class="nds-brand-name">NDS 1.12.0
+            <span class="nds-brand-slogan">Component showcase</span>
+          </span>
+        </a>
+        <ul class="nds-nav-minimal" hidden>
+          <li class="nds-mainNav-toggler nds-nav-item">
+            <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="ndsNavCollapse">
+              <i class="nds-icon nds-hgi-menu-01" aria-hidden="true"></i>
+            </button>
+          </li>
+        </ul>
+        <div class="nds-collapse" id="ndsNavCollapse" hidden>
+          <div class="nds-collapse-content">
+            <ul class="nds-nav-primary">
+            <li class="nds-nav-item">
+              <a href="/nds-showcase/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">Index</span>
+              </a>
+            </li>
+            <li class="nds-nav-item">
+              <a href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">Arabic site</span>
+              </a>
+            </li>
+            <li class="nds-nav-item">
+              <a href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">English site</span>
+              </a>
+            </li>
+            </ul>
+            <div class="nds-nav-item nds-show-more">
+              <a class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full">
+                <i class="nds-icon nds-hgi-arrow-down-01" aria-hidden="true"></i>
+              </a>
+            </div>
+            <ul class="nds-nav-actions">
+              <li class="nds-nav-item nds-icon-only nds-PAB">
+                <a href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="Back to the personal site" lang="ar" hreflang="ar">
+                  <i class="nds-icon nds-hgi-arrow-left-01" aria-hidden="true"></i>
+                  <span class="nds-label" data-hidden="sm md sr">Personal site</span>
+                </a>
+              </li>
+              <li class="nds-nav-item nds-icon-only nds-PAB">
+                <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-theme-toggle-wrap nds-tooltip" data-tooltip-hover="500" data-theme-toggle title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">
+                  <i class="nds-icon nds-hgi-moon-02" aria-hidden="true"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="nds-hero-section nds-sub nds-flat" id="top">
+      <nav class="nds-breadcrumb-nav" aria-label="Breadcrumb">
+        <ol class="nds-breadcrumb">
+            <li><a href="/nds-showcase/">Showcase</a></li>
+            <li class="nds-truncate" aria-current="page">Utilities</li>
+            <li class="nds-truncate" aria-current="page">Numbers</li>
+        </ol>
+      </nav>
+      <div class="nds-section-wrapper">
+        <div class="nds-section-head">
+          <h1 class="nds-section-title">Numbers</h1>
+          <p class="nds-section-description">Scroll-triggered animated counters that count up to a target value</p>
+        </div>
+      </div>
+    </section>
+    <div class="nds-content-layout nds-wSideInfo">
+      <div class="nds-main-content" id="main-content">
+        <section class="nds-content-section nds-sideinfo-section">
+          <div class="nds-section-body">
+        <aside class="nds-sideinfo nds-md nds-sticky nds-top" aria-label="On this page">
+          <nav class="nds-toc alq-toc" aria-label="Page section index">
+            <div class="nds-toc-head">
+              <span class="nds-label">On this page</span>
+              <h2 class="nds-toc-title nds-truncate">Sections</h2>
+            </div>
+            <div class="nds-drawer nds-lined">
+              <ul class="nds-drawer-list">
+                <li>
+                  <a href="#numberFormatting" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Number Formatting</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#counterAnimation" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Counter Animation</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#currencyFormat" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Currency</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#unitFormat" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Units</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#numberGuidelines" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Usage Guidelines</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </aside>
+            <div class="nds-info-content">
+          <div class="nds-flex nds-wrap alq-tags">
+            <span class="nds-tag nds-gray nds-sm"><span class="nds-label">JS</span></span>
+          </div>
+        <section id="numberFormatting" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Number Formatting</h2>
+            <p class="nds-section-description">Add nds-number-format to any element containing a number. The formatter applies locale-appropriate thousand separators on page load, preserving surrounding text, signs, and decimals.</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 1</span>
+                <div class="nds-card-text">
+                  <span class="nds-number-format">3240000</span>
+                  <!-- Renders: 3,240,000 -->
+
+                  <span class="nds-number-format">1850</span>
+                  <!-- Renders: 1,850 -->
+
+                  <span class="nds-number-format">42850.75</span>
+                  <!-- Renders: 42,850.75 -->
+
+                  <!-- Signs are preserved -->
+                  <span class="nds-number-format">+2500</span>
+                  <!-- Renders: +2,500 -->
+
+                  <span class="nds-number-format">-340</span>
+                  <!-- Renders: -340 -->
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex1">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex1">&lt;span class=&quot;nds-number-format&quot;&gt;3240000&lt;/span&gt;
+&lt;!-- Renders: 3,240,000 --&gt;
+
+&lt;span class=&quot;nds-number-format&quot;&gt;1850&lt;/span&gt;
+&lt;!-- Renders: 1,850 --&gt;
+
+&lt;span class=&quot;nds-number-format&quot;&gt;42850.75&lt;/span&gt;
+&lt;!-- Renders: 42,850.75 --&gt;
+
+&lt;!-- Signs are preserved --&gt;
+&lt;span class=&quot;nds-number-format&quot;&gt;+2500&lt;/span&gt;
+&lt;!-- Renders: +2,500 --&gt;
+
+&lt;span class=&quot;nds-number-format&quot;&gt;-340&lt;/span&gt;
+&lt;!-- Renders: -340 --&gt;</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="counterAnimation" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Counter Animation</h2>
+            <p class="nds-section-description">Add nds-counter-value and set data-target to the final value. The counter animates from zero when the element scrolls into view. Combine with nds-number-format to apply thousand separators to the final value.</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 2</span>
+                <div class="nds-card-text">
+                  <span class="nds-counter-value nds-number-format"
+                      data-target="1850">0</span>
+
+                  <span class="nds-counter-value nds-number-format"
+                      data-target="3240000">0</span>
+
+                  <!-- Suffix in data-target is preserved -->
+                  <span class="nds-counter-value nds-number-format"
+                      data-target="98.5%">0</span>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex2">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex2">&lt;span class=&quot;nds-counter-value nds-number-format&quot;
+    data-target=&quot;1850&quot;&gt;0&lt;/span&gt;
+
+&lt;span class=&quot;nds-counter-value nds-number-format&quot;
+    data-target=&quot;3240000&quot;&gt;0&lt;/span&gt;
+
+&lt;!-- Suffix in data-target is preserved --&gt;
+&lt;span class=&quot;nds-counter-value nds-number-format&quot;
+    data-target=&quot;98.5%&quot;&gt;0&lt;/span&gt;</code>
+              </div>
+            </div>
+          </div>
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 3</span>
+                <div class="nds-card-text">
+                  <!-- Custom start value -->
+                  <span class="nds-counter-value nds-number-format"
+                      data-target="8500" data-start="5000"
+                      data-duration="2000">0</span>
+
+                  <!-- Custom duration (3 seconds) -->
+                  <span class="nds-counter-value nds-number-format"
+                      data-target="3240000" data-duration="3000">0</span>
+
+                  <!-- Force no decimal places -->
+                  <span class="nds-counter-value nds-number-format"
+                      data-target="42850.75" data-decimals="0">0</span>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex3">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex3">&lt;!-- Custom start value --&gt;
+&lt;span class=&quot;nds-counter-value nds-number-format&quot;
+    data-target=&quot;8500&quot; data-start=&quot;5000&quot;
+    data-duration=&quot;2000&quot;&gt;0&lt;/span&gt;
+
+&lt;!-- Custom duration (3 seconds) --&gt;
+&lt;span class=&quot;nds-counter-value nds-number-format&quot;
+    data-target=&quot;3240000&quot; data-duration=&quot;3000&quot;&gt;0&lt;/span&gt;
+
+&lt;!-- Force no decimal places --&gt;
+&lt;span class=&quot;nds-counter-value nds-number-format&quot;
+    data-target=&quot;42850.75&quot; data-decimals=&quot;0&quot;&gt;0&lt;/span&gt;</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="currencyFormat" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Currency</h2>
+            <p class="nds-section-description">Add data-currency to any nds-number-format element to append the currency symbol automatically. SAR renders as the official Saudi Riyal SVG icon; other currencies use their Unicode symbols.</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 4</span>
+                <div class="nds-card-text">
+                  <!-- SAR: official Saudi Riyal SVG icon via CSS mask -->
+                  <span class="nds-number-format" data-currency="SAR">450000</span>
+
+                  <span class="nds-number-format" data-currency="USD">99999.99</span>
+
+                  <span class="nds-number-format" data-currency="EUR">75000</span>
+
+                  <!-- data-free: hides the currency icon for zero-price items -->
+                  <span class="nds-number-format" data-currency="SAR" data-free>Free</span>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex4">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex4">&lt;!-- SAR: official Saudi Riyal SVG icon via CSS mask --&gt;
+&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;450000&lt;/span&gt;
+
+&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;USD&quot;&gt;99999.99&lt;/span&gt;
+
+&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;EUR&quot;&gt;75000&lt;/span&gt;
+
+&lt;!-- data-free: hides the currency icon for zero-price items --&gt;
+&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot; data-free&gt;Free&lt;/span&gt;</code>
+              </div>
+            </div>
+          </div>
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 5</span>
+                <div class="nds-card-text">
+                  <span class="nds-counter-value nds-number-format"
+                      data-currency="SAR" data-target="450000"
+                      data-duration="2000">0</span>
+
+                  <span class="nds-counter-value nds-number-format"
+                      data-currency="SAR" data-target="128750"
+                      data-duration="2000">0</span>
+
+                  <span class="nds-counter-value nds-number-format"
+                      data-currency="SAR" data-target="43200"
+                      data-duration="2000">0</span>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex5">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex5">&lt;span class=&quot;nds-counter-value nds-number-format&quot;
+    data-currency=&quot;SAR&quot; data-target=&quot;450000&quot;
+    data-duration=&quot;2000&quot;&gt;0&lt;/span&gt;
+
+&lt;span class=&quot;nds-counter-value nds-number-format&quot;
+    data-currency=&quot;SAR&quot; data-target=&quot;128750&quot;
+    data-duration=&quot;2000&quot;&gt;0&lt;/span&gt;
+
+&lt;span class=&quot;nds-counter-value nds-number-format&quot;
+    data-currency=&quot;SAR&quot; data-target=&quot;43200&quot;
+    data-duration=&quot;2000&quot;&gt;0&lt;/span&gt;</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="unitFormat" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Units</h2>
+            <p class="nds-section-description">Add data-unit with any text (km, kg, %, years) to append a unit after the number. It is the non-currency counterpart of data-currency: the unit reads after the value, and because it renders via CSS it stays correct when the number updates live, such as a slider output.</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 6</span>
+                <div class="nds-card-text">
+                  <span class="nds-number-format" data-unit="km">1500</span>
+                  <!-- Renders: 1,500 km -->
+
+                  <span class="nds-number-format" data-unit="kg">2480</span>
+                  <!-- Renders: 2,480 kg -->
+
+                  <span class="nds-number-format" data-unit="MB">512</span>
+                  <!-- Renders: 512 MB -->
+
+                  <span class="nds-number-format" data-unit="years">25</span>
+                  <!-- Renders: 25 years -->
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex6">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex6">&lt;span class=&quot;nds-number-format&quot; data-unit=&quot;km&quot;&gt;1500&lt;/span&gt;
+&lt;!-- Renders: 1,500 km --&gt;
+
+&lt;span class=&quot;nds-number-format&quot; data-unit=&quot;kg&quot;&gt;2480&lt;/span&gt;
+&lt;!-- Renders: 2,480 kg --&gt;
+
+&lt;span class=&quot;nds-number-format&quot; data-unit=&quot;MB&quot;&gt;512&lt;/span&gt;
+&lt;!-- Renders: 512 MB --&gt;
+
+&lt;span class=&quot;nds-number-format&quot; data-unit=&quot;years&quot;&gt;25&lt;/span&gt;
+&lt;!-- Renders: 25 years --&gt;</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="numberGuidelines" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Usage Guidelines</h2>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="api-7">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-javascript" id="api-7">// ── Format a single element ─────────────────────────
+// Apply separators (and keep any data-currency / data-unit)
+// to one .nds-number-format element. Idempotent.
+NDS.Numbers.format(element);
+
+// ── Format numbers on the page ──────────────────────
+// Finds all .nds-number-format elements and applies
+// locale-appropriate thousand separators
+NDS.Numbers.formatNumbers();
+
+// ── Start counter animations ─────────────────────────
+// Observes all .nds-counter-value elements and animates
+// them when they scroll into view
+NDS.Numbers.setupCounterAnimations();
+
+// ── Re-initialize everything ─────────────────────────
+// Runs both formatNumbers() and setupCounterAnimations()
+// Call after dynamically adding new number elements
+NDS.Numbers.reinit();</code>
+              </div>
+            </div>
+          </div>
+          <div class="nds-block nds-prose">
+            <table class="nds-table nds-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Attribute</th>
+                                        <th>Default</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-currency</code></td>
+                                        <td>none</td>
+                                        <td>Set on <code class="nds-inline-code lang-html">.nds-number-format</code>. Supported values: <code class="nds-inline-code lang-html">SAR</code>, <code class="nds-inline-code lang-html">USD</code>, <code class="nds-inline-code lang-html">EUR</code>, <code class="nds-inline-code lang-html">GBP</code>, <code class="nds-inline-code lang-html">JPY</code>, <code class="nds-inline-code lang-html">CNY</code>, <code class="nds-inline-code lang-html">INR</code>, <code class="nds-inline-code lang-html">KRW</code>, <code class="nds-inline-code lang-html">TRY</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-free</code></td>
+                                        <td>absent</td>
+                                        <td>Set on <code class="nds-inline-code lang-html">.nds-number-format</code> to suppress the currency symbol. Pair with a text label such as "Free" or "مجاني" for zero-price items.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-unit</code></td>
+                                        <td>none</td>
+                                        <td>Set on <code class="nds-inline-code lang-html">.nds-number-format</code>. Any text to append after the number as a unit (e.g. <code class="nds-inline-code lang-html">km</code>, <code class="nds-inline-code lang-html">kg</code>, <code class="nds-inline-code lang-html">%</code>, <code class="nds-inline-code lang-html">years</code>). Renders after the value, unlike <code class="nds-inline-code lang-html">data-currency</code> which renders before it.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-target</code></td>
+                                        <td>Element text</td>
+                                        <td>Set on <code class="nds-inline-code lang-html">.nds-counter-value</code>. Target number to count to. A suffix in the value (e.g. "98.5%") is preserved and appended to the animated number.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-start</code></td>
+                                        <td>0</td>
+                                        <td>Starting number for the counter animation</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-duration</code></td>
+                                        <td>1000</td>
+                                        <td>Animation duration in milliseconds</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">data-decimals</code></td>
+                                        <td>auto</td>
+                                        <td>Force specific decimal places. When not set, matches decimals in <code class="nds-inline-code lang-html">data-target</code>. Set to <code class="nds-inline-code lang-html">0</code> to display whole numbers only.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+          </div>
+          <div class="nds-block nds-prose">
+            <table class="nds-table nds-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Property</th>
+                                        <th>Default</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-html">--number-icon-size</code></td>
+                                        <td>1em</td>
+                                        <td>Size of currency icons and child <code class="nds-inline-code lang-html">.nds-icon</code> elements inside a formatted number</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+          </div>
+            </div>
+          </div>
+        </section>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="nds-footer nds-content-wrapper nds-brand" role="contentinfo" aria-label="Site Footer">
+    <nav class="nds-footer-content" aria-label="Footer navigation">
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="nds-footer-col-1">Showcase</span>
+        <ul class="nds-footer-list" aria-labelledby="nds-footer-col-1">
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/">
+
+              <span class="nds-label">Component index</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/templates/">
+
+              <span class="nds-label">Page templates</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/examples/">
+
+              <span class="nds-label">Full examples</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="nds-footer-col-2">Personal site</span>
+        <ul class="nds-footer-list" aria-labelledby="nds-footer-col-2">
+          <li>
+            <a class="nds-link nds-footer-link" href="/">
+              <i class="nds-icon nds-hgi-arrow-left-01" aria-hidden="true"></i>
+              <span class="nds-label">Arabic (RTL)</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/en/">
+              <i class="nds-icon nds-hgi-arrow-right-01" aria-hidden="true"></i>
+              <span class="nds-label">English (LTR)</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <hr class="nds-divider nds-lg">
+    <div class="nds-footer-bottom">
+      <div class="nds-footer-meta">
+        <div class="nds-footer-legal">
+          <div class="nds-footer-copyright">
+            <span>Component examples are quoted from NDS v1.12.0 (commit 030d1c7ff4ab, MIT). This is a personal review route, not a government service.</span>
+          </div>
+        <div class="nds-footer-versions">
+          <span class="nds-tag nds-xs nds-oncolor"><span class="nds-label">NDS v1.12.0</span></span>
+          <span class="nds-tag nds-xs nds-oncolor"><span class="nds-label">NDS IQ v3.1</span></span>
+        </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script defer src="/assets/js/nds-main.min.js?ver=1.12.0.030d1c7"></script>
+  <script defer src="/assets/js/nds-accessibility.min.js?ver=1.12.0.030d1c7"></script>
+  <script type="module" src="/assets/js/site.js"></script>
+</body>
+</html>

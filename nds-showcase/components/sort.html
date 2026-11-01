@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-palette>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sort · NDS 1.12.0 showcase</title>
+  <meta name="description" content="DOM-reorder engine for lists, grids, and tables with type auto-detect and URL sync">
+  <style>html :where(header){display:contents}html :where(.nds-topbar){height:40px}html :where(.nds-main-nav){height:var(--nds-nav-height, 72px)}html .nds-swiper.nds-hero:not([data-nds-swiper-initialized],[data-swiper-preset]) .nds-swiper-slide:not(:first-child){display:none}html[data-theme~=dark] :where(.nds-main-nav .nds-brand.nds-oncolor :is(img,svg)){filter:brightness(0) invert(1)}:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-user-feedback-section,.nds-footer){visibility:hidden}html:not([data-nds-loaded]) main{overflow-x:clip}:root{--nds-icons-opacity: 0}i.hgi-stroke{opacity:0}html{overflow-anchor:none}html{background-color:var(--background-body, #f9fafb)}html[data-theme~=dark]{background-color:var(--background-body, #111927)}:where(.nds-topbar){background-color:var(--background-topbar, #f3f4f6)}html[data-theme~=dark] :where(.nds-topbar){background-color:var(--background-topbar, #111927)}:where(.nds-main-nav){background-color:var(--background-nav, #fff)}html[data-theme~=dark] :where(.nds-main-nav){background-color:var(--background-nav, #1f2a37)}:where(.nds-hero-image-wrapper)::before{content:"";position:absolute;inset:0;background:color-mix(in srgb, var(--img-overlay-color, #092a1e) calc(var(--overlay, 0.7) * 100%), transparent);pointer-events:none}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}:is(.nds-hidden,[hidden],[data-state~=hidden],[data-filtered]){display:none !important}:where(.nds-hero-section){position:relative;height:550px}:where(.nds-hero-section.nds-sub){height:auto;min-height:220px}:where(.nds-hero-image-wrapper){position:absolute;inset:0}:where(.nds-hero-image){width:100%;height:100%;object-fit:cover;display:block}:where(.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:hidden}</style>
+  <link rel="preload" href="/assets/css/nds.critical.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="high" data-nds-defer>
+  <link id="nds-theme-stylesheet" rel="stylesheet" href="/assets/css/theme.css?ver=1.12.0.030d1c7">
+  <link rel="preload" href="/assets/css/nds-main.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="low" data-nds-defer="main">
+  <link rel="preload" href="/assets/css/nds-accessibility.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="low" data-nds-defer>
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" fetchpriority="low">
+  <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#0e5a49">
+  <script>
+      // Pre-paint FOUC guard: stamp saved data-theme before first paint, union-merged with markup/pack tokens so a stored value never clobbers them.
+      (function() {
+          var v = localStorage.getItem('nds-theme');
+          if (v) {
+              var d = document.documentElement;
+              var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\s+/)
+                  .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+              d.setAttribute('data-theme', t.join(' '));
+          }
+      })();
+      // Deferred styles: preload → injected stylesheet link (markers move with it). Rationale: ui-shell/head.md, CSP section.
+      (function () {
+          document.querySelectorAll('link[rel="preload"][data-nds-defer]').forEach(function (p) {
+              var l = document.createElement('link');
+              // Clone every attribute except rel/as — keeps href, fetchpriority, integrity, crossorigin, and the data-* markers.
+              for (var i = 0; i < p.attributes.length; i++) {
+                  var a = p.attributes[i];
+                  if (a.name !== 'rel' && a.name !== 'as') l.setAttribute(a.name, a.value);
+              }
+              l.rel = 'stylesheet';
+              p.removeAttribute('data-nds-defer');
+              document.head.appendChild(l);
+          });
+      })();
+  </script>
+      <script>
+      // Project addition (docs/CUSTOM-EXCEPTIONS.md #2): NDS.Theme persists a manual
+      // choice but has no OS-preference surface. Follow prefers-color-scheme only
+      // while the visitor has nothing stored, using the canonical union merge.
+      (function () {
+        var stored;
+        try { stored = localStorage.getItem('nds-theme'); } catch (e) { return; }
+        if (stored || !window.matchMedia) return;
+        if (!window.matchMedia('(prefers-color-scheme: dark)').matches) return;
+        var d = document.documentElement;
+        var t = ((d.getAttribute('data-theme') || '') + ' dark').split(/\s+/)
+          .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+        d.setAttribute('data-theme', t.join(' '));
+      })();
+  </script>
+    <noscript>
+          <style>.alq-site :is(.nds-sideinfo, .nds-toc, .nds-drawer),
+          .alq-site :is(.nds-sideinfo, .nds-toc, .nds-drawer) > *,
+          .alq-site .nds-main-nav > *,
+          .alq-site .nds-code .nds-expandable-content { visibility: visible; }</style>
+        </noscript>
+</head>
+<body class="alq-site">
+  <a class="alq-skip-link" href="#main-content">Skip to content</a>
+  <noscript>
+    <nav class="alq-fallback" aria-label="Navigation without JavaScript">
+      <a href="/nds-showcase/">Showcase index</a>
+      <a href="/">Arabic site</a>
+      <a href="/en/">English site</a>
+    </nav>
+  </noscript>
+  <header>
+    <nav class="nds-main-nav nds-content-wrapper" id="ndsMainNav" aria-label="Primary navigation">
+      <div class="nds-nav-container">
+        <a class="nds-brand" href="/nds-showcase/">
+          <img class="nds-brand-logo" src="/assets/img/favicon.svg" width="40" height="40" alt="">
+          <span class="nds-brand-name">NDS 1.12.0
+            <span class="nds-brand-slogan">Component showcase</span>
+          </span>
+        </a>
+        <ul class="nds-nav-minimal" hidden>
+          <li class="nds-mainNav-toggler nds-nav-item">
+            <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="ndsNavCollapse">
+              <i class="nds-icon nds-hgi-menu-01" aria-hidden="true"></i>
+            </button>
+          </li>
+        </ul>
+        <div class="nds-collapse" id="ndsNavCollapse" hidden>
+          <div class="nds-collapse-content">
+            <ul class="nds-nav-primary">
+            <li class="nds-nav-item">
+              <a href="/nds-showcase/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">Index</span>
+              </a>
+            </li>
+            <li class="nds-nav-item">
+              <a href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">Arabic site</span>
+              </a>
+            </li>
+            <li class="nds-nav-item">
+              <a href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">English site</span>
+              </a>
+            </li>
+            </ul>
+            <div class="nds-nav-item nds-show-more">
+              <a class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full">
+                <i class="nds-icon nds-hgi-arrow-down-01" aria-hidden="true"></i>
+              </a>
+            </div>
+            <ul class="nds-nav-actions">
+              <li class="nds-nav-item nds-icon-only nds-PAB">
+                <a href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="Back to the personal site" lang="ar" hreflang="ar">
+                  <i class="nds-icon nds-hgi-arrow-left-01" aria-hidden="true"></i>
+                  <span class="nds-label" data-hidden="sm md sr">Personal site</span>
+                </a>
+              </li>
+              <li class="nds-nav-item nds-icon-only nds-PAB">
+                <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-theme-toggle-wrap nds-tooltip" data-tooltip-hover="500" data-theme-toggle title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">
+                  <i class="nds-icon nds-hgi-moon-02" aria-hidden="true"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="nds-hero-section nds-sub nds-flat" id="top">
+      <nav class="nds-breadcrumb-nav" aria-label="Breadcrumb">
+        <ol class="nds-breadcrumb">
+            <li><a href="/nds-showcase/">Showcase</a></li>
+            <li class="nds-truncate" aria-current="page">Data</li>
+            <li class="nds-truncate" aria-current="page">Sort</li>
+        </ol>
+      </nav>
+      <div class="nds-section-wrapper">
+        <div class="nds-section-head">
+          <h1 class="nds-section-title">Sort</h1>
+          <p class="nds-section-description">DOM-reorder engine for lists, grids, and tables with type auto-detect and URL sync</p>
+        </div>
+      </div>
+    </section>
+    <div class="nds-content-layout nds-wSideInfo">
+      <div class="nds-main-content" id="main-content">
+        <section class="nds-content-section nds-sideinfo-section">
+          <div class="nds-section-body">
+        <aside class="nds-sideinfo nds-md nds-sticky nds-top" aria-label="On this page">
+          <nav class="nds-toc alq-toc" aria-label="Page section index">
+            <div class="nds-toc-head">
+              <span class="nds-label">On this page</span>
+              <h2 class="nds-toc-title nds-truncate">Sections</h2>
+            </div>
+            <div class="nds-drawer nds-lined">
+              <ul class="nds-drawer-list">
+                <li>
+                  <a href="#sortDirectMode" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Direct Mode</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#sortCycleMode" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Cycle Mode</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#sortTableColumns" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Table Column Sort</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#sortGuidelines" class="nds-btn nds-subtle nds-indicator">
+                    <span class="nds-label nds-truncate">Usage Guidelines</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </aside>
+            <div class="nds-info-content">
+          <div class="nds-flex nds-wrap alq-tags">
+            <span class="nds-tag nds-gray nds-sm"><span class="nds-label">JS</span></span>
+            <span class="nds-tag nds-gray nds-sm"><span class="nds-label">API</span></span>
+          </div>
+        <section id="sortDirectMode" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Direct Mode</h2>
+            <p class="nds-section-description">Each trigger selects a fixed key and direction. An empty key trigger resets to the original order. Use this mode for dropmenu options, pill groups, or any UI where every choice is explicitly labelled.</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 1</span>
+            <p class="nds-card-description">Interaction note: this example carries page-local data attributes (data-sort-name, data-sort-price) that the NDS documentation site&#x27;s own demo script wires. That docs-only script is not shipped here, so this specific interaction is inert; the markup and the NDS runtime behaviour around it are canonical.</p>
+                <div class="nds-card-text">
+                  <div id="sortDirectRoot-ex1" class="nds-sort-demo-row">
+                    <div class="nds-dropmenu">
+                      <button type="button" class="nds-btn nds-secondary-outline nds-menu-btn nds-dropmenu-trigger">
+                        <i class="nds-icon nds-hgi-sorting-05" aria-hidden="true"></i>
+                        <span class="nds-label">Sort</span>
+                      </button>
+                      <div class="nds-dropmenu-menu" hidden>
+                        <div class="nds-dropmenu-scroll">
+                          <button type="button" class="nds-btn nds-subtle nds-dropmenu-item" data-sort>
+                            <i class="nds-icon nds-hgi-sorting-05" aria-hidden="true"></i>
+                            <span class="nds-label">Default order</span>
+                          </button>
+                          <button type="button" class="nds-btn nds-subtle nds-dropmenu-item" data-sort="name" data-sort-dir="asc">
+                            <i class="nds-icon nds-hgi-sort-by-up-02" aria-hidden="true"></i>
+                            <span class="nds-label">Name A to Z</span>
+                          </button>
+                          <button type="button" class="nds-btn nds-subtle nds-dropmenu-item" data-sort="name" data-sort-dir="desc">
+                            <i class="nds-icon nds-hgi-sort-by-down-02" aria-hidden="true"></i>
+                            <span class="nds-label">Name Z to A</span>
+                          </button>
+                          <button type="button" class="nds-btn nds-subtle nds-dropmenu-item" data-sort="price" data-sort-dir="asc">
+                            <i class="nds-icon nds-hgi-sort-by-up-02" aria-hidden="true"></i>
+                            <span class="nds-label">Price low to high</span>
+                          </button>
+                          <button type="button" class="nds-btn nds-subtle nds-dropmenu-item" data-sort="price" data-sort-dir="desc">
+                            <i class="nds-icon nds-hgi-sort-by-down-02" aria-hidden="true"></i>
+                            <span class="nds-label">Price high to low</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="sortDirectItems-ex1" class="nds-grid">
+                    <div class="nds-card nds-stroke" data-sort-name="Zakat Payment" data-sort-price="75">
+                      <div class="nds-card-content">
+                        <span class="nds-card-title">Zakat Payment</span>
+                        <p class="nds-card-description"><span class="nds-number-format" data-currency="SAR">75</span></p>
+                      </div>
+                    </div>
+                    <div class="nds-card nds-stroke" data-sort-name="Passport Renewal" data-sort-price="300">
+                      <div class="nds-card-content">
+                        <span class="nds-card-title">Passport Renewal</span>
+                        <p class="nds-card-description"><span class="nds-number-format" data-currency="SAR">300</span></p>
+                      </div>
+                    </div>
+                    <div class="nds-card nds-stroke" data-sort-name="Birth Certificate" data-sort-price="25">
+                      <div class="nds-card-content">
+                        <span class="nds-card-title">Birth Certificate</span>
+                        <p class="nds-card-description"><span class="nds-number-format" data-currency="SAR">25</span></p>
+                      </div>
+                    </div>
+                    <div class="nds-card nds-stroke" data-sort-name="Identity Verification" data-sort-price="0">
+                      <div class="nds-card-content">
+                        <span class="nds-card-title">Identity Verification</span>
+                        <p class="nds-card-description"><span class="nds-number-format" data-currency="SAR" data-free>Free</span></p>
+                      </div>
+                    </div>
+                    <div class="nds-card nds-stroke" data-sort-name="Driver License" data-sort-price="150">
+                      <div class="nds-card-content">
+                        <span class="nds-card-title">Driver License</span>
+                        <p class="nds-card-description"><span class="nds-number-format" data-currency="SAR">150</span></p>
+                      </div>
+                    </div>
+                    <div class="nds-card nds-stroke" data-sort-name="Business Registration" data-sort-price="1200">
+                      <div class="nds-card-content">
+                        <span class="nds-card-title">Business Registration</span>
+                        <p class="nds-card-description"><span class="nds-number-format" data-currency="SAR">1200</span></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex1">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex1">&lt;div id=&quot;sortDirectRoot&quot; class=&quot;nds-sort-demo-row&quot;&gt;
+  &lt;div class=&quot;nds-dropmenu&quot;&gt;
+    &lt;button type=&quot;button&quot; class=&quot;nds-btn nds-secondary-outline nds-menu-btn nds-dropmenu-trigger&quot;&gt;
+      &lt;i class=&quot;nds-icon nds-hgi-sorting-05&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+      &lt;span class=&quot;nds-label&quot;&gt;Sort&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;div class=&quot;nds-dropmenu-menu&quot; hidden&gt;
+      &lt;div class=&quot;nds-dropmenu-scroll&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-sort&gt;
+          &lt;i class=&quot;nds-icon nds-hgi-sorting-05&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+          &lt;span class=&quot;nds-label&quot;&gt;Default order&lt;/span&gt;
+        &lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-sort=&quot;name&quot; data-sort-dir=&quot;asc&quot;&gt;
+          &lt;i class=&quot;nds-icon nds-hgi-sort-by-up-02&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+          &lt;span class=&quot;nds-label&quot;&gt;Name A to Z&lt;/span&gt;
+        &lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-sort=&quot;name&quot; data-sort-dir=&quot;desc&quot;&gt;
+          &lt;i class=&quot;nds-icon nds-hgi-sort-by-down-02&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+          &lt;span class=&quot;nds-label&quot;&gt;Name Z to A&lt;/span&gt;
+        &lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-sort=&quot;price&quot; data-sort-dir=&quot;asc&quot;&gt;
+          &lt;i class=&quot;nds-icon nds-hgi-sort-by-up-02&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+          &lt;span class=&quot;nds-label&quot;&gt;Price low to high&lt;/span&gt;
+        &lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;nds-btn nds-subtle nds-dropmenu-item&quot; data-sort=&quot;price&quot; data-sort-dir=&quot;desc&quot;&gt;
+          &lt;i class=&quot;nds-icon nds-hgi-sort-by-down-02&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+          &lt;span class=&quot;nds-label&quot;&gt;Price high to low&lt;/span&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;sortDirectItems&quot; class=&quot;nds-grid&quot;&gt;
+  &lt;div class=&quot;nds-card nds-stroke&quot; data-sort-name=&quot;Zakat Payment&quot; data-sort-price=&quot;75&quot;&gt;
+    &lt;div class=&quot;nds-card-content&quot;&gt;
+      &lt;span class=&quot;nds-card-title&quot;&gt;Zakat Payment&lt;/span&gt;
+      &lt;p class=&quot;nds-card-description&quot;&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;75&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;nds-card nds-stroke&quot; data-sort-name=&quot;Passport Renewal&quot; data-sort-price=&quot;300&quot;&gt;
+    &lt;div class=&quot;nds-card-content&quot;&gt;
+      &lt;span class=&quot;nds-card-title&quot;&gt;Passport Renewal&lt;/span&gt;
+      &lt;p class=&quot;nds-card-description&quot;&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;300&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;nds-card nds-stroke&quot; data-sort-name=&quot;Birth Certificate&quot; data-sort-price=&quot;25&quot;&gt;
+    &lt;div class=&quot;nds-card-content&quot;&gt;
+      &lt;span class=&quot;nds-card-title&quot;&gt;Birth Certificate&lt;/span&gt;
+      &lt;p class=&quot;nds-card-description&quot;&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;25&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;nds-card nds-stroke&quot; data-sort-name=&quot;Identity Verification&quot; data-sort-price=&quot;0&quot;&gt;
+    &lt;div class=&quot;nds-card-content&quot;&gt;
+      &lt;span class=&quot;nds-card-title&quot;&gt;Identity Verification&lt;/span&gt;
+      &lt;p class=&quot;nds-card-description&quot;&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot; data-free&gt;Free&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;nds-card nds-stroke&quot; data-sort-name=&quot;Driver License&quot; data-sort-price=&quot;150&quot;&gt;
+    &lt;div class=&quot;nds-card-content&quot;&gt;
+      &lt;span class=&quot;nds-card-title&quot;&gt;Driver License&lt;/span&gt;
+      &lt;p class=&quot;nds-card-description&quot;&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;150&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;nds-card nds-stroke&quot; data-sort-name=&quot;Business Registration&quot; data-sort-price=&quot;1200&quot;&gt;
+    &lt;div class=&quot;nds-card-content&quot;&gt;
+      &lt;span class=&quot;nds-card-title&quot;&gt;Business Registration&lt;/span&gt;
+      &lt;p class=&quot;nds-card-description&quot;&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;1200&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+              </div>
+            </div>
+          </div>
+          <div class="nds-block">
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="api-2">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-javascript" id="api-2">// The cards live outside the root that holds the buttons, so `items` is a
+// getter rather than a selector string — a string is resolved inside the root.
+const items = document.getElementById(&#x27;sortDirectItems&#x27;);
+
+NDS.Sort.create(document.getElementById(&#x27;sortDirectRoot&#x27;), {
+    items: function () { return items.querySelectorAll(&#x27;:scope &gt; .nds-card&#x27;); },
+    reorderIn: items,
+    triggers: &#x27;[data-sort]&#x27;,
+    mode: &#x27;direct&#x27;,
+    a11y: &#x27;pressed&#x27;,
+    types: { price: &#x27;number&#x27; }
+});</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="sortCycleMode" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Cycle Mode</h2>
+            <p class="nds-section-description">Each trigger owns a single key. The same trigger advances through ascending, descending, and reset across three clicks. Use this mode for column headers, pill bars, or any UI where the trigger itself signals its own sort state.</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 3</span>
+            <p class="nds-card-description">Interaction note: this example carries page-local data attributes (data-sort-key, data-sort-name, data-sort-price) that the NDS documentation site&#x27;s own demo script wires. That docs-only script is not shipped here, so this specific interaction is inert; the markup and the NDS runtime behaviour around it are canonical.</p>
+                <div class="nds-card-text">
+                  <div id="sortCycleRoot-ex3">
+                    <button type="button" class="nds-btn nds-secondary-outline nds-sort-cycle-btn" data-sort-key="name">
+                      <span class="nds-label">Name</span>
+                      <i class="nds-icon nds-hgi-sorting-05" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="nds-btn nds-secondary-outline nds-sort-cycle-btn" data-sort-key="price">
+                      <span class="nds-label">Price</span>
+                      <i class="nds-icon nds-hgi-sorting-05" aria-hidden="true"></i>
+                    </button>
+                  </div>
+
+                  <div id="sortCycleItems-ex3" class="nds-grid">
+                    <div class="nds-card nds-stroke" data-sort-name="Zakat Payment" data-sort-price="75">
+                      <div class="nds-card-content">
+                        <span class="nds-card-title">Zakat Payment</span>
+                        <p class="nds-card-description"><span class="nds-number-format" data-currency="SAR">75</span></p>
+                      </div>
+                    </div>
+                    <div class="nds-card nds-stroke" data-sort-name="Passport Renewal" data-sort-price="300">
+                      <div class="nds-card-content">
+                        <span class="nds-card-title">Passport Renewal</span>
+                        <p class="nds-card-description"><span class="nds-number-format" data-currency="SAR">300</span></p>
+                      </div>
+                    </div>
+                    <div class="nds-card nds-stroke" data-sort-name="Birth Certificate" data-sort-price="25">
+                      <div class="nds-card-content">
+                        <span class="nds-card-title">Birth Certificate</span>
+                        <p class="nds-card-description"><span class="nds-number-format" data-currency="SAR">25</span></p>
+                      </div>
+                    </div>
+                    <div class="nds-card nds-stroke" data-sort-name="Identity Verification" data-sort-price="0">
+                      <div class="nds-card-content">
+                        <span class="nds-card-title">Identity Verification</span>
+                        <p class="nds-card-description"><span class="nds-number-format" data-currency="SAR" data-free>Free</span></p>
+                      </div>
+                    </div>
+                    <div class="nds-card nds-stroke" data-sort-name="Driver License" data-sort-price="150">
+                      <div class="nds-card-content">
+                        <span class="nds-card-title">Driver License</span>
+                        <p class="nds-card-description"><span class="nds-number-format" data-currency="SAR">150</span></p>
+                      </div>
+                    </div>
+                    <div class="nds-card nds-stroke" data-sort-name="Business Registration" data-sort-price="1200">
+                      <div class="nds-card-content">
+                        <span class="nds-card-title">Business Registration</span>
+                        <p class="nds-card-description"><span class="nds-number-format" data-currency="SAR">1200</span></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex3">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex3">&lt;div id=&quot;sortCycleRoot&quot;&gt;
+  &lt;button type=&quot;button&quot; class=&quot;nds-btn nds-secondary-outline nds-sort-cycle-btn&quot; data-sort-key=&quot;name&quot;&gt;
+    &lt;span class=&quot;nds-label&quot;&gt;Name&lt;/span&gt;
+    &lt;i class=&quot;nds-icon nds-hgi-sorting-05&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+  &lt;/button&gt;
+  &lt;button type=&quot;button&quot; class=&quot;nds-btn nds-secondary-outline nds-sort-cycle-btn&quot; data-sort-key=&quot;price&quot;&gt;
+    &lt;span class=&quot;nds-label&quot;&gt;Price&lt;/span&gt;
+    &lt;i class=&quot;nds-icon nds-hgi-sorting-05&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;sortCycleItems&quot; class=&quot;nds-grid&quot;&gt;
+  &lt;div class=&quot;nds-card nds-stroke&quot; data-sort-name=&quot;Zakat Payment&quot; data-sort-price=&quot;75&quot;&gt;
+    &lt;div class=&quot;nds-card-content&quot;&gt;
+      &lt;span class=&quot;nds-card-title&quot;&gt;Zakat Payment&lt;/span&gt;
+      &lt;p class=&quot;nds-card-description&quot;&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;75&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;nds-card nds-stroke&quot; data-sort-name=&quot;Passport Renewal&quot; data-sort-price=&quot;300&quot;&gt;
+    &lt;div class=&quot;nds-card-content&quot;&gt;
+      &lt;span class=&quot;nds-card-title&quot;&gt;Passport Renewal&lt;/span&gt;
+      &lt;p class=&quot;nds-card-description&quot;&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;300&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;nds-card nds-stroke&quot; data-sort-name=&quot;Birth Certificate&quot; data-sort-price=&quot;25&quot;&gt;
+    &lt;div class=&quot;nds-card-content&quot;&gt;
+      &lt;span class=&quot;nds-card-title&quot;&gt;Birth Certificate&lt;/span&gt;
+      &lt;p class=&quot;nds-card-description&quot;&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;25&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;nds-card nds-stroke&quot; data-sort-name=&quot;Identity Verification&quot; data-sort-price=&quot;0&quot;&gt;
+    &lt;div class=&quot;nds-card-content&quot;&gt;
+      &lt;span class=&quot;nds-card-title&quot;&gt;Identity Verification&lt;/span&gt;
+      &lt;p class=&quot;nds-card-description&quot;&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot; data-free&gt;Free&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;nds-card nds-stroke&quot; data-sort-name=&quot;Driver License&quot; data-sort-price=&quot;150&quot;&gt;
+    &lt;div class=&quot;nds-card-content&quot;&gt;
+      &lt;span class=&quot;nds-card-title&quot;&gt;Driver License&lt;/span&gt;
+      &lt;p class=&quot;nds-card-description&quot;&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;150&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;nds-card nds-stroke&quot; data-sort-name=&quot;Business Registration&quot; data-sort-price=&quot;1200&quot;&gt;
+    &lt;div class=&quot;nds-card-content&quot;&gt;
+      &lt;span class=&quot;nds-card-title&quot;&gt;Business Registration&lt;/span&gt;
+      &lt;p class=&quot;nds-card-description&quot;&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;1200&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+              </div>
+            </div>
+          </div>
+          <div class="nds-block">
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="api-4">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-javascript" id="api-4">const root = document.getElementById(&#x27;sortCycleRoot&#x27;);
+// The cards live outside the root that holds the buttons, so `items` is a
+// getter rather than a selector string — a string is resolved inside the root.
+const items = document.getElementById(&#x27;sortCycleItems&#x27;);
+
+NDS.Sort.create(root, {
+    items: function () { return items.querySelectorAll(&#x27;:scope &gt; .nds-card&#x27;); },
+    reorderIn: items,
+    triggers: &#x27;.nds-sort-cycle-btn&#x27;,
+    mode: &#x27;cycle&#x27;,
+    a11y: &#x27;pressed&#x27;,
+    keyFrom: (btn) =&gt; btn.dataset.sortKey,
+    types: { price: &#x27;number&#x27; },
+    onChange: (state) =&gt; {
+        // Swap each cycle-button&#x27;s icon to reflect its current state.
+        root.querySelectorAll(&#x27;.nds-sort-cycle-btn&#x27;).forEach((btn) =&gt; {
+            const icon = btn.querySelector(&#x27;i&#x27;);
+            if (!icon) return;
+            const isActive = btn.dataset.sortKey === state.key &amp;&amp; state.dir;
+            icon.className = !isActive
+                ? &#x27;nds-icon nds-hgi-sorting-05&#x27;
+                : state.dir === &#x27;asc&#x27;
+                    ? &#x27;nds-icon nds-hgi-sort-by-up-02&#x27;
+                    : &#x27;nds-icon nds-hgi-sort-by-down-02&#x27;;
+        });
+    }
+});</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="sortTableColumns" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Table Column Sort</h2>
+            <p class="nds-section-description">Drop .nds-sort-btn into any &lt;th&gt; and the table wires itself. NDS.Tables composes NDS.Sort in cycle mode with a cell-text accessor, so rows sort by whatever text the cell renders. Numbers like 2,500 SAR parse numerically, dates like 2026-03-15 parse chronologically, everything else falls back to locale-aware string compare.</p>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Example 5</span>
+                <div class="nds-card-text">
+                  <table class="nds-table nds-sortable">
+                    <thead>
+                      <tr>
+                        <th>
+                          <div class="nds-col-header">
+                            <span class="nds-label">Name</span>
+                            <div class="nds-col-actions">
+                              <button class="nds-btn nds-subtle nds-sort-btn nds-icon-only" aria-label="Sort by name"><i class="nds-icon nds-hgi-sorting-05 nds-sort-icon" aria-hidden="true"></i></button>
+                            </div>
+                          </div>
+                        </th>
+                        <th>
+                          <div class="nds-col-header">
+                            <span class="nds-label">Amount</span>
+                            <div class="nds-col-actions">
+                              <button class="nds-btn nds-subtle nds-sort-btn nds-icon-only" aria-label="Sort by amount"><i class="nds-icon nds-hgi-sorting-05 nds-sort-icon" aria-hidden="true"></i></button>
+                            </div>
+                          </div>
+                        </th>
+                        <th>
+                          <div class="nds-col-header">
+                            <span class="nds-label">Status</span>
+                            <div class="nds-col-actions">
+                              <button class="nds-btn nds-subtle nds-sort-btn nds-icon-only" aria-label="Sort by status"><i class="nds-icon nds-hgi-sorting-05 nds-sort-icon" aria-hidden="true"></i></button>
+                            </div>
+                          </div>
+                        </th>
+                        <th>
+                          <div class="nds-col-header">
+                            <span class="nds-label">Date</span>
+                            <div class="nds-col-actions">
+                              <button class="nds-btn nds-subtle nds-sort-btn nds-icon-only" aria-label="Sort by date"><i class="nds-icon nds-hgi-sorting-05 nds-sort-icon" aria-hidden="true"></i></button>
+                            </div>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Business License Renewal</td>
+                        <td><span class="nds-number-format" data-currency="SAR">2500</span></td>
+                        <td><span class="nds-tag nds-sm" data-status="success"><span class="nds-label">Completed</span></span></td>
+                        <td>2026-03-15</td>
+                      </tr>
+                      <tr>
+                        <td>Visa Processing Fee</td>
+                        <td><span class="nds-number-format" data-currency="SAR">800</span></td>
+                        <td><span class="nds-tag nds-sm" data-status="warning"><span class="nds-label">Pending</span></span></td>
+                        <td>2026-03-14</td>
+                      </tr>
+                      <tr>
+                        <td>Property Transfer Tax</td>
+                        <td><span class="nds-number-format" data-currency="SAR">15000</span></td>
+                        <td><span class="nds-tag nds-sm" data-status="success"><span class="nds-label">Completed</span></span></td>
+                        <td>2026-03-12</td>
+                      </tr>
+                      <tr>
+                        <td>Vehicle Registration Fee</td>
+                        <td><span class="nds-number-format" data-currency="SAR">450</span></td>
+                        <td><span class="nds-tag nds-sm" data-status="success"><span class="nds-label">Completed</span></span></td>
+                        <td>2026-03-10</td>
+                      </tr>
+                      <tr>
+                        <td>Building Permit Application</td>
+                        <td><span class="nds-number-format" data-currency="SAR">3200</span></td>
+                        <td><span class="nds-tag nds-sm" data-status="error"><span class="nds-label">Failed</span></span></td>
+                        <td>2026-03-08</td>
+                      </tr>
+                      <tr>
+                        <td>Health Insurance Premium</td>
+                        <td><span class="nds-number-format" data-currency="SAR">1800</span></td>
+                        <td><span class="nds-tag nds-sm" data-status="success"><span class="nds-label">Completed</span></span></td>
+                        <td>2026-03-06</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="code-ex5">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="code-ex5">&lt;table class=&quot;nds-table nds-sortable&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;
+        &lt;div class=&quot;nds-col-header&quot;&gt;
+          &lt;span class=&quot;nds-label&quot;&gt;Name&lt;/span&gt;
+          &lt;div class=&quot;nds-col-actions&quot;&gt;
+            &lt;button class=&quot;nds-btn nds-subtle nds-sort-btn nds-icon-only&quot; aria-label=&quot;Sort by name&quot;&gt;&lt;i class=&quot;nds-icon nds-hgi-sorting-05 nds-sort-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/th&gt;
+      &lt;th&gt;
+        &lt;div class=&quot;nds-col-header&quot;&gt;
+          &lt;span class=&quot;nds-label&quot;&gt;Amount&lt;/span&gt;
+          &lt;div class=&quot;nds-col-actions&quot;&gt;
+            &lt;button class=&quot;nds-btn nds-subtle nds-sort-btn nds-icon-only&quot; aria-label=&quot;Sort by amount&quot;&gt;&lt;i class=&quot;nds-icon nds-hgi-sorting-05 nds-sort-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/th&gt;
+      &lt;th&gt;
+        &lt;div class=&quot;nds-col-header&quot;&gt;
+          &lt;span class=&quot;nds-label&quot;&gt;Status&lt;/span&gt;
+          &lt;div class=&quot;nds-col-actions&quot;&gt;
+            &lt;button class=&quot;nds-btn nds-subtle nds-sort-btn nds-icon-only&quot; aria-label=&quot;Sort by status&quot;&gt;&lt;i class=&quot;nds-icon nds-hgi-sorting-05 nds-sort-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/th&gt;
+      &lt;th&gt;
+        &lt;div class=&quot;nds-col-header&quot;&gt;
+          &lt;span class=&quot;nds-label&quot;&gt;Date&lt;/span&gt;
+          &lt;div class=&quot;nds-col-actions&quot;&gt;
+            &lt;button class=&quot;nds-btn nds-subtle nds-sort-btn nds-icon-only&quot; aria-label=&quot;Sort by date&quot;&gt;&lt;i class=&quot;nds-icon nds-hgi-sorting-05 nds-sort-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Business License Renewal&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;2500&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;nds-tag nds-sm&quot; data-status=&quot;success&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;Completed&lt;/span&gt;&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;2026-03-15&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Visa Processing Fee&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;800&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;nds-tag nds-sm&quot; data-status=&quot;warning&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;Pending&lt;/span&gt;&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;2026-03-14&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Property Transfer Tax&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;15000&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;nds-tag nds-sm&quot; data-status=&quot;success&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;Completed&lt;/span&gt;&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;2026-03-12&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Vehicle Registration Fee&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;450&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;nds-tag nds-sm&quot; data-status=&quot;success&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;Completed&lt;/span&gt;&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;2026-03-10&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Building Permit Application&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;3200&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;nds-tag nds-sm&quot; data-status=&quot;error&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;Failed&lt;/span&gt;&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;2026-03-08&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Health Insurance Premium&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;1800&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;nds-tag nds-sm&quot; data-status=&quot;success&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;Completed&lt;/span&gt;&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;2026-03-06&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code>
+              </div>
+            </div>
+          </div>
+          <div class="nds-block">
+            <div class="nds-card nds-stroke alq-full">
+              <div class="nds-card-content">
+                <span class="nds-card-title">Source 6</span>
+                <p class="nds-card-description">Source only: this example is a Liquid template. Its loops and variables are resolved by the documentation site&#x27;s Jekyll build, which this static showcase does not run, so the markup is quoted exactly as published rather than rendered.</p>
+              </div>
+            </div>
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy source example" aria-controls="src-6">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-html code" id="src-6">&lt;table class=&quot;nds-table nds-sortable&quot;&gt;
+                                    &lt;thead&gt;
+                                        &lt;tr&gt;
+                                            &lt;th&gt;
+                                                &lt;div class=&quot;nds-col-header&quot;&gt;
+                                                    &lt;span class=&quot;nds-label&quot;&gt;Name&lt;/span&gt;
+                                                    &lt;div class=&quot;nds-col-actions&quot;&gt;
+                                                        &lt;button class=&quot;nds-btn nds-subtle nds-sort-btn nds-icon-only&quot; aria-label=&quot;Sort by name&quot;&gt;&lt;i class=&quot;nds-icon nds-hgi-sorting-05 nds-sort-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+                                                    &lt;/div&gt;
+                                                &lt;/div&gt;
+                                            &lt;/th&gt;
+                                            &lt;th&gt;
+                                                &lt;div class=&quot;nds-col-header&quot;&gt;
+                                                    &lt;span class=&quot;nds-label&quot;&gt;Amount&lt;/span&gt;
+                                                    &lt;div class=&quot;nds-col-actions&quot;&gt;
+                                                        &lt;button class=&quot;nds-btn nds-subtle nds-sort-btn nds-icon-only&quot; aria-label=&quot;Sort by amount&quot;&gt;&lt;i class=&quot;nds-icon nds-hgi-sorting-05 nds-sort-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+                                                    &lt;/div&gt;
+                                                &lt;/div&gt;
+                                            &lt;/th&gt;
+                                            &lt;th&gt;
+                                                &lt;div class=&quot;nds-col-header&quot;&gt;
+                                                    &lt;span class=&quot;nds-label&quot;&gt;Status&lt;/span&gt;
+                                                    &lt;div class=&quot;nds-col-actions&quot;&gt;
+                                                        &lt;button class=&quot;nds-btn nds-subtle nds-sort-btn nds-icon-only&quot; aria-label=&quot;Sort by status&quot;&gt;&lt;i class=&quot;nds-icon nds-hgi-sorting-05 nds-sort-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+                                                    &lt;/div&gt;
+                                                &lt;/div&gt;
+                                            &lt;/th&gt;
+                                            &lt;th&gt;
+                                                &lt;div class=&quot;nds-col-header&quot;&gt;
+                                                    &lt;span class=&quot;nds-label&quot;&gt;Date&lt;/span&gt;
+                                                    &lt;div class=&quot;nds-col-actions&quot;&gt;
+                                                        &lt;button class=&quot;nds-btn nds-subtle nds-sort-btn nds-icon-only&quot; aria-label=&quot;Sort by date&quot;&gt;&lt;i class=&quot;nds-icon nds-hgi-sorting-05 nds-sort-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+                                                    &lt;/div&gt;
+                                                &lt;/div&gt;
+                                            &lt;/th&gt;
+                                        &lt;/tr&gt;
+                                    &lt;/thead&gt;
+                                    &lt;tbody&gt;
+                                        {% for txn in site.data.content.transactions limit: 6 %}
+                                        &lt;tr&gt;
+                                            &lt;td&gt;{{ txn.name }}&lt;/td&gt;
+                                            &lt;td&gt;&lt;span class=&quot;nds-number-format&quot; data-currency=&quot;SAR&quot;&gt;{{ txn.amount }}&lt;/span&gt;&lt;/td&gt;
+                                            &lt;td&gt;&lt;span class=&quot;nds-tag nds-sm&quot; data-status=&quot;{% if txn.status == &#x27;completed&#x27; %}success{% elsif txn.status == &#x27;pending&#x27; %}warning{% else %}error{% endif %}&quot;&gt;&lt;span class=&quot;nds-label&quot;&gt;{{ txn.status | capitalize }}&lt;/span&gt;&lt;/span&gt;&lt;/td&gt;
+                                            &lt;td&gt;{{ txn.date }}&lt;/td&gt;
+                                        &lt;/tr&gt;
+                                        {% endfor %}
+                                    &lt;/tbody&gt;
+                                &lt;/table&gt;</code>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
+        <section id="sortGuidelines" class="nds-content-section">
+          <div class="nds-section-wrapper">
+          <div class="nds-section-head">
+            <h2 class="nds-section-title">Usage Guidelines</h2>
+          </div>
+            <div class="nds-section-body">
+          <div class="nds-block">
+            <div class="nds-code nds-expandable">
+              <div class="nds-code-action">
+                <button class="nds-btn nds-subtle nds-copy" type="button" aria-label="Copy code example" aria-controls="api-7">
+                  <i class="nds-icon nds-hgi-copy-01" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="nds-expandable-content">
+                <code class="lang-javascript" id="api-7">// ── Create an instance ───────────────────────────────
+// Returns the NDSSort instance; re-creating on the same root returns the existing one.
+const sort = NDS.Sort.create(rootElement, {
+    items: &#x27;.row&#x27;,                // selector, NodeList, Array, or () =&gt; NodeList
+                                  // a selector string is resolved INSIDE rootElement;
+                                  // pass a getter for items that live outside it
+    reorderIn: myListEl,          // optional; defaults to items[0].parentElement
+    triggers: &#x27;.sort-btn&#x27;,        // selector, NodeList, Array, or () =&gt; NodeList
+    mode: &#x27;direct&#x27;,               // &#x27;direct&#x27; | &#x27;cycle&#x27;
+    a11y: &#x27;pressed&#x27;,              // &#x27;pressed&#x27; | &#x27;sort&#x27; | &#x27;none&#x27;
+    a11yTarget: (t) =&gt; t.closest(&#x27;th&#x27;),   // only used when a11y === &#x27;sort&#x27;
+    accessor: (item, key) =&gt; item.getAttribute(&#x27;data-sort-&#x27; + key),
+    keyFrom: (trigger) =&gt; trigger.getAttribute(&#x27;data-sort&#x27;) || &#x27;&#x27;,
+    types: { price: &#x27;number&#x27;, added: &#x27;date&#x27; },
+    initialState: { key: &#x27;added&#x27;, dir: &#x27;desc&#x27; },   // seeds state without reordering
+    urlSync: { keyParam: &#x27;sort&#x27;, dirParam: &#x27;dir&#x27; },
+    onChange: ({ key, dir, orderedItems, state }) =&gt; {
+        // Consumer-specific post-processing (pagination refresh, CSS hooks, analytics)
+    }
+});
+
+// ── Instance methods ─────────────────────────────────
+sort.apply(&#x27;price&#x27;, &#x27;desc&#x27;);     // Sort programmatically
+sort.apply(null, null);          // Same as sort.reset()
+sort.reset();                    // Restore the DOM order captured at create()
+sort.refresh();                  // Re-apply the active sort to items added since
+sort.getState();                 // { key, dir } current state
+sort.destroy();                  // Abort every listener bound by this instance
+
+// ── Retrieval ────────────────────────────────────────
+NDS.Sort.getInstance(rootElement);   // Existing instance or null
+NDS.Sort.getInstance(&#x27;#mySortRoot&#x27;); // Selector also accepted
+
+// ── Events ───────────────────────────────────────────
+// Fires on the root, bubbles. Use for cross-component coordination
+// (e.g. analytics, external state stores).
+document.addEventListener(&#x27;nds:sort:change&#x27;, (e) =&gt; {
+    const { key, dir, orderedItems, sort } = e.detail;
+});
+
+// ── Pure helpers ─────────────────────────────────────
+// Useful when comparing values outside the instance lifecycle (e.g. server-rendered
+// initial ordering, custom virtualization).
+NDS.Sort.detectType([&#x27;9,375 SAR&#x27;, &#x27;1,200 SAR&#x27;]);   // &#x27;number&#x27;
+NDS.Sort.detectType([&#x27;2026-01-01&#x27;, &#x27;2026-02-01&#x27;]); // &#x27;date&#x27;
+NDS.Sort.parseValue(&#x27;9,375 SAR&#x27;, &#x27;number&#x27;);        // 9375
+NDS.Sort.compare(&#x27;Apple&#x27;, &#x27;Banana&#x27;, &#x27;string&#x27;, &#x27;asc&#x27;);  // Negative value</code>
+              </div>
+            </div>
+          </div>
+          <div class="nds-block nds-prose">
+            <table class="nds-table nds-responsive">
+                                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Purpose</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">items</code></td>
+                                        <td>selector, NodeList, Array, or function</td>
+                                        <td>none (required)</td>
+                                        <td>The elements to reorder. Pass a function to re-resolve on every sort for live item sets.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">reorderIn</code></td>
+                                        <td>Element</td>
+                                        <td><code class="nds-inline-code lang-js">items[0].parentElement</code></td>
+                                        <td>The parent to re-append items into. Override when items live in a container different from the root.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">triggers</code></td>
+                                        <td>selector, NodeList, Array, or function</td>
+                                        <td>none (required)</td>
+                                        <td>The clickable elements that drive sorting.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">accessor</code></td>
+                                        <td><code class="nds-inline-code lang-js">(item, key) =&gt; value</code></td>
+                                        <td><code class="nds-inline-code lang-js">(i, k) =&gt; i.getAttribute('data-sort-' + k)</code></td>
+                                        <td>Returns the raw sortable value for an item under a given key.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">keyFrom</code></td>
+                                        <td><code class="nds-inline-code lang-js">(trigger) =&gt; key</code></td>
+                                        <td><code class="nds-inline-code lang-js">(t) =&gt; t.getAttribute('data-sort') || ''</code></td>
+                                        <td>Maps a trigger element to its sort key. Return an empty string or null for a reset trigger.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">mode</code></td>
+                                        <td><code class="nds-inline-code lang-js">'direct'</code> or <code class="nds-inline-code lang-js">'cycle'</code></td>
+                                        <td><code class="nds-inline-code lang-js">'direct'</code></td>
+                                        <td>Trigger behaviour model.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">a11y</code></td>
+                                        <td><code class="nds-inline-code lang-js">'pressed'</code>, <code class="nds-inline-code lang-js">'sort'</code>, or <code class="nds-inline-code lang-js">'none'</code></td>
+                                        <td><code class="nds-inline-code lang-js">'pressed'</code></td>
+                                        <td>Which accessibility attribute to write. <code class="nds-inline-code lang-js">'pressed'</code> for toggle-like triggers, <code class="nds-inline-code lang-js">'sort'</code> for table columns, <code class="nds-inline-code lang-js">'none'</code> to suppress.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">a11yTarget</code></td>
+                                        <td><code class="nds-inline-code lang-js">(trigger) =&gt; Element</code></td>
+                                        <td><code class="nds-inline-code lang-js">(t) =&gt; t.closest('th')</code></td>
+                                        <td>The element that carries <code class="nds-inline-code lang-html">aria-sort</code> when <code class="nds-inline-code lang-js">a11y: 'sort'</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">types</code></td>
+                                        <td>object</td>
+                                        <td><code class="nds-inline-code lang-js">{}</code></td>
+                                        <td>Per-key overrides for auto-detection. Values: <code class="nds-inline-code lang-js">'number'</code>, <code class="nds-inline-code lang-js">'date'</code>, <code class="nds-inline-code lang-js">'string'</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">initialState</code></td>
+                                        <td><code class="nds-inline-code lang-js">{ key, dir }</code> or null</td>
+                                        <td>null</td>
+                                        <td>Seeds state without reordering. Use when HTML is already sorted by the server.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">urlSync</code></td>
+                                        <td><code class="nds-inline-code lang-js">{ keyParam, dirParam }</code> or false</td>
+                                        <td>false</td>
+                                        <td>Persists state in the query string. Reads on create, writes on every change, ascending direction is omitted.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">onChange</code></td>
+                                        <td><code class="nds-inline-code lang-js">({ key, dir, orderedItems, state }) =&gt; void</code></td>
+                                        <td>none</td>
+                                        <td>Called synchronously after every apply, before the <code class="nds-inline-code lang-js">nds:sort:change</code> event fires.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+          </div>
+          <div class="nds-block nds-prose">
+            <table class="nds-table nds-responsive">
+                                <thead><tr><th>Event</th><th>Detail</th><th>Fires when</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code class="nds-inline-code lang-js">nds:sort:change</code></td>
+                                        <td><code class="nds-inline-code lang-js">{ key, dir, orderedItems, sort }</code></td>
+                                        <td>After every reorder, including programmatic <code class="nds-inline-code lang-js">apply()</code> and <code class="nds-inline-code lang-js">reset()</code>. Bubbles from the root.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+          </div>
+            </div>
+          </div>
+        </section>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="nds-footer nds-content-wrapper nds-brand" role="contentinfo" aria-label="Site Footer">
+    <nav class="nds-footer-content" aria-label="Footer navigation">
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="nds-footer-col-1">Showcase</span>
+        <ul class="nds-footer-list" aria-labelledby="nds-footer-col-1">
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/">
+
+              <span class="nds-label">Component index</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/templates/">
+
+              <span class="nds-label">Page templates</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/examples/">
+
+              <span class="nds-label">Full examples</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="nds-footer-col-2">Personal site</span>
+        <ul class="nds-footer-list" aria-labelledby="nds-footer-col-2">
+          <li>
+            <a class="nds-link nds-footer-link" href="/">
+              <i class="nds-icon nds-hgi-arrow-left-01" aria-hidden="true"></i>
+              <span class="nds-label">Arabic (RTL)</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/en/">
+              <i class="nds-icon nds-hgi-arrow-right-01" aria-hidden="true"></i>
+              <span class="nds-label">English (LTR)</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <hr class="nds-divider nds-lg">
+    <div class="nds-footer-bottom">
+      <div class="nds-footer-meta">
+        <div class="nds-footer-legal">
+          <div class="nds-footer-copyright">
+            <span>Component examples are quoted from NDS v1.12.0 (commit 030d1c7ff4ab, MIT). This is a personal review route, not a government service.</span>
+          </div>
+        <div class="nds-footer-versions">
+          <span class="nds-tag nds-xs nds-oncolor"><span class="nds-label">NDS v1.12.0</span></span>
+          <span class="nds-tag nds-xs nds-oncolor"><span class="nds-label">NDS IQ v3.1</span></span>
+        </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script defer src="/assets/js/nds-main.min.js?ver=1.12.0.030d1c7"></script>
+  <script defer src="/assets/js/nds-accessibility.min.js?ver=1.12.0.030d1c7"></script>
+  <script type="module" src="/assets/js/site.js"></script>
+</body>
+</html>

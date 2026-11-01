@@ -8,10 +8,10 @@ from urllib.parse import unquote, urlsplit
 ROOT = Path(__file__).resolve().parent.parent
 CURRENT = [
     'README.md', 'DEPLOY.md', 'CONTRIBUTING.md', 'SECURITY.md',
-    'docs/NDS-INTEGRATION.md', 'docs/DESIGN-TOKENS.md',
-    'docs/UPDATE-CHECKLIST.md', 'docs/AUDIT-2026-10-18.md',
-    'docs/CONTINUATION-2026-10-18.md', 'docs/ASSISTIVE-REVIEW.md', 'NDS-REPORT.md',
-    'assets/licenses/README.md', 'tools/vendor/README.md',
+    'docs/NDS-INTEGRATION.md', 'docs/DESIGN-TOKENS.md', 'docs/CUSTOM-EXCEPTIONS.md',
+    'docs/NDS-SHOWCASE.md', 'docs/UPDATE-CHECKLIST.md', 'docs/AUDIT-2026-10-18.md',
+    'docs/CONTINUATION-2026-10-18.md', 'docs/ASSISTIVE-REVIEW.md',
+    'NDS-PLAN.md', 'NDS-REPORT.md', 'assets/licenses/README.md',
 ]
 failed = []
 count = 0
@@ -25,7 +25,11 @@ for name in CURRENT:
         if url.scheme or url.netloc or not url.path:
             continue
         count += 1
-        if not (path.parent / unquote(url.path)).exists():
+        # Site docs link routes from the site root (`/nds-showcase/…`). A leading
+        # slash is the repository root, not the document's directory.
+        raw = unquote(url.path)
+        target = (ROOT / raw.lstrip('/')) if raw.startswith('/') else (path.parent / raw)
+        if not target.exists():
             failed.append(f'{name}: {href}')
 for failure in failed:
     print('FAIL ' + failure)

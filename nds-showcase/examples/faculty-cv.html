@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-palette>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dr. Noura Al-Otaibi · NDS 1.12.0 showcase</title>
+  <meta name="description" content="Associate Professor, Department of Industrial Engineering">
+  <style>html :where(header){display:contents}html :where(.nds-topbar){height:40px}html :where(.nds-main-nav){height:var(--nds-nav-height, 72px)}html .nds-swiper.nds-hero:not([data-nds-swiper-initialized],[data-swiper-preset]) .nds-swiper-slide:not(:first-child){display:none}html[data-theme~=dark] :where(.nds-main-nav .nds-brand.nds-oncolor :is(img,svg)){filter:brightness(0) invert(1)}:where(.nds-topbar>*,.nds-main-nav>*,.nds-hero-section .nds-section-action,.nds-content-layout,.nds-user-feedback-section,.nds-footer){visibility:hidden}html:not([data-nds-loaded]) main{overflow-x:clip}:root{--nds-icons-opacity: 0}i.hgi-stroke{opacity:0}html{overflow-anchor:none}html{background-color:var(--background-body, #f9fafb)}html[data-theme~=dark]{background-color:var(--background-body, #111927)}:where(.nds-topbar){background-color:var(--background-topbar, #f3f4f6)}html[data-theme~=dark] :where(.nds-topbar){background-color:var(--background-topbar, #111927)}:where(.nds-main-nav){background-color:var(--background-nav, #fff)}html[data-theme~=dark] :where(.nds-main-nav){background-color:var(--background-nav, #1f2a37)}:where(.nds-hero-image-wrapper)::before{content:"";position:absolute;inset:0;background:color-mix(in srgb, var(--img-overlay-color, #092a1e) calc(var(--overlay, 0.7) * 100%), transparent);pointer-events:none}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}:is(.nds-hidden,[hidden],[data-state~=hidden],[data-filtered]){display:none !important}:where(.nds-hero-section){position:relative;height:550px}:where(.nds-hero-section.nds-sub){height:auto;min-height:220px}:where(.nds-hero-image-wrapper){position:absolute;inset:0}:where(.nds-hero-image){width:100%;height:100%;object-fit:cover;display:block}:where(.nds-hero-section :is(.nds-section-body,.nds-section-wrapper,.nds-breadcrumb-nav)){visibility:hidden}</style>
+  <link rel="preload" href="/assets/css/nds.critical.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="high" data-nds-defer>
+  <link id="nds-theme-stylesheet" rel="stylesheet" href="/assets/css/theme.css?ver=1.12.0.030d1c7">
+  <link rel="preload" href="/assets/css/nds-main.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="low" data-nds-defer="main">
+  <link rel="preload" href="/assets/css/nds-accessibility.min.css?ver=1.12.0.030d1c7" as="style" fetchpriority="low" data-nds-defer>
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" fetchpriority="low">
+  <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#0e5a49">
+  <script>
+      // Pre-paint FOUC guard: stamp saved data-theme before first paint, union-merged with markup/pack tokens so a stored value never clobbers them.
+      (function() {
+          var v = localStorage.getItem('nds-theme');
+          if (v) {
+              var d = document.documentElement;
+              var t = ((d.getAttribute('data-theme') || '') + ' ' + v).split(/\s+/)
+                  .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+              d.setAttribute('data-theme', t.join(' '));
+          }
+      })();
+      // Deferred styles: preload → injected stylesheet link (markers move with it). Rationale: ui-shell/head.md, CSP section.
+      (function () {
+          document.querySelectorAll('link[rel="preload"][data-nds-defer]').forEach(function (p) {
+              var l = document.createElement('link');
+              // Clone every attribute except rel/as — keeps href, fetchpriority, integrity, crossorigin, and the data-* markers.
+              for (var i = 0; i < p.attributes.length; i++) {
+                  var a = p.attributes[i];
+                  if (a.name !== 'rel' && a.name !== 'as') l.setAttribute(a.name, a.value);
+              }
+              l.rel = 'stylesheet';
+              p.removeAttribute('data-nds-defer');
+              document.head.appendChild(l);
+          });
+      })();
+  </script>
+      <script>
+      // Project addition (docs/CUSTOM-EXCEPTIONS.md #2): NDS.Theme persists a manual
+      // choice but has no OS-preference surface. Follow prefers-color-scheme only
+      // while the visitor has nothing stored, using the canonical union merge.
+      (function () {
+        var stored;
+        try { stored = localStorage.getItem('nds-theme'); } catch (e) { return; }
+        if (stored || !window.matchMedia) return;
+        if (!window.matchMedia('(prefers-color-scheme: dark)').matches) return;
+        var d = document.documentElement;
+        var t = ((d.getAttribute('data-theme') || '') + ' dark').split(/\s+/)
+          .filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+        d.setAttribute('data-theme', t.join(' '));
+      })();
+  </script>
+    <noscript>
+          <style>.alq-site :is(.nds-sideinfo, .nds-toc, .nds-drawer),
+          .alq-site :is(.nds-sideinfo, .nds-toc, .nds-drawer) > *,
+          .alq-site .nds-main-nav > *,
+          .alq-site .nds-code .nds-expandable-content { visibility: visible; }</style>
+        </noscript>
+</head>
+<body class="alq-site">
+  <a class="alq-skip-link" href="#main-content">Skip to content</a>
+  <noscript>
+    <nav class="alq-fallback" aria-label="Navigation without JavaScript">
+      <a href="/nds-showcase/">Showcase index</a>
+      <a href="/">Arabic site</a>
+      <a href="/en/">English site</a>
+    </nav>
+  </noscript>
+  <header>
+    <nav class="nds-main-nav nds-content-wrapper" id="ndsMainNav" aria-label="Primary navigation">
+      <div class="nds-nav-container">
+        <a class="nds-brand" href="/nds-showcase/">
+          <img class="nds-brand-logo" src="/assets/img/favicon.svg" width="40" height="40" alt="">
+          <span class="nds-brand-name">NDS 1.12.0
+            <span class="nds-brand-slogan">Component showcase</span>
+          </span>
+        </a>
+        <ul class="nds-nav-minimal" hidden>
+          <li class="nds-mainNav-toggler nds-nav-item">
+            <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="ndsNavCollapse">
+              <i class="nds-icon nds-hgi-menu-01" aria-hidden="true"></i>
+            </button>
+          </li>
+        </ul>
+        <div class="nds-collapse" id="ndsNavCollapse" hidden>
+          <div class="nds-collapse-content">
+            <ul class="nds-nav-primary">
+            <li class="nds-nav-item">
+              <a href="/nds-showcase/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">Index</span>
+              </a>
+            </li>
+            <li class="nds-nav-item">
+              <a href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">Arabic site</span>
+              </a>
+            </li>
+            <li class="nds-nav-item">
+              <a href="/en/" class="nds-nav-link nds-btn nds-subtle nds-indicator">
+                <span class="nds-label">English site</span>
+              </a>
+            </li>
+            </ul>
+            <div class="nds-nav-item nds-show-more">
+              <a class="nds-nav-link nds-btn nds-subtle nds-indicator nds-full">
+                <i class="nds-icon nds-hgi-arrow-down-01" aria-hidden="true"></i>
+              </a>
+            </div>
+            <ul class="nds-nav-actions">
+              <li class="nds-nav-item nds-icon-only nds-PAB">
+                <a href="/" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-tooltip" data-tooltip-hover="500" title="Back to the personal site" lang="ar" hreflang="ar">
+                  <i class="nds-icon nds-hgi-arrow-left-01" aria-hidden="true"></i>
+                  <span class="nds-label" data-hidden="sm md sr">Personal site</span>
+                </a>
+              </li>
+              <li class="nds-nav-item nds-icon-only nds-PAB">
+                <button type="button" class="nds-nav-link nds-btn nds-subtle nds-indicator nds-theme-toggle-wrap nds-tooltip" data-tooltip-hover="500" data-theme-toggle title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">
+                  <i class="nds-icon nds-hgi-moon-02" aria-hidden="true"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="nds-hero-section nds-sub nds-flat" id="top">
+      <nav class="nds-breadcrumb-nav" aria-label="Breadcrumb">
+        <ol class="nds-breadcrumb">
+            <li><a href="/nds-showcase/">Showcase</a></li>
+            <li><a href="/nds-showcase/examples/">Examples</a></li>
+            <li class="nds-truncate" aria-current="page">Dr. Noura Al-Otaibi</li>
+        </ol>
+      </nav>
+      <div class="nds-section-wrapper">
+        <div class="nds-section-image">
+        <div class="nds-avatar nds-image-border">
+          <img src="/assets/img/showcase-placeholder.svg" width="120" height="120" alt="">
+        </div>
+      </div>
+      <div class="nds-section-head">
+          <h1 class="nds-section-title">Dr. Noura Al-Otaibi</h1>
+          <p class="nds-section-description">Associate Professor, Department of Industrial Engineering</p>
+        </div>
+      </div>
+    </section>
+    <div class="nds-content-layout nds-wSideInfo">
+      <div class="nds-main-content" id="main-content">
+        <section id="facultyProfile" class="nds-content-section nds-sideinfo-section">
+            <div class="nds-section-body">
+                <aside class="nds-sideinfo nds-md nds-sticky nds-top" aria-label="On this page">
+                    <nav class="nds-toc" aria-label="Table of contents" style="--toc-skeleton-rows: 5"
+                        data-toc-source="#facultyProfile .nds-info-content" data-toc-levels="h2">
+                        <div class="nds-toc-head">
+                            <span class="nds-label">On this page</span>
+                            <h2 class="nds-toc-title nds-truncate">Dr. Noura Al-Otaibi</h2>
+                        </div>
+                        <div class="nds-drawer nds-lined">
+                            <ul class="nds-drawer-list"></ul>
+                        </div>
+                    </nav>
+                </aside>
+                <div class="nds-info-content">
+                    <!-- Academic information. The portrait and the name live in the hero. -->
+                    <div class="nds-section-wrapper" id="facultyInfo">
+                        <div class="nds-section-head">
+                            <h2 class="nds-section-title">Academic Information</h2>
+                            <p class="nds-section-description">College, department, and field of specialization</p>
+                        </div>
+                        <div class="nds-section-action">
+                            <div class="nds-dropmenu">
+                                <button class="nds-btn nds-secondary-outline nds-menu-btn nds-dropmenu-trigger" type="button">
+                                    <i class="hgi hgi-stroke hgi-mail-01" aria-hidden="true"></i>
+                                    <span class="nds-label">Contact</span>
+                                </button>
+                                <div class="nds-dropmenu-menu" hidden>
+                                    <div class="nds-dropmenu-scroll">
+                                        <a class="nds-btn nds-subtle nds-dropmenu-item" href="mailto:n.alotaibi@university.edu.sa">
+                                            <i class="hgi hgi-stroke hgi-mail-01" aria-hidden="true"></i>
+                                            <span class="nds-label">Email</span>
+                                        </a>
+                                        <a class="nds-btn nds-subtle nds-dropmenu-item" href="tel:+966118765432">
+                                            <i class="hgi hgi-stroke hgi-call" aria-hidden="true"></i>
+                                            <span class="nds-label">Office phone</span>
+                                        </a>
+                                        <a class="nds-btn nds-subtle nds-dropmenu-item" href="https://www.linkedin.com/">
+                                            <i class="hgi hgi-stroke hgi-linkedin-02" aria-hidden="true"></i>
+                                            <span class="nds-label">LinkedIn</span>
+                                        </a>
+                                        <a class="nds-btn nds-subtle nds-dropmenu-item" href="https://scholar.google.com/">
+                                            <i class="hgi hgi-stroke hgi-mortarboard-02" aria-hidden="true"></i>
+                                            <span class="nds-label">Google Scholar</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nds-section-body">
+                            <dl class="nds-definition-list nds-grid" style="--max-col:2;--mid-col:2;--min-col:1;">
+                                <div class="nds-definition-item nds-card nds-stroke">
+                                    <dt>
+                                        <i class="hgi hgi-stroke hgi-school"></i>
+                                        <span class="nds-label">College</span>
+                                    </dt>
+                                    <dd>College of Engineering</dd>
+                                </div>
+                                <div class="nds-definition-item nds-card nds-stroke">
+                                    <dt>
+                                        <i class="hgi hgi-stroke hgi-building-02"></i>
+                                        <span class="nds-label">Department</span>
+                                    </dt>
+                                    <dd>Department of Industrial Engineering</dd>
+                                </div>
+                                <div class="nds-definition-item nds-card nds-stroke">
+                                    <dt>
+                                        <i class="hgi hgi-stroke hgi-book-open-02"></i>
+                                        <span class="nds-label">General Specialization</span>
+                                    </dt>
+                                    <dd>Industrial Engineering</dd>
+                                </div>
+                                <div class="nds-definition-item nds-card nds-stroke">
+                                    <dt>
+                                        <i class="hgi hgi-stroke hgi-book-02"></i>
+                                        <span class="nds-label">Specific Specialization</span>
+                                    </dt>
+                                    <dd>Operations Research and Scheduling</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <!-- Biography + research interests -->
+                    <div class="nds-section-wrapper" id="facultyBio">
+                        <div class="nds-section-head">
+                            <h2 class="nds-section-title">Biography</h2>
+                            <p class="nds-section-description">Teaching, research, and consulting work in short</p>
+                        </div>
+                        <div class="nds-section-body">
+                            <div class="nds-block nds-prose">
+                                <p>Dr. Noura Al-Otaibi teaches industrial engineering at the College of Engineering. She joined the
+                                    university in 2013 and now leads the Operations Research group. Her work covers scheduling,
+                                    vehicle routing, and quality control in public services.</p>
+                                <p>She has supervised 24 master's theses and led six funded research projects. She also advises
+                                    government bodies on service capacity planning and process improvement.</p>
+                            </div>
+                            <div class="nds-block">
+                                <h3 class="nds-block-title">Research Interests</h3>
+                                <div class="nds-flex nds-wrap" style="--gap: var(--spacing-sm);">
+                                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">Operations Research</span></span>
+                                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">Linear Programming</span></span>
+                                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">Vehicle Routing</span></span>
+                                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">Scheduling</span></span>
+                                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">Quality Control</span></span>
+                                    <span class="nds-tag nds-green nds-sm"><span class="nds-label">Simulation</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Career timeline - vertical stepper, newest role on top -->
+                    <div class="nds-section-wrapper" id="facultyExperience">
+                        <div class="nds-section-head">
+                            <h2 class="nds-section-title">Professional Experience</h2>
+                            <p class="nds-section-description">Academic and advisory roles, most recent first</p>
+                        </div>
+                        <div class="nds-section-body">
+                            <!-- nds-reverse renders the last step at the top, so steps run oldest-first in the markup -->
+                            <div class="nds-stepper nds-vertical nds-dot nds-reverse " data-current="6" data-total="6">
+                                <div class="nds-stepper-step">
+                                    <div class="nds-stepper-base">
+                                        <div class="nds-stepper-circle" data-step-text="1"></div>
+                                    </div>
+                                    <div class="nds-stepper-content">
+                                        <div class="nds-divider">2009 — 2013</div>
+                                        <div class="nds-stepper-text">
+                                            <span class="nds-stepper-title">Lecturer, Department of Industrial Engineering</span>
+                                            <span class="nds-stepper-description">College of Engineering</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nds-stepper-step">
+                                    <div class="nds-stepper-base">
+                                        <div class="nds-stepper-circle" data-step-text="2"></div>
+                                    </div>
+                                    <div class="nds-stepper-content">
+                                        <div class="nds-divider">2013 — 2018</div>
+                                        <div class="nds-stepper-text">
+                                            <span class="nds-stepper-title">Assistant Professor</span>
+                                            <span class="nds-stepper-description">Department of Industrial Engineering</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nds-stepper-step">
+                                    <div class="nds-stepper-base">
+                                        <div class="nds-stepper-circle" data-step-text="3"></div>
+                                    </div>
+                                    <div class="nds-stepper-content">
+                                        <div class="nds-divider">2016 — 2019</div>
+                                        <div class="nds-stepper-text">
+                                            <span class="nds-stepper-title">Consultant, Process Improvement</span>
+                                            <span class="nds-stepper-description">Regional Development Authority</span>
+                                        </div>
+                                        <ul>
+                                        <li>Cut the average service wait time by 31% across 12 branch offices.</li>
+                                        <li>Built the capacity model still used for annual staffing plans.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="nds-stepper-step">
+                                    <div class="nds-stepper-base">
+                                        <div class="nds-stepper-circle" data-step-text="4"></div>
+                                    </div>
+                                    <div class="nds-stepper-content">
+                                        <div class="nds-divider">2018 — Present</div>
+                                        <div class="nds-stepper-text">
+                                            <span class="nds-stepper-title">Associate Professor</span>
+                                            <span class="nds-stepper-description">Department of Industrial Engineering</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nds-stepper-step">
+                                    <div class="nds-stepper-base">
+                                        <div class="nds-stepper-circle" data-step-text="5"></div>
+                                    </div>
+                                    <div class="nds-stepper-content">
+                                        <div class="nds-divider">2020 — 2022</div>
+                                        <div class="nds-stepper-text">
+                                            <span class="nds-stepper-title">Supervisor, Entrepreneurship Center</span>
+                                            <span class="nds-stepper-description">Office of the Vice Rector for Research</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nds-stepper-step">
+                                    <div class="nds-stepper-base">
+                                        <div class="nds-stepper-circle" data-step-text="6"></div>
+                                    </div>
+                                    <div class="nds-stepper-content">
+                                        <div class="nds-divider">2023 — Present</div>
+                                        <div class="nds-stepper-text">
+                                            <span class="nds-stepper-title">Head, Department of Industrial Engineering</span>
+                                            <span class="nds-stepper-description">College of Engineering</span>
+                                        </div>
+                                        <ul>
+                                        <li>Led the 2024 program accreditation review.</li>
+                                        <li>Opened two research labs with industry funding.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Academic qualifications -->
+                    <div class="nds-section-wrapper" id="facultyQualifications">
+                        <div class="nds-section-head">
+                            <h2 class="nds-section-title">Academic Qualifications</h2>
+                            <p class="nds-section-description">Degrees and executive programs</p>
+                        </div>
+                        <div class="nds-section-body">
+                            <!-- --gap is set here, not inherited, so an ancestor can never retune this list -->
+                            <div class="nds-flex nds-col" style="--gap: var(--spacing-xl);">
+                                <div class="nds-card nds-stroke nds-rowView" style="--card-width: 100%;">
+                                    <div class="nds-card-header">
+                                        <div class="nds-card-featured-icon">
+                                            <span class="nds-featured-icon">
+                                                <i class="hgi hgi-stroke hgi-mortarboard-02" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">Doctor of Philosophy in Industrial Engineering</span>
+                                            <p class="nds-card-description">College of Engineering — Dalhousie University, Canada</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2009</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nds-card nds-stroke nds-rowView" style="--card-width: 100%;">
+                                    <div class="nds-card-header">
+                                        <div class="nds-card-featured-icon">
+                                            <span class="nds-featured-icon">
+                                                <i class="hgi hgi-stroke hgi-mortarboard-02" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">Master of Science in Industrial Engineering</span>
+                                            <p class="nds-card-description">College of Engineering — University of Michigan, United States</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2005</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nds-card nds-stroke nds-rowView" style="--card-width: 100%;">
+                                    <div class="nds-card-header">
+                                        <div class="nds-card-featured-icon">
+                                            <span class="nds-featured-icon">
+                                                <i class="hgi hgi-stroke hgi-mortarboard-02" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">Bachelor of Science in Systems Engineering</span>
+                                            <p class="nds-card-description">College of Computer Science and Engineering — King Fahd University of Petroleum and Minerals</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2002</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Publications - auto pagination slices the list into pages of 5 -->
+                    <div class="nds-section-wrapper" id="facultyPublications">
+                        <div class="nds-section-head">
+                            <h2 class="nds-section-title">Publications</h2>
+                            <p class="nds-section-description">Journal articles and conference papers</p>
+                        </div>
+                        <div class="nds-section-action">
+                            <a class="nds-btn nds-secondary-outline nds-md nds-link" href="https://scholar.google.com/">
+                                <span class="nds-label">Google Scholar</span>
+                            </a>
+                        </div>
+                        <div class="nds-section-body">
+                            <!-- --gap is set here, not inherited, so an ancestor can never retune this list -->
+                            <div id="facultyPublicationList" class="nds-paged-content nds-flex nds-col"
+                                style="--per-page: 5; --gap: var(--spacing-xl);">
+                                <div class="nds-page-item nds-card nds-stroke" style="--card-width: 100%;">
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">A two-stage framework for school bus routing and scheduling</span>
+                                            <span class="nds-card-subtitle">N. Al-Otaibi, K. Bin Saleh, R. Al-Zahrani</span>
+                                            <p class="nds-card-description">Transportation Research Part E, volume 168</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-blue nds-sm"><span class="nds-label">Journal article</span></span>
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2024</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-actions">
+                                        <a href="https://scholar.google.com/" class="nds-btn nds-secondary-outline nds-md nds-link">
+                                            <span class="nds-label">View publication</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="nds-page-item nds-card nds-stroke" style="--card-width: 100%;">
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">Capacity planning for walk-in government service centres</span>
+                                            <span class="nds-card-subtitle">N. Al-Otaibi, M. Al-Harbi</span>
+                                            <p class="nds-card-description">Journal of Service Management, volume 35, issue 2</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-blue nds-sm"><span class="nds-label">Journal article</span></span>
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2024</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-actions">
+                                        <a href="https://scholar.google.com/" class="nds-btn nds-secondary-outline nds-md nds-link">
+                                            <span class="nds-label">View publication</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="nds-page-item nds-card nds-stroke" style="--card-width: 100%;">
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">Operating room scheduling under demand uncertainty</span>
+                                            <span class="nds-card-subtitle">N. Al-Otaibi, S. Al-Qahtani, F. Mak</span>
+                                            <p class="nds-card-description">Computers and Industrial Engineering, volume 182</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-blue nds-sm"><span class="nds-label">Journal article</span></span>
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2023</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-actions">
+                                        <a href="https://scholar.google.com/" class="nds-btn nds-secondary-outline nds-md nds-link">
+                                            <span class="nds-label">View publication</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="nds-page-item nds-card nds-stroke" style="--card-width: 100%;">
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">Measuring process quality in shared service centres</span>
+                                            <span class="nds-card-subtitle">N. Al-Otaibi, A. Bin Dawood</span>
+                                            <p class="nds-card-description">International Conference on Quality Engineering, Riyadh</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-gray nds-sm"><span class="nds-label">Conference paper</span></span>
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2023</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-actions">
+                                        <a href="https://scholar.google.com/" class="nds-btn nds-secondary-outline nds-md nds-link">
+                                            <span class="nds-label">View publication</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="nds-page-item nds-card nds-stroke" style="--card-width: 100%;">
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">Simulating pilgrim flow at transport hubs in peak season</span>
+                                            <span class="nds-card-subtitle">N. Al-Otaibi, H. Al-Ghamdi, T. Al-Shehri</span>
+                                            <p class="nds-card-description">Simulation Modelling Practice and Theory, volume 121</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-blue nds-sm"><span class="nds-label">Journal article</span></span>
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2022</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-actions">
+                                        <a href="https://scholar.google.com/" class="nds-btn nds-secondary-outline nds-md nds-link">
+                                            <span class="nds-label">View publication</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="nds-page-item nds-card nds-stroke" style="--card-width: 100%;">
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">Robust vehicle routing for municipal waste collection</span>
+                                            <span class="nds-card-subtitle">N. Al-Otaibi, Y. Al-Mutairi</span>
+                                            <p class="nds-card-description">Waste Management, volume 145</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-blue nds-sm"><span class="nds-label">Journal article</span></span>
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2022</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-actions">
+                                        <a href="https://scholar.google.com/" class="nds-btn nds-secondary-outline nds-md nds-link">
+                                            <span class="nds-label">View publication</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="nds-page-item nds-card nds-stroke" style="--card-width: 100%;">
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">Assessing learning outcomes across three domains</span>
+                                            <span class="nds-card-subtitle">W. Hussain, N. Al-Otaibi</span>
+                                            <p class="nds-card-description">IEEE Frontiers in Education Conference</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-gray nds-sm"><span class="nds-label">Conference paper</span></span>
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2021</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-actions">
+                                        <a href="https://scholar.google.com/" class="nds-btn nds-secondary-outline nds-md nds-link">
+                                            <span class="nds-label">View publication</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="nds-page-item nds-card nds-stroke" style="--card-width: 100%;">
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">Lot sizing with setup carryover in small manufacturing plants</span>
+                                            <span class="nds-card-subtitle">N. Al-Otaibi, R. Siddiqui</span>
+                                            <p class="nds-card-description">International Journal of Production Research, volume 59, issue 14</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-blue nds-sm"><span class="nds-label">Journal article</span></span>
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2021</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-actions">
+                                        <a href="https://scholar.google.com/" class="nds-btn nds-secondary-outline nds-md nds-link">
+                                            <span class="nds-label">View publication</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="nds-page-item nds-card nds-stroke" style="--card-width: 100%;">
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">A digital quality management system for standardised outcomes</span>
+                                            <span class="nds-card-subtitle">N. Al-Otaibi, W. Hussain</span>
+                                            <p class="nds-card-description">International Conference on Outcomes Assessment</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-gray nds-sm"><span class="nds-label">Conference paper</span></span>
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2020</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-actions">
+                                        <a href="https://scholar.google.com/" class="nds-btn nds-secondary-outline nds-md nds-link">
+                                            <span class="nds-label">View publication</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="nds-page-item nds-card nds-stroke" style="--card-width: 100%;">
+                                    <div class="nds-card-content">
+                                        <div class="nds-card-text">
+                                            <span class="nds-card-title">Queueing analysis of appointment systems in public clinics</span>
+                                            <span class="nds-card-subtitle">N. Al-Otaibi</span>
+                                            <p class="nds-card-description">Health Care Management Science, volume 22, issue 3</p>
+                                        </div>
+                                        <div class="nds-card-meta">
+                                            <div class="nds-card-tags">
+                                                <span class="nds-tag nds-blue nds-sm"><span class="nds-label">Journal article</span></span>
+                                                <span class="nds-tag nds-green nds-rounded nds-sm"><span class="nds-label">2019</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nds-card-actions">
+                                        <a href="https://scholar.google.com/" class="nds-btn nds-secondary-outline nds-md nds-link">
+                                            <span class="nds-label">View publication</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <nav class="nds-pagination" data-auto-pagination="facultyPublicationList" aria-label="Publications pagination"></nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="nds-footer nds-content-wrapper nds-brand" role="contentinfo" aria-label="Site Footer">
+    <nav class="nds-footer-content" aria-label="Footer navigation">
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="nds-footer-col-1">Showcase</span>
+        <ul class="nds-footer-list" aria-labelledby="nds-footer-col-1">
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/">
+
+              <span class="nds-label">Component index</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/templates/">
+
+              <span class="nds-label">Page templates</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/nds-showcase/examples/">
+
+              <span class="nds-label">Full examples</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="nds-footer-column">
+        <span class="nds-footer-heading" id="nds-footer-col-2">Personal site</span>
+        <ul class="nds-footer-list" aria-labelledby="nds-footer-col-2">
+          <li>
+            <a class="nds-link nds-footer-link" href="/">
+              <i class="nds-icon nds-hgi-arrow-left-01" aria-hidden="true"></i>
+              <span class="nds-label">Arabic (RTL)</span>
+            </a>
+          </li>
+          <li>
+            <a class="nds-link nds-footer-link" href="/en/">
+              <i class="nds-icon nds-hgi-arrow-right-01" aria-hidden="true"></i>
+              <span class="nds-label">English (LTR)</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <hr class="nds-divider nds-lg">
+    <div class="nds-footer-bottom">
+      <div class="nds-footer-meta">
+        <div class="nds-footer-legal">
+          <div class="nds-footer-copyright">
+            <span>Component examples are quoted from NDS v1.12.0 (commit 030d1c7ff4ab, MIT). This is a personal review route, not a government service.</span>
+          </div>
+        <div class="nds-footer-versions">
+          <span class="nds-tag nds-xs nds-oncolor"><span class="nds-label">NDS v1.12.0</span></span>
+          <span class="nds-tag nds-xs nds-oncolor"><span class="nds-label">NDS IQ v3.1</span></span>
+        </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script defer src="/assets/js/nds-main.min.js?ver=1.12.0.030d1c7"></script>
+  <script defer src="/assets/js/nds-accessibility.min.js?ver=1.12.0.030d1c7"></script>
+  <script type="module" src="/assets/js/site.js"></script>
+</body>
+</html>

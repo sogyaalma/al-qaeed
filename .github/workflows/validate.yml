@@ -30,11 +30,17 @@ jobs:
           python -m pip install -r requirements-test.txt
           npm ci --ignore-scripts
           python -m playwright install --with-deps chromium firefox webkit
+      - name: Fetch the pinned NDS release and prove the committed assets match it
+        run: |
+          python tools/vendor_nds.py fetch
+          python tools/vendor_nds.py sync
+          python tools/vendor_nds.py verify
+          python tools/check_nds_usage.py
+          git diff --exit-code -- assets/css assets/js assets/fonts assets/i18n tools/generated docs/nds-assets.json
       - name: Build, package and validate
         run: |
           python tools/build.py
           python tools/package.py
-          python tools/reproduce_nds.py
           python -m unittest discover -s tests -p 'test_*.py' -v
           python tests/run_static_checks.py
           python tests/check_docs.py
@@ -43,8 +49,9 @@ jobs:
           python -m compileall -q tools tests
           for script in assets/js/*.js; do node --check "$script"; done
           npm run validate
+          npm run validate:quoted
           npm audit --audit-level=moderate
-          git diff --exit-code -- index.html en/index.html 404.html sitemap.xml _headers vercel.json
+          git diff --exit-code -- index.html en/index.html 404.html sitemap.xml _headers vercel.json nds-showcase docs/NDS-SHOWCASE.md
       - name: Test actual package in Chromium, Firefox and WebKit with CSP
         run: |
           python tools/serve.py --port 8000 > "$RUNNER_TEMP/site-preview.log" 2>&1 &
